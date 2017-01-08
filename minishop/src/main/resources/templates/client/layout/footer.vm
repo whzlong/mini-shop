@@ -1,0 +1,32 @@
+<div class="page-footer">
+    <div class="container">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <a href="#" style="color:#ccc;padding:5px;">PhoneYou</a>
+            </div>
+            <div class="footer-right">
+                <div style="float:left;width:30%;">
+                    <a href="#" style="color: #ccc;">About Us</a><br>
+                    <a href="#" style="color:#ccc;">Contact Us</a>
+                </div>
+                <div style="float:left;width:70%">
+                    <a href="#">About Us</a><br>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bar">
+            <div class="footer-bar-left">
+                <a href="#" style="color:#ccc;padding:5px;">
+                    <i class="fa fa-facebook fa-2x"></i>
+                </a>
+                <a href="#" style="color:#ccc;padding:5px;padding-left:10px;">
+                    <i class="fa fa-twitter fa-2x"></i>
+                </a>
+                <a href="#" style="color:#ccc;padding:5px;padding-left:10px;">
+                    <i class="fa fa-google-plus fa-2x"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

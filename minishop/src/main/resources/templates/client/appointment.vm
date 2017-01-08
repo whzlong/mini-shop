@@ -1,0 +1,76 @@
+
+
+<div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="appointmentModalLabel">Please Complete Details</h4>
+            </div>
+            <div class="modal-body">
+                <div id="appointment">
+                    <form id="appointmentForm" method="post" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="selectedDate" class="col-sm-2 control-label">Date</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="selectedDate" placeholder="the selected date" disabled/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="selectedTime" class="col-sm-2 control-label">Time</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="selectedTime" placeholder="the selected time" disabled/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="selectedService" class="col-sm-2 control-label">Service</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="selectedService" value="${item.itemName}" placeholder="the choosen service" disabled/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="selectedServicePrice" class="col-sm-2 control-label">Price</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="selectedServicePrice" value="${item.currency}&nbsp;${item.discountPrice}" placeholder="service price" disabled/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerName" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="customerName" name="customerName" placeholder="your full name"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="your email"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmEmail" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="confirm your email"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="col-sm-2 control-label">Phone</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="phone" name="phone" placeholder="your phone number"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="deviceColour" class="col-sm-2 control-label">Device colour</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="deviceColour" name="deviceColour" placeholder="the colour of your device"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnAppointmentSubmit">Submit2</button>
+            </div>
+        </div>
+    </div>
+</div>

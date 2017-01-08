@@ -1,0 +1,136 @@
+<div class="container">
+    <div class="item-navigator">
+        Home > iPhone > ${item.itemName}
+    </div>
+    <div id="item-info">
+        <div class="item-image">
+            <img src="${item.bigImage}" class="img-responsive"/>
+        </div>
+        <div class="item-detail">
+            <h1>${item.itemName}</h1>
+            <p style="font-size:40px">${item.currency}&nbsp;${item.unitPrice}</p>
+            <div style="width: 100%" class="item-description"><p style="margin-top: 20px;">${item.description}</p></div>
+
+        </div>
+    </div>
+    <hr>
+
+</div>
+<div class="container">
+    <div class="item-services">
+        <hr>
+        <h2 style="text-align: center;padding-bottom: 18px;">Choose your service</h2>
+
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li role="presentation" class="active"><a data-toggle="tab" href="#waitTab">WHILE YOU WAIT</a></li>
+            <li role="presentation"><a data-toggle="tab" href="#mailTab">EXPRESS MAIL</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="waitTab" class="tab-pane fade in active">
+                <h2>While you wait, West End</h2>
+                <h4>37 TOTTENHAM STREET, W1T 4RU</h4>
+                <p>You’ll get to experience the magic of the iPhone 6S screen repair first hand!</p>
+                <p>Bring your damaged iPhone 6S into our shop in central London and we’ll have it repaired within 30 minutes.
+                    Meanwhile, you can catch up on some email, get to know our friendly staff, or people watch from our window overlooking the street (and you may see some very strange things!).</p>
+                <p>Use the calendar below to book a time and date that works best for you or just come by. We’re open from 9am to 6pm Monday through Friday, 9am to 5pm on Saturday and 11am to 5pm on Sunday.
+                </p>
+
+                <h3 style="padding-top: 20px">Select the day and time for your appointment</h3>
+                <form action="/client/book" method="post">
+                    <div class="form-group">
+                        <label for="bookDate">Date:</label>
+                        <input type="text" class="form-control datepicker" style="width: 150px;" id="bookDate" name="bookDate"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookTime">Time:</label>
+                        <input type="text" class="form-control timepicker" style="width: 110px;" id="bookTime" name="bookTime"/>
+                    </div>
+                    <input type="hidden" name="itemId" value="${item.itemId}" />
+                    <button id="btnBook" type="submit" class="btn btn-primary btn-lg"
+                            data-toggle="modal" data-target="#appointmentModal">BOOK AN APPOINTMENT NOW</button>
+                </form>
+            </div>
+
+            <div id="mailTab" class="tab-pane fade">
+                <h3>mail</h3>
+                <h3>mail</h3>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //设定选择日期
+        $('#bookDate').pickadate({format:'yyyy-mm-dd'});
+        //设定选择时间
+        $('.timepicker').pickatime();
+
+        $('#btnBook').click(function () {
+            $('#selectedDate').val($('#bookDate').val());
+            $('#selectedTime').val($('#bookTime').val());
+        });
+
+        //客户资料验证
+        validateAppointmentForm();
+
+    });
+    
+    function validateAppointmentForm() {
+        $('#appointmentForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                customerName:{
+                    validators:{
+                        notEmpty: {
+                            message: 'The name is required'
+                        }
+                    }
+                },
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The email is required'
+                        },
+                        emailAddress: {
+                            message: 'The input is not a valid email address'
+                        },
+                        identical: {
+                            field: 'confirmEmail',
+                            message: 'The email and its confirm are not the same'
+                        }
+                    }
+                },
+                confirmEmail: {
+                    validators: {
+                        notEmpty: {
+                            message: 'The confirmEmail is required'
+                        },
+                        emailAddress: {
+                            message: 'The input is not a valid email address'
+                        },
+                        identical: {
+                            field: 'email',
+                            message: 'The email and its confirm are not the same'
+                        }
+                    }
+                }
+
+            }
+
+        });
+
+        $('#btnAppointmentSubmit').click(function(){
+            $('#appointmentForm').bootstrapValidator('validate');
+        });
+    }
+</script>
+

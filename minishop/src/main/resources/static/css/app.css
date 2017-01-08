@@ -1,0 +1,110 @@
+body{
+    font-family: sans-serif;
+}
+.page-footer{
+    padding: 0 0 150px;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-family: 'Open Sans',sans-serif;
+    margin-top: 20px;
+    background-color: #1e201d;
+    color: #fff;
+}
+
+.footer-container{
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 20px;
+    padding-left: 20px;
+    font-size: 1.2em;
+    letter-spacing: 0;
+}
+
+.footer-logo{
+    float: left;
+    width: 40%;
+}
+
+.footer-right{
+    float: right;
+    width: 60%;
+    line-height: 30px;
+    text-align: center;
+}
+
+.footer-bar{
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 1.2em;
+    letter-spacing: 0;
+}
+
+.footer-bar-left{
+    float: left;
+    width: 50%;
+    padding-top: 45px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.item-navigator{
+    margin-top: 20px;
+}
+
+.item-info{
+    width: 100%;
+}
+
+.item-image{
+    float: left;
+    width: 30%;
+}
+
+.item-detail{
+    float: right;
+    width: 70%;
+    padding-left: 30px;
+}
+
+.item-description{
+    clear: both;
+}
+
+.item-services{
+    width: 100%;
+    padding-top: 20px;
+    border: 1px;
+}
+
+.tab-content>div{
+    padding-top: 30px;
+    padding-left: 30px;
+}
+
+ul li{
+    font-size: larger;
+}
+
+/*信息提示页面*/
+.promptMsgPage{
+    margin-top: 100px;
+    height: 350px;
+    text-align: center;
+}
+
+.login{
+    margin: 60px auto;
+    height: 600px;
+    width: 300px;
+}
+
+.login-content{
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-left:1px solid #CCC;
+    border-right:1px solid #CCC;
+    border-bottom:1px solid #CCC;
+}

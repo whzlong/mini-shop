@@ -1,0 +1,46 @@
+<style>
+    /*
+.backgroundImage{
+    background-image: url("/images/toppage_repairman.png");
+}
+*/
+</style>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container backgroundImage">
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">PICK UP SERVICE &raquo;</a></p>
+        <p>Speedy, high quality and hossie-free repairs for your iPhone.</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <h4>Special Price Service</h4>
+    <div class="row">
+
+        #foreach($item in $discountItems)
+            <div class="col-md-3">
+                <img src="${item.smallImage}" class="img-thumbnail">
+                <p>${item.itemName} </p>
+
+                <p><a class="btn btn-default" href="/client/items/${item.itemId}" role="button">View details &raquo;</a></p>
+            </div>
+        #end
+
+    </div>
+    <hr>
+    <h4>New Repair Service</h4>
+    <div class="row">
+
+        #foreach($item in $newItems)
+            <div class="col-md-3">
+                <img src="${item.smallImage}" class="img-thumbnail">
+                <p>${item.itemName} </p>
+
+                <p><a class="btn btn-default" href="/client/items/${item.itemId}" role="button">View details &raquo;</a></p>
+            </div>
+        #end
+
+    </div>
+</div> <!-- /container -->

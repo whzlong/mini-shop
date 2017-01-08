@@ -1,0 +1,74 @@
+<div class="container">
+    <div class="login">
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li role="presentation" class="active"><a data-toggle="tab" href="#tabLogin">LOGIN</a></li>
+            <li role="presentation"><a data-toggle="tab" href="#tabRegister">REGISTER</a></li>
+        </ul>
+        <div class="tab-content login-content">
+            <div id="tabLogin" class="tab-pane fade in active" >
+                <div id="loginErrorMsg" style="color: red"></div>
+                <form id="loginForm" action="/client/login" method="post" role="form">
+                    #if($error)
+                        <span style="color: red">${error}</span>
+                    #end
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" placeholder="Password" id="password" name="password" class="form-control">
+                    </div>
+                    <!--
+                    <div class="checkbox">
+                        <label>
+                            <input id="remember-me" name="remember-me" type="checkbox" />Remember me
+                        </label>
+                    </div>
+                    -->
+
+                    <button type="submit" class="btn btn-lg btn-primary btn-block" id="btnRegisterSubmit">Login</button>
+
+                </form>
+            </div>
+            <div id="tabRegister" class="tab-pane fade">
+                <div id="registerErrorMsg" style="color: red"></div>
+                <form id="registerForm" method="post" role="form" action="/client/register">
+                    <div class="alert alert-success" style="display: none;font-size: large"></div>
+                    <div class="form-group">
+                        <label for="firstName">Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First name"/>
+                        <input type="text" class="form-control" style="margin-top: 5px;" id="lastName" name="lastName" placeholder="Last name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password"/>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary btn-block" id="btnRegister">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/login.js"></script>
+
+<script type="text/javascript">
+    $(function (){
+        validateLoginForm();
+        validateRegisterForm();
+
+        $("#btnRegister").click(function(){
+            $("#registerForm").find(".alert").html("").hide();
+        });
+    });
+</script>
