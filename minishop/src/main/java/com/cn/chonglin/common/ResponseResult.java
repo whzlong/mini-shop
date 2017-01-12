@@ -32,7 +32,7 @@ public class ResponseResult<T> {
      * @return
      */
     public static <T> ResponseResult<T> error(List<FieldError> fieldErrors){
-        StringBuilder builder = new StringBuilder();
+        StringBuffer builder = new StringBuffer();
 
         fieldErrors.forEach(e -> {
             builder.append(String.format("%s &nbsp;--> &nbsp;%s<br>", e.getField(), e.getDefaultMessage()));

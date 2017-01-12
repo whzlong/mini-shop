@@ -122,29 +122,5 @@ function validateLoginForm() {
             }
         }
 
-    ).on('success.form.bv', function(e){
-        // Prevent form submission
-        //e.preventDefault();
-
-        // Get the form instance
-        //var $form = $(e.target);
-        //$form.submit();
-        // Get the BootstrapValidator instance
-        //var bv = $form.data('bootstrapValidator');
-
-
-        //Use Ajax to submit form data
-        // $.post($form.attr('action')
-        //     , $form.serialize()
-        //     , function(result) {
-        //         if(result.code == "0"){
-        //             // Enable the submit buttons
-        //             $('#loginForm').bootstrapValidator('disableSubmitButtons', false);
-        //         }else{
-        //             $('#errorsMsg').html(result.message);
-        //             // Enable the submit buttons
-        //             $('#registerForm').bootstrapValidator('disableSubmitButtons', false);
-        //         }
-        //     }, 'json');
-    });
+    );
 }

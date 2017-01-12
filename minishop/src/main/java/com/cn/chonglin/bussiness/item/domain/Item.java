@@ -59,6 +59,21 @@ public class Item {
     private String description;
 
     /**
+     * 品牌ID
+     */
+    private String brandId;
+
+    /**
+     * 类型ID
+     */
+    private String modelId;
+
+    /**
+     *
+     */
+    private int enabled;
+
+    /**
      * 更新日时
      */
     private Timestamp updatedAt;
@@ -146,6 +161,30 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 
     public Timestamp getUpdatedAt() {

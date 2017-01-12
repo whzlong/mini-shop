@@ -2,6 +2,7 @@ package com.cn.chonglin.bussiness.item.dao;
 
 import com.cn.chonglin.bussiness.item.domain.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -42,6 +43,14 @@ public class ItemDao {
         return jdbcTemplate.query("SELECT * FROM items WHERE is_discount = ?", new Object[]{isDiscount}, mapper);
     }
 
+    public List<Item> findItemsByModel(String modelId){
+        try{
+            return jdbcTemplate.query("SELECT * FROM items WHERE type_id = ?", new Object[]{modelId}, mapper);
+        }catch (EmptyResultDataAccessException ex){
+            return null;
+        }
+    }
+
     static class ItemMapper implements RowMapper<Item> {
 
         @Override
@@ -57,6 +66,8 @@ public class ItemDao {
             t.setNew(rs.getBoolean("is_new"));
             t.setDiscount(rs.getBoolean("is_discount"));
             t.setDescription(rs.getString("description"));
+            t.setModelId(rs.getString("type_id"));
+            t.setEnabled(rs.getInt("enabled"));
             t.setUpdatedAt(rs.getTimestamp("updated_at"));
             t.setCreatedAt(rs.getTimestamp("created_at"));
 

@@ -108,3 +108,28 @@ ul li{
     border-right:1px solid #CCC;
     border-bottom:1px solid #CCC;
 }
+
+.appointment-form{
+    width: 150px;
+}
+
+.app-error{
+    color: red;
+}
+
+.select-title{
+    padding-top: 15px;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: lighter;
+}
+
+.select-item{
+    padding-bottom: 5px;
+}
+
+.item-name{
+    color: #999;
+    word-wrap: break-word;
+    word-break: break-all;
+}

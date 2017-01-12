@@ -32,11 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authorizeRequests()
                 .antMatchers("/"
                         , "/client/items/**"
-                        ,"/file/**"
-                        ,"/client/register"
-                        ,"/client/confirm/**"
-                        ,"/libs/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                        , "/client/itemTypes/**"
+                        , "/file/**"
+                        , "/client/register"
+                        , "/client/confirm/**"
+                        , "/admin/**"
+                        , "/libs/**").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()

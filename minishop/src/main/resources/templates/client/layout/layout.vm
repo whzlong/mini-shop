@@ -53,6 +53,7 @@
     <script src="/libs/pickerdate/picker.date.js"></script>
     <script src="/libs/pickerdate/picker.time.js"></script>
     <script src="/libs/pickerdate/legacy.js"></script>
+    <script src="/libs/vue/vue.js"></script>
 
 </body>
 

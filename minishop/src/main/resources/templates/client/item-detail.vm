@@ -36,19 +36,24 @@
                 </p>
 
                 <h3 style="padding-top: 20px">Select the day and time for your appointment</h3>
-                <form action="/client/book" method="post">
+                #if($errors)
+                    <div class="alert alert-danger" role="alert">${errors}</div>
+                #end
+                <div class="appointment-form">
+                <form id="appointmentForm" action="/client/book" method="post">
+
                     <div class="form-group">
                         <label for="bookDate">Date:</label>
-                        <input type="text" class="form-control datepicker" style="width: 150px;" id="bookDate" name="bookDate"/>
+                        <input type="text" class="form-control datepicker" id="bookDate" name="bookDate"/>
                     </div>
                     <div class="form-group">
                         <label for="bookTime">Time:</label>
-                        <input type="text" class="form-control timepicker" style="width: 110px;" id="bookTime" name="bookTime"/>
+                        <input type="text" class="form-control timepicker" id="bookTime" name="bookTime"/>
                     </div>
                     <input type="hidden" name="itemId" value="${item.itemId}" />
-                    <button id="btnBook" type="submit" class="btn btn-primary btn-lg"
-                            data-toggle="modal" data-target="#appointmentModal">BOOK AN APPOINTMENT NOW</button>
+                    <button id="btnBook" type="submit" class="btn btn-primary btn-lg">BOOK AN APPOINTMENT NOW</button>
                 </form>
+                </div>
             </div>
 
             <div id="mailTab" class="tab-pane fade">
@@ -65,17 +70,35 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //设定选择日期
-        $('#bookDate').pickadate({format:'yyyy-mm-dd'});
+        $('#bookDate').pickadate({format:'dd-mm-yyyy'});
         //设定选择时间
-        $('.timepicker').pickatime();
+        $('#bookTime').pickatime();
 
         $('#btnBook').click(function () {
-            $('#selectedDate').val($('#bookDate').val());
-            $('#selectedTime').val($('#bookTime').val());
+            var submitAbled = true;
+            $('.app-error').remove();
+
+            if($('#bookDate').val() == ""){
+                $('#bookDate').after("<span class='app-error'>The date is required.</span>");
+                submitAbled = false;
+            }
+
+            if($('#bookTime').val() == ""){
+                $('#bookTime').after("<span class='app-error'>The time is required.</span>")
+                submitAbled = false;
+            }
+
+            return submitAbled;
         });
 
+        $("#bookDate").change(function(){
+            $('.app-error').remove();
+        });
+        $("#bookTime").change(function(){
+            $('.app-error').remove();
+        });
         //客户资料验证
-        validateAppointmentForm();
+        //validateAppointmentForm();
 
     });
     
@@ -88,38 +111,17 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                customerName:{
+                bookDate:{
                     validators:{
                         notEmpty: {
-                            message: 'The name is required'
+                            message: 'The date is required'
                         }
                     }
                 },
-                email: {
+                bookTime: {
                     validators: {
                         notEmpty: {
-                            message: 'The email is required'
-                        },
-                        emailAddress: {
-                            message: 'The input is not a valid email address'
-                        },
-                        identical: {
-                            field: 'confirmEmail',
-                            message: 'The email and its confirm are not the same'
-                        }
-                    }
-                },
-                confirmEmail: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The confirmEmail is required'
-                        },
-                        emailAddress: {
-                            message: 'The input is not a valid email address'
-                        },
-                        identical: {
-                            field: 'email',
-                            message: 'The email and its confirm are not the same'
+                            message: 'The time is required'
                         }
                     }
                 }
@@ -128,9 +130,9 @@
 
         });
 
-        $('#btnAppointmentSubmit').click(function(){
-            $('#appointmentForm').bootstrapValidator('validate');
-        });
+//        $('#btnAppointmentSubmit').click(function(){
+//            $('#appointmentForm').bootstrapValidator('validate');
+//        });
     }
 </script>
 
