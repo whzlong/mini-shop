@@ -1,5 +1,5 @@
 body{
-    font-family: sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 .page-footer{
     padding: 0 0 150px;
@@ -132,4 +132,41 @@ ul li{
     color: #999;
     word-wrap: break-word;
     word-break: break-all;
+}
+
+.app-calendar th{
+    padding:5px;
+    text-align: center;
+}
+.app-calendar td{
+    padding:5px;
+    text-align: center;
+}
+
+.day:hover{
+    background-color: #ff0000;
+}
+
+.day:focus {
+    background-color: #00ff00;
+}
+
+
+.day:active {
+    background-color: #000000;
+}
+
+.cart-input-form{
+    text-align: center;
+}
+
+.cart-input-form select{
+    width: 70px;
+    height: 34px;
+    border:1px solid #ccc;
+}
+
+.cart-input-form input{
+    width: 70px;
+    height: 34px;
 }

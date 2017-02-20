@@ -10,8 +10,8 @@ import java.util.UUID;
  * @author wu
  */
 public class IdGenerator {
-
     public static String getUuid(){
         return StringUtils.remove(UUID.randomUUID().toString(), "-");
     }
+
 }

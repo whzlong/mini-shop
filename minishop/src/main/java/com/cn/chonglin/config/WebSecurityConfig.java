@@ -34,11 +34,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         , "/client/items/**"
                         , "/client/itemTypes/**"
                         , "/file/**"
+                        , "/api/**"
                         , "/client/register"
                         , "/client/confirm/**"
                         , "/admin/**"
                         , "/libs/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/cart/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -48,6 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
                     .logout()
                     .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/client/authority-error")
                 .and()
                     .csrf().disable();
 

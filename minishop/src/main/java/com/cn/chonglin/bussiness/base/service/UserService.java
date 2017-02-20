@@ -8,6 +8,9 @@ import com.cn.chonglin.common.IdGenerator;
 import com.cn.chonglin.common.mail.MailService;
 import com.cn.chonglin.common.mail.maillogger.MailLog;
 import com.cn.chonglin.common.mail.maillogger.MailLogService;
+import com.cn.chonglin.constants.DropdownListContants;
+import com.cn.chonglin.constants.RoleContants;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +33,6 @@ import java.util.List;
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    private static final int USER_ENABLED_ZERO = 0;
-    private static final int USER_ENABLED_ONE = 1;
-
-    private static final String ROLE_DEFAULT = "USER";
-
     @Autowired
     private UserDao userDao;
 
@@ -54,8 +52,9 @@ public class UserService {
         try{
             user.setId(IdGenerator.getUuid());
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setEnabled(USER_ENABLED_ZERO);
-            user.setRole(ROLE_DEFAULT);
+            user.setEnabled(DropdownListContants.USER_STATE_PENDING_VALUE);
+            user.setState(DropdownListContants.USER_STATE_PENDING);
+            user.setRole(RoleContants.ROLE_GENERAL);
 
             userDao.insert(user);
 
@@ -68,6 +67,20 @@ public class UserService {
         }
 
         return userDao.findByKey(user.getId());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void update(User user){
+        if(userDao.checkEmail(user.getId(), user.getEmail())){
+            throw new AppException("The email have been registered, please use another email.");
+        }
+
+        if(!StringUtils.isEmpty(user.getPassword())){
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
+
+        userDao.update(user);
+
     }
 
     /**
@@ -85,7 +98,7 @@ public class UserService {
         }
 
         //帐户是否已经被激活
-        if(USER_ENABLED_ONE == user.getEnabled()){
+        if(DropdownListContants.USER_STATE_ACTIVE_VALUE == user.getEnabled()){
             throw new AppException("The account has been validated.");
         }
 
@@ -106,8 +119,7 @@ public class UserService {
             throw new AppException("The link was expired, please register your account once again.");
         }
 
-        userDao.updateEnabled(user.getId(), USER_ENABLED_ONE);
-
+        userDao.setUserState(user.getId(), DropdownListContants.USER_STATE_ACTIVE_VALUE, DropdownListContants.USER_STATE_ACTIVE);
     }
 
     private void checkInput(User user){
@@ -125,11 +137,38 @@ public class UserService {
      * @return
      */
     public User getUserByUsername(String username){
-        return userDao.findByEmail(username);
+        return userDao.findValidUser(username);
     }
 
     public User findByKey(String id){
         return userDao.findByKey(id);
+    }
+
+    public int count(String email, String firstname, int state){
+        return userDao.count(email, firstname, state);
+    }
+
+    public List<User> query(String email, String firstname, int state, int limit, int offset){
+        return userDao.query(email, firstname, state, limit, offset);
+    }
+
+    /**
+     * 屏蔽用户
+     *
+     * @param userId
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void disableUser(String userId){
+        userDao.setUserState(userId, DropdownListContants.USER_STATE_SHIELDED_VALUE, DropdownListContants.USER_STATE_SHIELDED);
+    }
+
+    /**
+     * 删除用户
+     * @param userid
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteUser(String userid){
+        userDao.delete(userid);
     }
 
 }

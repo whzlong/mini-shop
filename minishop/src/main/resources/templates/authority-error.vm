@@ -1,0 +1,5 @@
+#set($layout="/client/layout/layout-none.vm")
+<div class="container">
+    <h1>You do not have permission to access this page.</h1>
+    <a href="/" class="btn btn-warning">Return to home page</a>
+</div>

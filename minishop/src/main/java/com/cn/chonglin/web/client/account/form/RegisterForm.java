@@ -67,6 +67,9 @@ public class RegisterForm {
         user.setPassword(this.password);
         user.setFirstName(this.firstName);
         user.setLastName(this.lastName);
+        user.setAddress("");
+        user.setPostcode("");
+        user.setPhone("");
 
         return user;
     }

@@ -44,16 +44,6 @@ public class Item {
     private String currency;
 
     /**
-     * 是否为新品（ true: 是）
-     */
-    private boolean isNew;
-
-    /**
-     * 是否为打折品（true: 是）
-     */
-    private boolean isDiscount;
-
-    /**
      * 商品描述
      */
     private String description;
@@ -64,14 +54,32 @@ public class Item {
     private String brandId;
 
     /**
+     *品牌名称
+     */
+    private String brandName;
+
+    /**
      * 类型ID
      */
     private String modelId;
 
     /**
-     *
+     *类型名称
      */
-    private int enabled;
+    private String modelName;
+
+    /**
+     * 库存量
+     */
+    private int stock;
+
+    /**
+     * 状态
+     * new -> 新品
+     * discount -> 折扣品
+     * inactive -> 作废
+     */
+    private String state;
 
     /**
      * 更新日时
@@ -139,22 +147,6 @@ public class Item {
         this.currency = currency;
     }
 
-    public boolean isNew() {
-        return isNew;
-    }
-
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
-
-    public boolean isDiscount() {
-        return isDiscount;
-    }
-
-    public void setDiscount(boolean discount) {
-        isDiscount = discount;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -171,6 +163,14 @@ public class Item {
         this.brandId = brandId;
     }
 
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
     public String getModelId() {
         return modelId;
     }
@@ -179,12 +179,28 @@ public class Item {
         this.modelId = modelId;
     }
 
-    public int getEnabled() {
-        return enabled;
+    public String getModelName() {
+        return modelName;
     }
 
-    public void setEnabled(int enabled) {
-        this.enabled = enabled;
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public Timestamp getUpdatedAt() {

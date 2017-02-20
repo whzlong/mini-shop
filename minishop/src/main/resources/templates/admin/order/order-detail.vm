@@ -1,0 +1,54 @@
+#set($layout="/admin/layout/layout-admin.vm")
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>＃</th>
+                    <th>Itemname</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th>Discount price</th>
+                </tr>
+            </thead>
+            <tbody>
+            #foreach($orderDetail in $orderDetails)
+                <tr>
+                    <td>
+                        $foreach.count
+                    </td>
+                    <td>
+                        ${orderDetail.itemName}
+                    </td>
+                    <td>
+                        ${orderDetail.quantity}
+                    </td>
+                    <td>
+                        ${orderDetail.unitPrice}
+                    </td>
+                    <td>
+                        ${orderDetail.discountPrice}
+                    </td>
+                </tr>
+            #end
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <form action="/admin/order-list" method="post">
+                            <input type="hidden" name="orderId" value="${previousPageVo.orderId}"/>
+                            <input type="hidden" name="orderDateFrom" value="${previousPageVo.orderDateFrom}" />
+                            <input type="hidden" name="orderDateTo" value="${previousPageVo.orderDateTo}" />
+                            <input type="hidden" name="state" value="${previousPageVo.state}" />
+                            <input type="hidden" name="currentPage" value="${previousPageVo.currentPage}"/>
+                            <input type="hidden" name="beginPage" value="${previousPageVo.beginPage}"/>
+                            <button type="submit" class="btn btn-primary">Return</button>
+                        </form>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>

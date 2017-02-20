@@ -1,0 +1,172 @@
+#set($layout="/admin/layout/layout-admin.vm")
+
+<form action="/admin/items/add" method="post" class="form-horizontal" id="itemForm">
+    #if($error)
+        <div style="text-align: center;color:red;padding: 5px;">${error}</div>
+    #end
+    <div class="row" id="itemCategory">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="brandId" class="col-sm-3 control-label">Brand</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="brandId" name="brandId" v-on:change="findModels" >
+                        <option v-for="option in brands" v-bind:value="option.value">{{option.text}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="modelId" class="col-sm-3 control-label">Model</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="modelId" name="modelId" >
+                        <option v-for="option in models" v-bind:value="option.value">{{option.text}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="itemName" class="col-sm-3 control-label">Item name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="itemName"  maxlength="50">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="state" class="col-sm-3 control-label">State</label>
+                <div class="col-sm-6">
+                    <select class="form-control" name="state">
+                        <option>active</option>
+                        <option>inactive</option>
+                        <option>new</option>
+                        <option>discount</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="unitPrice" class="col-sm-3 control-label">Unit price</label>
+                <div class="col-sm-6">
+                    <input type="email" class="form-control" name="unitPrice"  maxlength="20">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="discountPrice" class="col-sm-3 control-label">Discount price</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="discountPrice"  maxlength="20">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="bigImage" class="col-sm-3 control-label">Detail image</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="bigImage"  maxlength="30">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="smallImage" class="col-sm-3 control-label">List image</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="smallImage"  maxlength="20">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="stock" class="col-sm-3 control-label">Stock</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="stock"  maxlength="200">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="currency" class="col-sm-3 control-label">Currency</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="currency"  maxlength="200">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+            <button type="submit" class="btn btn-primary">Save</button>
+            &nbsp;
+            <button type="button" class="btn btn-primary" id="btnBack">Back</button>
+        </div>
+    </div>
+
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        var vm = new Vue({
+            el: '#itemCategory'
+            , data: {
+                 brands: []
+                , models:[]}
+            , created: function () {
+
+                $.ajax({
+                    type: "GET"
+                    , url: "http://localhost:8080/api/brands"
+                    , success: function (result) {
+                        if(result.code == "0"){
+                            vm.brands = result["rs"];
+                        }else{
+                            alert(result.message);
+                        }
+                    }
+
+                });
+
+            }
+            , methods: {
+                findModels:function (event) {
+
+                    if(event.target.value != ""){
+                        $.ajax({
+                            type: "GET"
+                            , url: "http://localhost:8080/api/models?brand=" + event.target.value
+                            , success: function (result) {
+                                if(result.code == "0"){
+                                    vm.models = result["rs"];
+                                }else{
+                                    alert(result.message);
+                                }
+                            }
+
+                        });
+                    }
+                }
+            }
+
+        });
+
+
+        $('#btnBack').click(function () {
+            window.location.href = "/admin/item-list";
+        });
+
+    });
+
+</script>

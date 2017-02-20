@@ -1,9 +1,10 @@
 package com.cn.chonglin.bussiness.item.service;
 
 import com.cn.chonglin.bussiness.item.dao.ItemDao;
-import com.cn.chonglin.bussiness.item.dao.ItemTypeDao;
+import com.cn.chonglin.bussiness.item.dao.ItemCategoryDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
-import com.cn.chonglin.bussiness.item.domain.ItemType;
+import com.cn.chonglin.bussiness.item.domain.ItemCategory;
+import com.cn.chonglin.common.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,13 @@ import java.util.List;
 @Transactional
 public class ItemService {
     @Autowired
-    ItemDao dao;
+    ItemDao itemDao;
 
     @Autowired
-    ItemTypeDao itemTypeDao;
+    ItemCategoryDao itemCategoryDao;
 
-    public Item findByKey(long id){
-        return dao.findByKey(id);
+    public Item findByKey(String id){
+        return itemDao.findByKey(id);
     }
 
     /**
@@ -35,7 +36,7 @@ public class ItemService {
      * @return
      */
     public List<Item> findItemsByModel(String modelId){
-        return dao.findItemsByModel(modelId);
+        return itemDao.findItemsByModel(modelId);
     }
 
     /**
@@ -44,7 +45,7 @@ public class ItemService {
      * @return
      */
     public List<Item> findDiscountItems(){
-        return dao.findDiscountItems(true);
+        return itemDao.findDiscountItems();
     }
 
     /**
@@ -53,7 +54,7 @@ public class ItemService {
      * @return
      */
     public List<Item> findNewItems(){
-        return dao.findNewItems(true);
+        return itemDao.findNewItems();
     }
 
     /**
@@ -63,7 +64,31 @@ public class ItemService {
      *          所属商品类别ID
      * @return
      */
-    public List<ItemType> findItemTypes(String parentTypeId){
-        return itemTypeDao.findItemTypes(parentTypeId);
+    public List<ItemCategory> findItemTypes(String parentTypeId){
+        return itemCategoryDao.findItemCategories(parentTypeId);
     }
+
+    public int getListCount(String brand, String model){
+        return itemDao.getListCount(brand, model);
+    }
+
+    public List<Item> queryForList(String brand, String model, int limit, int offset){
+        return itemDao.queryForList(brand, model, limit, offset);
+    }
+
+    public void add(Item item){
+        item.setItemId(IdGenerator.getUuid());
+
+        item.setBrandName(itemCategoryDao.getItemCategoryName(item.getBrandId()));
+        item.setModelName(itemCategoryDao.getItemCategoryName(item.getModelId()));
+
+        itemDao.insert(item);
+    }
+
+    public void update(Item item){
+        item.setBrandName(itemCategoryDao.getItemCategoryName(item.getBrandId()));
+        item.setModelName(itemCategoryDao.getItemCategoryName(item.getModelId()));
+        itemDao.update(item);
+    }
+
 }

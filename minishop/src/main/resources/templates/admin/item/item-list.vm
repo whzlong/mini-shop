@@ -1,0 +1,224 @@
+#set($layout="/admin/layout/layout-admin.vm")
+
+<form action="/admin/item-list" method="post" id="itemListForm">
+    <table class="search-condition-table">
+        <tr id="dropDownList">
+            <td style="width: 15%">
+                <label for="brand" >Brand</label>
+            </td>
+            <td style="width: 35%">
+                <select class="form-control" id="brand" name="brand" v-on:change="findModels">
+                    <option v-for="option in brands" v-bind:value="option.value">{{option.text}}</option>
+                </select>
+            </td>
+            <td style="width: 15%">
+                <label for="orderId" >Model</label>
+            </td>
+            <td style="width: 35%">
+                <select class="form-control" id="model" name="model">
+                    <option v-for="option in models" v-bind:value="option.value">{{option.text}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" style="text-align: center;padding-right: 30px;">
+                <button type="submit" id="btnSearch" class="btn btn-primary">Search</button>
+                &nbsp;
+                <button type="button" id="btnAdd" class="btn btn-primary">Add</button>
+            </td>
+        </tr>
+    </table>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>＃</th>
+                <th>Item</th>
+                <th>Brand/Model</th>
+                <th>Unit price/Discount price</th>
+                <th>Stock</th>
+                <th>State</th>
+                <th></th>
+            </tr>
+        </thead>
+       <tbody>
+            #foreach($item in $items)
+                #set($rowNum = $foreach.count + ${listPageVo.listSize} * (${listPageVo.currentPage} - 1))
+                <tr>
+                    <td>
+                        $rowNum
+                    </td>
+                    <td>
+                        $item.itemName
+                    </td>
+                    <td>
+                        $item.brandName / $item.modelName
+                    </td>
+                    <td>
+                        #if($item.state=="discount")
+                            <span style="text-decoration:line-through;color: red;">$item.unitPrice</span>/<span>$item.discountPrice</span>
+                        #else
+                            <span>$item.unitPrice</span>
+                        #end
+
+
+                    </td>
+                    <td>
+                        $item.stock
+                    </td>
+                    <td>
+                        $item.state
+                    </td>
+                    <td>
+                        <a href="#" name="btnEdit" value="$item.itemId"> <span class="glyphicon glyphicon-edit"></span></a>
+                        &nbsp;
+                        <a href="#" name="btnDisable" value="$item.itemId"> <span class="glyphicon glyphicon-ban-circle"></span></a>
+                        &nbsp;
+                        <a href="#" name="btnDelete" value="$item.itemId"> <span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>
+            #end
+
+       </tbody>
+       <tfoot>
+           <tr>
+               <td colspan="7">
+                   <ul class="pagination">
+
+                       #if(${listPageVo.currentPage} > ${listPageVo.pageSize})
+                           #set($previousBeginPage = ${listPageVo.beginPage} - ${listPageVo.pageSize})
+                           <li><a href="#" title="previous 10 page" id="previousPage" value="${previousBeginPage}"> &laquo; </a></li>
+                       #end
+
+                       #if(${listPageVo.endPage} != 0)
+                           #foreach($pageNum in [${listPageVo.beginPage}..${listPageVo.endPage}])
+                               #if(${listPageVo.currentPage} == $pageNum)
+                                   <li class="active">
+                                       <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
+                                   </li>
+                               #else
+                                   <li>
+                                       <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
+                                   </li>
+                               #end
+                           #end
+                       #end
+
+
+                       #if(${listPageVo.leftPage} >= ${listPageVo.pageSize})
+                           #set($nextBeginPage = ${listPageVo.endPage} + 1)
+                           <li>
+                               <a href="#" value="${nextBeginPage}" title="next 10 page" id="nextPage"> &raquo; </a>
+                           </li>
+                       #end
+
+                       &nbsp;
+                       <span style="text-align: center; font-size: larger;vertical-align: middle;">(total: ${listPageVo.totalPage})</span>
+
+                   </ul>
+                   <input type="hidden" value="${listPageVo.beginPage}" name="beginPage" id="beginPage"/>
+                   <input type="hidden" value="${listPageVo.currentPage}" name="currentPage" id="currentPage"/>
+               </td>
+           </tr>
+       </tfoot>
+    </table>
+
+</div>
+
+</form>
+<script type="text/javascript">
+    $(function () {
+        var vm = new Vue({
+            el: '#dropDownList'
+            , data: {brands: []
+                    , models:[]}
+            , created: function () {
+
+                 $.ajax({
+                     type: "GET"
+                     , url: "http://localhost:8080/api/brands"
+                     , success: function (result) {
+                         if(result.code == "0"){
+                             vm.brands = result["rs"];
+                         }else{
+                             alert(result.message);
+                         }
+                     }
+
+                 });
+
+            }
+            , methods: {
+                findModels:function (event) {
+
+                    if(event.target.value != ""){
+                        $.ajax({
+                            type: "GET"
+                            , url: "http://localhost:8080/api/models?brand=" + event.target.value
+                            , success: function (result) {
+                                if(result.code == "0"){
+                                    vm.models = result["rs"];
+                                }else{
+                                    alert(result.message);
+                                }
+                            }
+
+                        });
+                    }
+                }
+            }
+
+        });
+
+        $('#previousPage').click(function () {
+            $('#beginPage').val($('#previousPage').attr("value"));
+            $('#currentPage').val($('#previousPage').attr("value"));
+            $('#btnSearch').click();
+        });
+
+        $('#nextPage').click(function () {
+            $('#beginPage').val($('#nextPage').attr("value"));
+            $('#currentPage').val($('#nextPage').attr("value"));
+            $('#btnSearch').click();
+        });
+
+        $('a[name="tablePage"]').click(function () {
+            $('#currentPage').val($(this).attr("value"));
+            $('#btnSearch').click();
+        });
+
+
+        $('a[name="btnDisable"]').click(function () {
+            var result = confirm("You will disable this user, are you sure? ")
+
+            if(result == true){
+                $('#itemListForm').attr("action", "/admin/items/" + $(this).attr("value"));
+                $('#itemListForm').submit();
+            }
+        });
+
+        $('a[name="btnDelete"]').click(function () {
+            var result = confirm("You will delete this user, are you sure? ")
+
+            if(result == true){
+                $('#itemListForm').attr("action", "/admin/items/delete?itemId=" + $(this).attr("value"));
+                $('#itemListForm').submit();
+            }
+
+        });
+
+        $('a[name="btnEdit"]').click(function () {
+
+            window.location.href = "/admin/items/edit?itemId=" + $(this).attr("value")
+                    + "&beginPage=" + $('#beginPage').val()
+                    + "&currentPage=" + $('#currentPage').val();
+
+        });
+
+        $('#btnAdd').click(function () {
+            window.location.href = "/admin/items/add";
+        });
+
+    })
+</script>

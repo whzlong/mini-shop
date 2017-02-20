@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Access denied</title>
+</head>
+<body>
+    <p>You have not authority to access it.</p>
+    <a href="/" class="btn btn-warning">Return to home page</a>
+</body>
+</html>

@@ -104,3 +104,39 @@ body {
     border-radius: 50%;
 }
 
+.search-condition-table{
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.search-condition-table td{
+    padding: 5px;
+    text-align: center;
+}
+
+.app-calendar th{
+    padding:5px;
+    text-align: center;
+}
+.app-calendar td{
+    padding:5px;
+    text-align: center;
+}
+
+.item-category-title{
+    font-size: x-large;
+}
+
+.list-item {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.list-enter-active, .list-leave-active {
+    transition: all 1s;
+}
+
+.list-enter, .list-leave-active {
+    opacity: 0;
+    transform: translateY(30px);
+}

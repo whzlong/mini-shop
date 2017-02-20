@@ -1,0 +1,171 @@
+#set($layout="/admin/layout/layout-admin.vm")
+
+<form action="/admin/user-list" method="post" id="userListForm" class="form-horizontal">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="email" class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-6">
+                    <input type="email" class="form-control" name="email" value="${listPageVo.email}">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="firstname" class="col-sm-2 control-label">Firstname</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" name="firstname" value="${listPageVo.firstname}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="state" class="col-sm-2 control-label">state</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="state" name="state">
+                        <option value="0">Active</option>
+                        <option value="1">Verification pending</option>
+                        <option value="2">Shielded</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Postcode</th>
+                    <th>Role</th>
+                    <th>State</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                #foreach($user in $users)
+                    #set($rowNum = $foreach.count + ${listPageVo.listSize} * (${listPageVo.currentPage} - 1))
+                    <tr>
+                        <td>
+                            $rowNum
+                        </td>
+                        <td>
+                            $user.firstName &nbsp; $user.lastName
+                        </td>
+                        <td>
+                            $user.email
+                        </td>
+                        <td>
+                            $user.phone
+                        </td>
+                        <td>
+                            $user.address
+                        </td>
+                        <td>
+                            $user.postcode
+                        </td>
+                        <td>
+                            $user.role
+                        </td>
+                        <td>
+                            $user.state
+                        </td>
+                        <td>
+                            <a href="#" name="btnEdit" value="$user.id"> <span class="glyphicon glyphicon-edit"></span></a>
+                            &nbsp;
+                            <a href="#" name="btnDisable" value="$user.id"> <span class="glyphicon glyphicon-ban-circle"></span></a>
+                            &nbsp;
+                            <a href="#" name="btnDelete" value="$user.id"> <span class="glyphicon glyphicon-trash"></span></a>
+                        </td>
+                    </tr>
+                #end
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <ul class="pagination">
+
+                            #if(${listPageVo.currentPage} > ${listPageVo.pageSize})
+                                #set($previousBeginPage = ${listPageVo.beginPage} - ${listPageVo.pageSize})
+                                <li><a href="#" title="previous 10 page" id="previousPage" value="${previousBeginPage}"> &laquo; </a></li>
+                            #end
+
+                            #if(${listPageVo.endPage} != 0)
+                                #foreach($pageNum in [${listPageVo.beginPage}..${listPageVo.endPage}])
+                                    #if(${listPageVo.currentPage} == $pageNum)
+                                        <li class="active">
+                                            <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
+                                        </li>
+                                    #else
+                                        <li>
+                                            <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
+                                        </li>
+                                    #end
+                                #end
+                            #end
+
+
+                            #if(${listPageVo.leftPage} >= ${listPageVo.pageSize})
+                                #set($nextBeginPage = ${listPageVo.endPage} + 1)
+                                <li>
+                                    <a href="#" value="${nextBeginPage}" title="next 10 page" id="nextPage"> &raquo; </a>
+                                </li>
+                            #end
+
+                            &nbsp;
+                            <span style="text-align: center; font-size: larger;vertical-align: middle;">(total: ${listPageVo.totalPage})</span>
+
+                        </ul>
+                        <input type="hidden" value="${listPageVo.beginPage}" name="beginPage" id="beginPage"/>
+                        <input type="hidden" value="${listPageVo.currentPage}" name="currentPage" id="currentPage"/>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $('#state').val("${listPageVo.state}");
+
+        $('a[name="btnDisable"]').click(function () {
+            var result = confirm("You will disable this user, are you sure? ")
+            if(result == true){
+                $('#userListForm').attr("action", "/admin/users/" + $(this).attr("value"));
+
+                $('#userListForm').submit();
+            }
+
+        });
+
+        $('a[name="btnDelete"]').click(function () {
+
+            var result = confirm("You will delete this user, are you sure? ")
+            if(result == true){
+                $('#userListForm').attr("action", "/admin/users/delete?id=" + $(this).attr("value"));
+                $('#userListForm').submit();
+            }
+
+        });
+
+        $('a[name="btnEdit"]').click(function () {
+
+            window.location.href = "/admin/users/edit?id=" + $(this).attr("value");
+
+        });
+
+    })
+</script>

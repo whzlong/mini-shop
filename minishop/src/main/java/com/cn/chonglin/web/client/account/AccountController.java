@@ -11,10 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -105,5 +102,10 @@ public class AccountController {
     @RequestMapping(value = "logout")
     public String logout(){
         return "redirect:/";
+    }
+
+    @GetMapping(value = "authority-error")
+    public String accesssDenied(){
+        return "authority-error";
     }
 }

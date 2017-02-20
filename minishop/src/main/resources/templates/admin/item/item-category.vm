@@ -1,0 +1,107 @@
+#set($layout="/admin/layout/layout-admin.vm")
+
+<div id="item-category">
+<div class="row">
+    <div class="col-md-6">
+        <span class="item-category-title">Brand</span>
+        <div class="list-group">
+            <transition-group name="list" tag="p">
+                <template v-for="item in brands">
+                    <a v-bind:key="item.value" href="#" v-bind:id="item.value" v-on:click="findModels" v-if="item.selected == true" v-bind:class="{active:isActive}" class="list-group-item list-group-item-success" >
+                        {{item.text}}
+                    </a>
+                    <a v-bind:key="item.value" href="#" v-bind:id="item.value" v-on:click="findModels" v-else="item.selected == true" class="list-group-item list-group-item-success" >
+                        {{item.text}}
+                    </a>
+                </template>
+            </transition-group>
+        </div>
+        <div style="text-align: center;padding: 5px;font-size: larger;">
+            <a href="#" name="btnModalBrandAdd" id="btnModalBrandAdd" v-on:click="addBrand" data-toggle="modal" data-target="#brandModal"> <span class="glyphicon glyphicon-plus"></span></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" name="btnModalBrandEdit" id="btnModalBrandEdit" v-on:click="editBrand" data-toggle="modal" data-target="#brandModal"> <span class="glyphicon glyphicon-edit"></span></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" name="btnModalBrandDelete" v-on:click="deleteBrand"> <span class="glyphicon glyphicon-minus"></span></a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <span class="item-category-title">Model</span>
+        <ul class="list-group">
+            <li v-for="item in models" v-bind:id="item.value" class="list-group-item list-group-item-info">{{item.text}}</li>
+        </ul>
+        <div style="text-align: center;padding: 5px;font-size: larger;">
+            <a href="#" name="btnBrandAdd"> <span class="glyphicon glyphicon-plus"></span></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" name="btnBrandEdit"  data-toggle="modal" data-target="#brandModal"> <span class="glyphicon glyphicon-edit"></span></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" name="btnBrandDelete" value="$item.itemId"> <span class="glyphicon glyphicon-minus"></span></a>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="brandModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="brandForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Please input the brand</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="brandName" name="brandName" v-model="brandName">
+                        <input type="hidden" name="brandId" v-model="brandId">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btnBrandAdd" name="btnBrandAdd" v-on:click="saveBrand" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+</div>
+
+
+<script src="/js/item-category.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+
+
+
+//        validateBrandForm();
+//
+//        $('#btnBrandAdd').click(function () {
+//            $('#brandForm').bootstrapValidator('validate');
+//        });
+//
+//        $('#btnModalBrandAdd').click(function () {
+//            $('#brandForm').data('bootstrapValidator').resetForm(true);
+//        });
+    });
+
+    function validateBrandForm() {
+        $('#brandForm').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                brandName:{
+                    validators:{
+                        notEmpty: {
+                            message: 'The brand name is required'
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
