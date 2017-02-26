@@ -169,4 +169,53 @@ ul li{
 .cart-input-form input{
     width: 70px;
     height: 34px;
+    border-radius: 3px;
+}
+
+#cartForm .item-list{
+    margin: 10px 0 30px;
+    height: 400px;
+    overflow: auto;
+}
+
+#cartForm .divider{
+    padding-bottom: 40px;
+    margin-bottom: 20px;
+}
+
+.order-note{
+    width: 30%;
+    float: left;
+}
+
+.order-note .textareawrapper{
+    padding: 10px;
+    border: 1px solid #d9d9d2;
+}
+
+.order-note textarea{
+    height: 100px;
+    width: 100%;
+    border-radius: 3px;
+    border: none;
+}
+
+#cartForm .total-area{
+    width: 70%;
+    float: right;
+}
+#cartForm .total-area .subtotal{
+    margin: 0 0 40px;
+}
+
+#cartForm .total-area .checkout-col{
+    float: right;
+}
+
+#cartForm .cart-item-quantity{
+    width: 50px;
+}
+
+.checkout-button-papal img{
+    height: 1.3em !important;
 }

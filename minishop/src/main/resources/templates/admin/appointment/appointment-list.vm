@@ -1,0 +1,92 @@
+#set($layout="/admin/layout/layout-admin.vm")
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-horizontal"">
+            <div class="form-group">
+                <label for="bookDate" class="col-sm-3 control-label">Book date</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="bookDate">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-horizontal"">
+            <div class="form-group">
+                <label for="state" class="col-sm-3 control-label">State</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="state">
+                        <option>Pending</option>
+                        <option>Customer confirming</option>
+                        <option>Confirmed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="text-align: center;">
+    <a class="btn btn-primary">Search</a>
+</div>
+
+<div class="table-responsive" id="appointmentList">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>＃</th>
+                <th>Item</th>
+                <th>Username</th>
+                <th>Book date</th>
+                <th>Book time</th>
+                <th>State</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, index) in appointments">
+                <td>{{(pagination.currentPage - 1) * pagination.size + 1 + index }}</td>
+                <td>{{item.itemName}}</td>
+                <td>{{item.userName}}</td>
+                <td>{{item.bookDate}}</td>
+                <td>{{item.bookTime}}</td>
+                <td>{{item.state}}</td>
+                <td></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li v-if="pagination.currentPage != 1">
+                                <a href="#" aria-label="Previous" @click="previousPage">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <template v-for="pageNum in pageNums">
+                                <li class="active" v-if="pageNum == pagination.currentPage"><a href="#">{{pageNum}}</a></li>
+                                <li v-else><a href="#" @click="queryCurrentPage">{{pageNum}}</a></li>
+                            </template>
+
+                            <li v-if="pagination.currentPage != pagination.totalPage">
+                                <a href="#" aria-label="Next" @click="nextPage">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </td>
+                <td colspan="2">
+                    (Total: {{pagination.totalPage}})
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+<script src="/js/appointment-list.js"></script>

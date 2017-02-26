@@ -1,5 +1,11 @@
 <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
+        #if($appointmentActive)
+            <li class="active"><a href="/admin/appointment-list/index">Appointment</a></li>
+        #else
+            <li><a href="/admin/appointment-list/index">Appointment</a></li>
+        #end
+
         #if($orderActive)
             <li class="active"><a href="/admin/order-list">Order</a></li>
         #else

@@ -47,16 +47,15 @@
                 <div class="appointment-form">
                     <form id="appointmentForm" action="/client/book" method="post">
 
-                        <div class="form-group">
+                        <div class="form-group" v-bind:class="{'has-error': hasErrorDate}">
                             <label for="bookDate">Date:</label>
-                            <input type="text" class="form-control datepicker" id="bookDate" name="bookDate"/>
+                            <input type="text" v-model="bookDate" class="form-control datepicker"  id="bookDate" name="bookDate"/>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" v-bind:class="{'has-error': hasErrorTime}">
                             <label for="bookTime">Time:</label>
-                            <input type="text" class="form-control timepicker" id="bookTime" name="bookTime"/>
+                            <input type="text" v-model="bookTime" class="form-control timepicker" id="bookTime" name="bookTime"/>
                         </div>
-                        <input type="hidden" name="itemId" value="${item.itemId}" />
-                        <button id="btnBook" type="submit" class="btn btn-primary btn-lg">BOOK AN APPOINTMENT NOW</button>
+                        <a id="btnBook" v-on:click="bookAppointment" class="btn btn-primary btn-lg">BOOK AN APPOINTMENT NOW</a>
                     </form>
 
                 </div>
@@ -67,17 +66,15 @@
                 <p>We get it, our Express mail service is simply one of the most convenient ways to have your iPad Pro 9.7" screen repaired when you can’t make it to our location.</p>
                 <p>We designed it that way! Plus, when you see the postman approaching with that package you know is your good-as-new iPad Pro 9.7", it can feel a bit like Christmas, no matter what the time of year.</p>
                 <p>The process is simple. You send us your damaged iPad Pro 9.7" in a padded envelope via Royal Mail Special Delivery. Once we receive it, we’ll fix it right up and have it in the post for you same day. With next day delivery, you’ll be cradling your iPad Pro 9.7" again in just a couple of days! Order this service below and we’ll send you the complete mailing instructions straightaway.</p>
-                <form action="/cart" method="post">
-                    <div class="cart-input-form">
-                        <label for="quantity">Quantity</label>
-                        <input type="text" name="quantity" maxlength="2"/>
-                        <select>
-                            <option>Black</option>
-                            <option>White</option>
-                        </select>
-                        <button name="btnCart" class="btn btn-primary">ADD TO CART</button>
-                    </div>
-                </form>
+                <div class="cart-input-form">
+                    <label for="quantity">Quantity</label>
+                    <input type="text" name="quantity" id="quantity" maxlength="2" />
+                    <select>
+                        <option>Black</option>
+                        <option>White</option>
+                    </select>
+                    <button  id="btnAddCartItem" class="btn btn-primary">ADD TO CART</button>
+                </div>
             </div>
         </div>
 
@@ -85,82 +82,6 @@
 
 </div>
 
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        new Vue({
-            el: "#calendar-tr"
-        });
-
-        //设定选择日期
-        $('#bookDate').pickadate({format:'dd-mm-yyyy'});
-        //设定选择时间
-        $('#bookTime').pickatime({formatSubmit: 'HH:i'
-            , hiddenName: true
-            , min: [9,00]
-            , max: [18,0]
-            , interval: 15
-        });
-
-        $('#btnBook').click(function () {
-            var submitAbled = true;
-            $('.app-error').remove();
-
-            if($('#bookDate').val() == ""){
-                $('#bookDate').after("<span class='app-error'>The date is required.</span>");
-                submitAbled = false;
-            }
-
-            if($('#bookTime').val() == ""){
-                $('#bookTime').after("<span class='app-error'>The time is required.</span>")
-                submitAbled = false;
-            }
-
-            return submitAbled;
-        });
-
-        $("#bookDate").change(function(){
-            $('.app-error').remove();
-        });
-        $("#bookTime").change(function(){
-            $('.app-error').remove();
-        });
-        //客户资料验证
-        //validateAppointmentForm();
-
-    });
-    
-    function validateAppointmentForm() {
-        $('#appointmentForm').bootstrapValidator({
-            message: 'This value is not valid',
-            feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
-                bookDate:{
-                    validators:{
-                        notEmpty: {
-                            message: 'The date is required'
-                        }
-                    }
-                },
-                bookTime: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The time is required'
-                        }
-                    }
-                }
-
-            }
-
-        });
-
-//        $('#btnAppointmentSubmit').click(function(){
-//            $('#appointmentForm').bootstrapValidator('validate');
-//        });
-    }
-</script>
+<input type="hidden" id="itemId" value="${item.itemId}">
+<script src="/js/item-detail.js"></script>
 

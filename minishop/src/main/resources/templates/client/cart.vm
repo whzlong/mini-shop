@@ -1,3 +1,72 @@
-<div class="container">
-
+<div class="container" style="height: 700px;" id="cartForm">
+    <div class="item-list">
+        <table class="table">
+            <thead>
+                <th>Item</th>
+                <th>Unit price/Discount price</th>
+                <th>Quantity</th>
+                <th>Total price</th>
+                <th></th>
+            </thead>
+            <tbody>
+               <template v-if="cartItems.length > 0">
+                   <tr v-for="cartItem in cartItems">
+                       <td>
+                           {{cartItem.itemName}}---{{cartItem.itemId}}
+                       </td>
+                       <td>
+                           <template v-if="cartItem.state=='discount'">
+                               <span style="text-decoration: line-through; color: red;">{{cartItem.unitPrice}}</span>
+                               /
+                               <span>{{cartItem.discountPrice}}</span>
+                           </template>
+                           <template v-else>
+                               {{cartItem.unitPrice}}
+                           </template>
+                       </td>
+                       <td>
+                           <input class="form-control cart-item-quantity" type="text" name="quantity" v-model.number="cartItem.quantity" />
+                       </td>
+                       <td>
+                           <template v-if="cartItem.state=='discount'">
+                               {{cartItem.discountPrice * cartItem.quantity}}
+                           </template>
+                           <template v-else>
+                               {{cartItem.unitPrice * cartItem.quantity}}
+                           </template>
+                       </td>
+                       <td>
+                           <a href="#" v-on:click="deleteCartItem" name="btnDelete"> <span v-bind:id="cartItem.itemId" class="glyphicon glyphicon-trash"></span></a>
+                       </td>
+                   </tr>
+               </template>
+               <template v-else>
+                   <tr>
+                       <td colspan="5" style="text-align: center;">Your cart is empty</td>
+                   </tr>
+               </template>
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top:20px;margin-bottom: 40px;">
+        <button class="btn btn-primary" v-on:click="updateCart">Update cart</button>
+    </div>
+    <div class="divider">
+        <div class="order-note">
+            <label>Add a note to your order</label>
+            <div class="textareawrapper">
+                <textarea name="note"></textarea>
+            </div>
+        </div>
+        <div class="total-area">
+            <div class="checkout-col">
+                <h2 class="subtotal" >{{currency}} {{totalPrice}}</h2>
+                <button class="btn btn-danger">CHECKOUT</button>
+                <br><br>
+                <button class="btn btn-warning checkout-button-papal">Checkout with <img alt="PayPal" src="/images/paypal-logo.png"></button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="/js/cart.js"></script>

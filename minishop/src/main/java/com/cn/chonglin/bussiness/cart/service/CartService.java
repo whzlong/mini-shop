@@ -1,13 +1,18 @@
 package com.cn.chonglin.bussiness.cart.service;
 
+import com.cn.chonglin.bussiness.base.dao.SettingDao;
 import com.cn.chonglin.bussiness.base.dao.UserDao;
+import com.cn.chonglin.bussiness.base.domain.Setting;
 import com.cn.chonglin.bussiness.base.domain.User;
 import com.cn.chonglin.bussiness.cart.dao.CartDao;
 import com.cn.chonglin.bussiness.cart.dao.CartItemDao;
 import com.cn.chonglin.bussiness.cart.domain.Cart;
 import com.cn.chonglin.bussiness.cart.domain.CartItem;
+import com.cn.chonglin.bussiness.cart.vo.CartItemVo;
+import com.cn.chonglin.bussiness.cart.vo.CartVo;
 import com.cn.chonglin.bussiness.item.dao.ItemDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
+import com.cn.chonglin.web.client.cart.form.CartItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +37,9 @@ public class CartService {
     @Autowired
     private ItemDao itemDao;
 
+    @Autowired
+    private SettingDao settingDao;
+
     /**
      * 向购物车添加商品
      *
@@ -43,19 +51,25 @@ public class CartService {
 
         cartItem.setCartId(cart.getCartId());
 
-        if(cartItemDao.findByKey(cart.getCartId(), cartItem.getItemId()) == null){
-            Item item = itemDao.findByKey(cartItem.getItemId());
+        CartItem currentCartItem = cartItemDao.findByKey(cart.getCartId(), cartItem.getItemId());
 
-            cartItem.setItemName(item.getItemName());
-
+        if(currentCartItem == null){
             cartItemDao.insert(cartItem);
         }else{
-            cartItemDao.update(cartItem);
+            currentCartItem.setQuantity(currentCartItem.getQuantity() + cartItem.getQuantity());
+
+            cartItemDao.update(currentCartItem);
         }
 
-    }
+        Item item = itemDao.findByKey(cartItem.getItemId());
 
-    public void updateCart(Cart cart){
+        if("discount".equals(item.getState())){
+            cart.setTotalPrice(cart.getTotalPrice().add(item.getDiscountPrice().multiply(new BigDecimal(cartItem.getQuantity()))));
+        }else{
+            cart.setTotalPrice(cart.getTotalPrice().add(item.getUnitPrice().multiply(new BigDecimal(cartItem.getQuantity()))));
+        }
+
+        cartDao.update(cart);
 
     }
 
@@ -82,9 +96,70 @@ public class CartService {
         return cart;
     }
 
-    public List<CartItem> getCartItems(String cartId){
-        return cartItemDao.findByCartId(cartId);
+    public CartVo getCart(){
+        Cart cart = getCartInfo();
+
+        CartVo cartVo = new CartVo();
+
+        cartVo.setCartId(cart.getCartId());
+        cartVo.setTotalPrice(cart.getTotalPrice());
+        cartVo.setCartItemVos(cartItemDao.findCartItems(cart.getCartId()));
+
+        Setting setting = settingDao.queryForObject();
+
+        cartVo.setCurrency(setting.getCurrency());
+
+        return cartVo;
     }
 
+    public CartVo deleteCartItem(String itemId){
+        Cart cart = getCartInfo();
+
+        cartItemDao.delete(cart.getCartId(), itemId);
+
+        return updateCart(cart);
+    }
+
+    public CartVo updateCartItems(List<CartItemForm> cartItemForms){
+        Cart cart = getCartInfo();
+
+        CartItem cartItem = null;
+
+        for (CartItemForm form : cartItemForms){
+            cartItem = cartItemDao.findByKey(cart.getCartId(), form.getItemId());
+            cartItem.setQuantity(form.getQuantity());
+
+            cartItemDao.update(cartItem);
+        }
+
+        return updateCart(cart);
+    }
+
+    private CartVo updateCart(Cart cart){
+        List<CartItemVo> cartItemVos = cartItemDao.findCartItems(cart.getCartId());
+
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        for(CartItemVo cartItemVo : cartItemVos){
+            if ("discount".equals(cartItemVo.getState())){
+                totalPrice = totalPrice.add(cartItemVo.getDiscountPrice().multiply(new BigDecimal(cartItemVo.getQuantity())));
+            }else {
+                totalPrice = totalPrice.add(cartItemVo.getUnitPrice().multiply(new BigDecimal(cartItemVo.getQuantity())));
+            }
+        }
+
+        cart.setTotalPrice(totalPrice);
+
+        cartDao.update(cart);
+
+        CartVo cartVo = new CartVo();
+
+        cartVo.setCartId(cart.getCartId());
+        cartVo.setTotalPrice(cart.getTotalPrice());
+        cartVo.setCartItemVos(cartItemVos);
+
+        return cartVo;
+
+    }
 
 }

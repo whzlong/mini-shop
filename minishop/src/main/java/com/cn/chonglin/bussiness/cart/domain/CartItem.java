@@ -1,6 +1,5 @@
 package com.cn.chonglin.bussiness.cart.domain;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -9,8 +8,6 @@ import java.sql.Timestamp;
 public class CartItem {
     private String cartId;
     private String itemId;
-    private String itemName;
-    private BigDecimal price;
     private int quantity;
     private String color;
     private Timestamp updatedAt;
@@ -30,22 +27,6 @@ public class CartItem {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public int getQuantity() {

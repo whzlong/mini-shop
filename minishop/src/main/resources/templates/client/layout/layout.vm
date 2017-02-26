@@ -20,6 +20,11 @@
     <script src="/libs/bootstrap/v3.3.0/js/bootstrap.min.js"></script>
     <script src="/libs/bootstrap-validator/js/bootstrapValidator.min.js"></script>
     <script src="/libs/vue/vue.js"></script>
+    <script src="/libs/fly/jquery.fly.min.js"></script>
+
+    <!--[if (gte IE 7)&(lt IE 10)]>
+    <script src="/libs/fly/requestAnimationFrame.js"></script>
+    <![endif]-->
 
     <!--[if lt IE 9]>
     <script src="/webjars/html5shiv/v3.7.3/html5shiv.min.js"></script>

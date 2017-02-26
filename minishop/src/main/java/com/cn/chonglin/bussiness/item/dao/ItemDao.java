@@ -46,7 +46,7 @@ public class ItemDao {
 
     public List<Item> findItemsByModel(String modelId){
         try{
-            return jdbcTemplate.query("SELECT * FROM items WHERE type_id = ?", new Object[]{modelId}, mapper);
+            return jdbcTemplate.query("SELECT * FROM items WHERE model_id = ?", new Object[]{modelId}, mapper);
         }catch (EmptyResultDataAccessException ex){
             return null;
         }

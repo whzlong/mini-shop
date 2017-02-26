@@ -17,6 +17,14 @@ import javax.sql.DataSource;
 @Configuration
 @EnableScheduling
 public class MinishopConfig {
+//    @Bean
+//    public ObjectMapper jacksonObjectMapper() {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+//                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//        return objectMapper;
+//    }
+
     @Bean(name = "businessDatasource")
     @Primary
     @ConfigurationProperties(prefix="spring.business.datasource")

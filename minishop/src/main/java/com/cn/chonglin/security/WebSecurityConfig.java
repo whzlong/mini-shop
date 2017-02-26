@@ -1,4 +1,4 @@
-package com.cn.chonglin.config;
+package com.cn.chonglin.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
+    private RESTAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
@@ -34,7 +37,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         , "/client/items/**"
                         , "/client/itemTypes/**"
                         , "/file/**"
-                        , "/api/**"
                         , "/client/register"
                         , "/client/confirm/**"
                         , "/admin/**"
@@ -51,9 +53,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                     .logout()
                     .permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/client/authority-error")
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
+//                .exceptionHandling().accessDeniedPage("/client/authority-error")
                 .and()
                     .csrf().disable();
+
+        //.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint)
+
+        //.exceptionHandling().accessDeniedPage("/client/authority-error")
 
     }
 

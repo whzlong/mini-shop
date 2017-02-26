@@ -8,7 +8,6 @@ import java.sql.Timestamp;
  */
 public class Cart {
     private String cartId;
-    private String userId;
     private BigDecimal totalPrice;
     private Timestamp updatedAt;
     private Timestamp createdAt;
@@ -19,14 +18,6 @@ public class Cart {
 
     public void setCartId(String cartId) {
         this.cartId = cartId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public BigDecimal getTotalPrice() {
