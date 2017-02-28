@@ -61,4 +61,27 @@ public class AppointmentController{
         return PaginationResult.success(appointmentService.query(bookDate, state, size, currentPage));
     }
 
+    @PostMapping(value = "admin/appointments", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    ResponseResult<Object> edit(@Valid AppointmentForm appointmentForm, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return ResponseResult.error(bindingResult.getFieldErrors());
+        }
+
+        appointmentService.edit(appointmentForm.toDomain());
+
+        return ResponseResult.success(null);
+    }
+
+    @PostMapping(value = "admin/appointments/confirm", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    ResponseResult<Object> confirmWithCustomer(@Valid AppointmentForm appointmentForm, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return ResponseResult.error(bindingResult.getFieldErrors());
+        }
+
+        appointmentService.confirmWithCustomer(appointmentForm.toDomain());
+
+        return ResponseResult.success(null);
+    }
 }

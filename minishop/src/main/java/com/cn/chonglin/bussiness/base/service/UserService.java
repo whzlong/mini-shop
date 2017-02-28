@@ -1,12 +1,13 @@
 package com.cn.chonglin.bussiness.base.service;
 
 import com.cn.chonglin.bussiness.base.dao.UserDao;
+import com.cn.chonglin.bussiness.base.dao.VerificationDao;
 import com.cn.chonglin.bussiness.base.domain.User;
+import com.cn.chonglin.bussiness.base.domain.Verification;
 import com.cn.chonglin.bussiness.mail.UserMailSender;
 import com.cn.chonglin.common.AppException;
 import com.cn.chonglin.common.IdGenerator;
 import com.cn.chonglin.common.mail.MailService;
-import com.cn.chonglin.common.mail.maillogger.MailLog;
 import com.cn.chonglin.common.mail.maillogger.MailLogService;
 import com.cn.chonglin.constants.DropdownListContants;
 import com.cn.chonglin.constants.RoleContants;
@@ -45,6 +46,9 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private VerificationDao verificationDao;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public User save(User user){
         checkInput(user);
@@ -58,10 +62,18 @@ public class UserService {
 
             userDao.insert(user);
 
+            //验证信息
+            Verification verification = new Verification();
+            verification.setVerificationCode(IdGenerator.getUuid());
+            verification.setUserId(user.getId());
+
+            verificationDao.insert(verification);
+
+
             //发送帐户验证邮件
             List<String> mailList = new ArrayList<>();
             mailList.add(user.getEmail());
-            mailService.asynSend(new UserMailSender(user), mailList);
+            mailService.asynSend(new UserMailSender(verification), mailList);
         }catch(Exception ex){
             logger.error("Email sending is failed.(customerId:{}, email:{})", user.getId(), user.getEmail());
         }
@@ -90,28 +102,23 @@ public class UserService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void confirmRegister(String id){
-        User user = userDao.findByKey(id);
+        Verification verification = verificationDao.findByKey(id);
 
-        if(user == null){
+        if(verification == null){
             //是否为有效链接
             throw new AppException("The link was invalid.");
         }
+
+        User user = userDao.findByKey(verification.getUserId());
 
         //帐户是否已经被激活
         if(DropdownListContants.USER_STATE_ACTIVE_VALUE == user.getEnabled()){
             throw new AppException("The account has been validated.");
         }
 
-        MailLog mailLog = mailLogService.findByEmail(user.getEmail());
-
-        //是否为有效链接
-        if(mailLog == null){
-            throw new AppException("The link was invalid.");
-        }
-
         //是否过期（超过24小时）
         LocalDateTime localDateTime = LocalDateTime.now();
-        LocalDateTime createdAt = mailLog.getCreatedAt().toLocalDateTime();
+        LocalDateTime createdAt = verification.getCreated_at();
 
         createdAt = createdAt.plusHours(24);
 

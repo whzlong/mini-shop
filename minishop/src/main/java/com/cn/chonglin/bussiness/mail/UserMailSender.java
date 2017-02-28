@@ -1,6 +1,6 @@
 package com.cn.chonglin.bussiness.mail;
 
-import com.cn.chonglin.bussiness.base.domain.User;
+import com.cn.chonglin.bussiness.base.domain.Verification;
 import com.cn.chonglin.common.mail.sender.BaseMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -13,11 +13,11 @@ import javax.mail.internet.MimeMessage;
  * @author wu
  */
 public class UserMailSender extends BaseMailSender {
-    private User user;
+    private Verification verification;
 
-    public UserMailSender(User user){
+    public UserMailSender(Verification verification){
         super(true);
-        this.user = user;
+        this.verification = verification;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class UserMailSender extends BaseMailSender {
 
     private String buildContent() {
         StringBuffer sb = new StringBuffer(300);
-        String confirmUrl = "http://localhost:8080/confirm/" + user.getId();
+        String confirmUrl = "http://localhost:8080/client/confirm/" + verification.getVerificationCode();
         sb.append("Thank you very much for your registration. <br>");
         sb.append("Please click the link below to validate your account.<br>");
         sb.append("<a href='" + confirmUrl+"'>" + confirmUrl + "</a>");

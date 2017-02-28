@@ -2,6 +2,7 @@ package com.cn.chonglin.bussiness.appointment.domain;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Appointment {
@@ -17,9 +18,11 @@ public class Appointment {
 
     private String state;
 
-    private String updatedAt;
+    private String comment;
 
-    private String created_at;
+    private LocalDateTime updatedAt;
+
+    private LocalDateTime created_at;
 
     public String getId() {
         return id;
@@ -69,19 +72,27 @@ public class Appointment {
         this.state = state;
     }
 
-    public String getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public String getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(String created_at) {
+    public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

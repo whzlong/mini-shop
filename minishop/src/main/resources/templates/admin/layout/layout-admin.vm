@@ -15,7 +15,15 @@
     <link href="/libs/pickerdate/themes/default.css" rel="stylesheet"/>
     <link href="/libs/pickerdate/themes/default.date.css" rel="stylesheet"/>
     <link href="/libs/pickerdate/themes/default.time.css" rel="stylesheet"/>
+
+
     <script src="/libs/jquery/v1.12.4/jquery.min.js"></script>
+
+
+    <link href="/libs/datepicker/bootstrapDatepickr-1.0.0.min.css" rel="stylesheet"/>
+    <script src="/libs/datepicker/bootstrapDatepickr-1.0.0.min.js"></script>
+
+
     <script src="/libs/bootstrap/v3.3.0/js/bootstrap.min.js"></script>
     <script src="/libs/bootstrap-validator/js/bootstrapValidator.min.js"></script>
 

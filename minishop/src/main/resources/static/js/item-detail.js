@@ -29,7 +29,7 @@ $(function () {
                     this.hasErrorTime = false;
                 }
 
-                var appointmentParams = {itemId: $('#itemId').val(), bookDate: $('input[name=bookDate]').val(), bookTime: $('input[name=bookTime]').val()};
+                var appointmentParams = {itemId: $('#itemId').val(), bookDate: $('#bookDate').val(), bookTime: $('input[name=bookTime]').val()};
 
                 $.ajax({
                     type: "post",

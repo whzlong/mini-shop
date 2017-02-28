@@ -8,11 +8,15 @@ public class AppointmentVo {
 
     private String itemName;
 
+    private String phone;
+
     private String bookDate;
 
     private String bookTime;
 
     private String state;
+
+    private String comment;
 
     public String getId() {
         return id;
@@ -38,6 +42,14 @@ public class AppointmentVo {
         this.itemName = itemName;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getBookDate() {
         return bookDate;
     }
@@ -60,5 +72,13 @@ public class AppointmentVo {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
