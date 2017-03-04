@@ -32,18 +32,10 @@
             <li><a href="/admin/user-list">User</a></li>
         #end
 
-        #if($discountActive)
-            <li class="active"><a href="">Discount</a></li>
+        #if($couponActive)
+            <li class="active"><a href="/admin/coupon-list">Coupon</a></li>
         #else
-            <li><a href="">Discount</a></li>
-        #end
-
-    </ul>
-    <ul class="nav nav-sidebar">
-        #if($scheduleActive)
-            <li class="active"><a href="/admin/calendar">Calendar</a></li>
-        #else
-            <li><a href="/admin/calendar">Schedule</a></li>
+            <li><a href="/admin/coupon-list">Coupon</a></li>
         #end
 
     </ul>

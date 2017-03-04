@@ -1,14 +1,24 @@
 package com.cn.chonglin.bussiness.item.service;
 
-import com.cn.chonglin.bussiness.item.dao.ItemDao;
 import com.cn.chonglin.bussiness.item.dao.ItemCategoryDao;
+import com.cn.chonglin.bussiness.item.dao.ItemDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.domain.ItemCategory;
+import com.cn.chonglin.bussiness.item.vo.ItemVo;
 import com.cn.chonglin.common.IdGenerator;
+import com.cn.chonglin.common.ListPage;
+import com.cn.chonglin.web.item.form.ItemForm;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -19,11 +29,19 @@ import java.util.List;
 @Service
 @Transactional
 public class ItemService {
-    @Autowired
-    ItemDao itemDao;
+    private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
+
+    @Value("${uploadfilepath.detailimage}")
+    private String detailImgFilePath;
+
+    @Value("${uploadfilepath.listimage}")
+    private String listImgFilePath;
 
     @Autowired
-    ItemCategoryDao itemCategoryDao;
+    private ItemDao itemDao;
+
+    @Autowired
+    private ItemCategoryDao itemCategoryDao;
 
     public Item findByKey(String id){
         return itemDao.findByKey(id);
@@ -65,15 +83,32 @@ public class ItemService {
      * @return
      */
     public List<ItemCategory> findItemTypes(String parentTypeId){
-        return itemCategoryDao.findItemCategories(parentTypeId);
+        return itemCategoryDao.findByParentCategoryId(parentTypeId);
     }
 
-    public int getListCount(String brand, String model){
-        return itemDao.getListCount(brand, model);
+    public ListPage<ItemVo> query(String brand, String model, int limit, int page){
+        int count = itemDao.countItems(brand, model);
+
+        List<ItemVo> itemVos = itemDao.query(brand, model, limit, page*limit);
+
+        return new ListPage<>(count, itemVos);
     }
 
-    public List<Item> queryForList(String brand, String model, int limit, int offset){
-        return itemDao.queryForList(brand, model, limit, offset);
+    public void save(ItemForm itemForm){
+
+        String itemDetailImagePath = uploadFile(itemForm.getItemDetailImage(), detailImgFilePath);
+
+        String itemListImagePath = uploadFile(itemForm.getItemListImage(), listImgFilePath);
+
+        Item item = itemForm.toDomain();
+        item.setItemDetailImage(itemDetailImagePath);
+        item.setItemListImage(itemListImagePath);
+
+        if(!StringUtils.isEmpty(itemForm.getItemId())){
+            update(item);
+        }else{
+            add(item);
+        }
     }
 
     public void add(Item item){
@@ -86,9 +121,59 @@ public class ItemService {
     }
 
     public void update(Item item){
-        item.setBrandName(itemCategoryDao.getItemCategoryName(item.getBrandId()));
-        item.setModelName(itemCategoryDao.getItemCategoryName(item.getModelId()));
-        itemDao.update(item);
+        Item updateItem = itemDao.findByKey(item.getItemId());
+
+        updateItem.setBrandId(item.getBrandId());
+        updateItem.setBrandName(itemCategoryDao.getItemCategoryName(item.getBrandId()));
+        updateItem.setModelId(item.getModelId());
+        updateItem.setModelName(itemCategoryDao.getItemCategoryName(item.getModelId()));
+        updateItem.setItemName(item.getItemName());
+
+        if(!StringUtils.isEmpty(item.getItemDetailImage())){
+            updateItem.setItemDetailImage(item.getItemDetailImage());
+        }
+
+        if(!StringUtils.isEmpty(item.getItemListImage())){
+            updateItem.setItemListImage(item.getItemListImage());
+        }
+
+        updateItem.setUnitPrice(item.getUnitPrice());
+        updateItem.setDiscountPrice(item.getDiscountPrice());
+        updateItem.setState(item.getState());
+        updateItem.setStock(item.getStock());
+
+        itemDao.update(updateItem);
+    }
+
+    public String uploadFile(MultipartFile multipartFile, String fileUploadPath){
+        String fileSavePath = "";
+
+        if(!multipartFile.isEmpty()){
+
+            String appAbsolutePath = org.springframework.util.ClassUtils.getDefaultClassLoader().getResource("static").getPath();
+
+            String fileName = multipartFile.getOriginalFilename();
+
+            fileSavePath = fileUploadPath + fileName;
+
+            File file = new File(appAbsolutePath + fileSavePath);
+
+            if(!file.getParentFile().exists()){
+                file.getParentFile().mkdirs();
+            }
+
+            try{
+                multipartFile.transferTo(file);
+            }catch (IOException ex){
+                logger.error("fileupload is failed. ({})", ex.getMessage());
+            }
+        }
+
+        return fileSavePath;
+    }
+
+    public void delete(String itemId){
+
     }
 
 }

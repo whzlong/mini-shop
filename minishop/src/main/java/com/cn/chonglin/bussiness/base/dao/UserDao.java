@@ -1,6 +1,7 @@
 package com.cn.chonglin.bussiness.base.dao;
 
 import com.cn.chonglin.bussiness.base.domain.User;
+import com.cn.chonglin.bussiness.base.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,7 +22,9 @@ import java.util.List;
  */
 @Repository
 public class UserDao {
-    private final RowMapper<User> mapper = new UserDao.UserMapper();
+    private final RowMapper<User> mapper = new UserMapper();
+    private final RowMapper<UserVo> userVoRowMapper = new UserVoMapper();
+
     private JdbcTemplate jdbcTemplate;
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -48,19 +51,19 @@ public class UserDao {
         }
     }
 
-    public User findValidUser(String email){
+    public User findUserByState(String email, String state){
         try{
-            return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email = ? AND enabled = 0", new Object[]{email}, mapper);
+            return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email = ? AND state = ?", new Object[]{email, state}, mapper);
         }catch (EmptyResultDataAccessException ex){
             return null;
         }
     }
 
-    public int count(String email, String firstname, int state){
+    public int count(String email, String firstName, String state){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
-        sqlWhere.append(" WHERE enabled = ? ");
+        sqlWhere.append(" WHERE state = ? ");
         paramObjects.add(state);
 
         if(!StringUtils.isEmpty(email)){
@@ -68,25 +71,19 @@ public class UserDao {
             paramObjects.add("%" + email + "%");
         }
 
-        if(!StringUtils.isEmpty(firstname)){
+        if(!StringUtils.isEmpty(firstName)){
             sqlWhere.append(" AND first_name like ?");
-            paramObjects.add("%" + firstname + "%");
+            paramObjects.add("%" + firstName + "%");
         }
-
-//        Object[] params = new Object[paramObjects.size()];
-//
-//        for(int i = 0; i < paramObjects.size(); i++){
-//            params[i] = paramObjects.get(i);
-//        }
 
         return jdbcTemplate.queryForObject("SELECT count(id) FROM users " + sqlWhere.toString(), paramObjects.toArray(), Integer.class);
     }
 
-    public List<User> query(String email, String firstname, int state, int limit, int offset){
+    public List<UserVo> query(String email, String firstname, String state, int limit, int offset){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
-        sqlWhere.append(" WHERE enabled = ? ");
+        sqlWhere.append(" WHERE state = ? ");
         paramObjects.add(state);
 
         if(!StringUtils.isEmpty(email)){
@@ -106,13 +103,7 @@ public class UserDao {
         paramObjects.add(limit);
         paramObjects.add(offset);
 
-//        Object[] params = new Object[paramObjects.size()];
-//
-//        for(int i = 0; i < paramObjects.size(); i++){
-//            params[i] = paramObjects.get(i);
-//        }
-
-        return jdbcTemplate.query("SELECT * FROM users " + sqlWhere.toString(), paramObjects.toArray(), mapper);
+        return jdbcTemplate.query("SELECT * FROM users " + sqlWhere.toString(), paramObjects.toArray(), userVoRowMapper);
     }
 
     public void insert(User user){
@@ -212,14 +203,14 @@ public class UserDao {
     /**
      * 更新用户信息时，检查邮箱是否唯一
      *
-     * @param userid
+     * @param userId
      * @param email
      *
      * @return  true： 不唯一
      *          false: 唯一
      */
-    public boolean checkEmail(String userid, String email){
-        return jdbcTemplate.queryForObject("SELECT count(id) FROM users WHERE id != ? and email = ?", new Object[]{userid, email}, Integer.class) > 0;
+    public boolean checkEmail(String userId, String email){
+        return jdbcTemplate.queryForObject("SELECT count(id) FROM users WHERE id = ? and email = ?", new Object[]{userId, email}, Integer.class) > 0;
     }
 
     static class UserMapper implements RowMapper<User> {
@@ -245,23 +236,24 @@ public class UserDao {
         }
     }
 
-//    static class UserVoMapper implements  RowMapper<UserVo>{
-//        @Override
-//        public UserVo mapRow(ResultSet rs, int rowNum) throws SQLException {
-//            UserVo userVo = new UserVo();
-//
-//            userVo.setUserId(rs.getString("id"));
-//            userVo.setUsername(rs.getString("first_name") + rs.getString("last_name"));
-//            userVo.setEmail(rs.getString("email"));
-//            userVo.setAddress(rs.getString("address"));
-//            userVo.setPostcode(rs.getString("postcode"));
-//            userVo.setPhone(rs.getString("phone"));
-//            userVo.setRole(rs.getString("role"));
-//            userVo.setState(rs.getString("state"));
-//
-//            return userVo;
-//        }
-//    }
+    static class UserVoMapper implements  RowMapper<UserVo>{
+        @Override
+        public UserVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            UserVo userVo = new UserVo();
+
+            userVo.setUserId(rs.getString("id"));
+            userVo.setFirstName(rs.getString("first_name"));
+            userVo.setLastName(rs.getString("last_name"));
+            userVo.setEmail(rs.getString("email"));
+            userVo.setAddress(rs.getString("address"));
+            userVo.setPostcode(rs.getString("postcode"));
+            userVo.setPhone(rs.getString("phone"));
+            userVo.setRole(rs.getString("role"));
+            userVo.setState(rs.getString("state"));
+
+            return userVo;
+        }
+    }
 
 
 }

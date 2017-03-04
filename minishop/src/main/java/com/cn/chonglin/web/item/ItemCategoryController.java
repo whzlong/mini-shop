@@ -1,31 +1,36 @@
-package com.cn.chonglin.web.api;
+package com.cn.chonglin.web.item;
 
+import com.cn.chonglin.bussiness.base.vo.SelectOptionVo;
 import com.cn.chonglin.bussiness.item.domain.ItemCategory;
 import com.cn.chonglin.bussiness.item.service.ItemCategoryService;
 import com.cn.chonglin.common.AppException;
 import com.cn.chonglin.common.ResponseResult;
-import com.cn.chonglin.web.api.vo.SelectOptionVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 商品分类
+ */
 @RestController
-@RequestMapping("api")
-public class ApiController {
-
+public class ItemCategoryController {
     @Autowired
     private ItemCategoryService itemCategoryService;
 
-    @GetMapping("brands")
+    @GetMapping(value = "api/brands", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<List<SelectOptionVo>> getBrands(@RequestParam(defaultValue = "0") String blank){
         List<ItemCategory> itemCategories = itemCategoryService.findBrands();
 
         return ResponseResult.success(createKeyValue(itemCategories, blank));
     }
 
-    @GetMapping("models")
+    @GetMapping(value = "api/models", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<List<SelectOptionVo>> getModels(@RequestParam String brandId, @RequestParam(defaultValue = "0") String blank){
         List<ItemCategory> itemCategories = itemCategoryService.findModels(brandId);
 
@@ -43,22 +48,24 @@ public class ApiController {
             brands.add(selectOptionVo);
         }
 
-        for (ItemCategory itemCategory : itemCategories){
-            selectOptionVo = new SelectOptionVo();
-            selectOptionVo.setValue(itemCategory.getCategoryId());
-            selectOptionVo.setText(itemCategory.getName());
+        if(itemCategories != null){
+            for (ItemCategory itemCategory : itemCategories){
+                selectOptionVo = new SelectOptionVo();
+                selectOptionVo.setValue(itemCategory.getCategoryId());
+                selectOptionVo.setText(itemCategory.getName());
 
-            brands.add(selectOptionVo);
+                brands.add(selectOptionVo);
+            }
         }
 
         return brands;
     }
 
-    @PostMapping("brands/add")
-    public ResponseResult<SelectOptionVo> addBrand(@RequestParam String brandName){
+    @PostMapping("admin/item-categories/add")
+    public ResponseResult<SelectOptionVo> addItemCategory(@RequestParam(defaultValue = "0") String parentCategoryId, @RequestParam String categoryName){
 
         try{
-            ItemCategory itemCategory = itemCategoryService.save(brandName);
+            ItemCategory itemCategory = itemCategoryService.save(parentCategoryId, categoryName);
 
             SelectOptionVo selectOptionVo = new SelectOptionVo();
             selectOptionVo.setValue(itemCategory.getCategoryId());
@@ -72,11 +79,11 @@ public class ApiController {
 
     }
 
-    @PostMapping("brands/update")
-    public ResponseResult<Object> updateBrand(@RequestParam String brandId, @RequestParam String brandName){
+    @PostMapping("admin/item-categories/update")
+    public ResponseResult<Object> updateBrand(@RequestParam String categoryId, @RequestParam String categoryName){
 
         try{
-            itemCategoryService.update(brandId, brandName);
+            itemCategoryService.update(categoryId, categoryName);
 
             return ResponseResult.success(null);
 
@@ -86,10 +93,10 @@ public class ApiController {
 
     }
 
-    @GetMapping("brands/delete")
-    public ResponseResult<Object> deleteBrand(@RequestParam String brandId){
+    @PostMapping("admin/item-categories/delete")
+    public ResponseResult<Object> delete(@RequestParam String categoryId){
         try{
-            itemCategoryService.deleteBrand(brandId);
+            itemCategoryService.delete(categoryId);
 
             return ResponseResult.success(null);
 
@@ -97,4 +104,5 @@ public class ApiController {
             return ResponseResult.error(ex.getCode(), ex.getMessage());
         }
     }
+
 }

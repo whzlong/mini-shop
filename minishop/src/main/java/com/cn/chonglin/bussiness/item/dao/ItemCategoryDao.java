@@ -2,6 +2,7 @@ package com.cn.chonglin.bussiness.item.dao;
 
 import com.cn.chonglin.bussiness.item.domain.ItemCategory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -31,15 +32,20 @@ public class ItemCategoryDao {
         return jdbcTemplate.queryForObject("SELECT * FROM item_categories WHERE category_id = ?", new Object[]{categoryId}, mapper);
     }
     /**
-     * 查找商品类别
+     * 查找商品子类别
      *
-     * @param parentTypeId
+     * @param parentCategoryId
      *          所属商品类别ID
      * @return
      */
-    public List<ItemCategory> findItemCategories(String parentTypeId){
-        return jdbcTemplate.query("SELECT * FROM item_categories WHERE parent_category_id = ?", new Object[]{parentTypeId}, mapper);
+    public List<ItemCategory> findByParentCategoryId(String parentCategoryId){
+        try{
+            return jdbcTemplate.query("SELECT * FROM item_categories WHERE parent_category_id = ?", new Object[]{parentCategoryId}, mapper);
+        }catch (EmptyResultDataAccessException ex){
+            return null;
+        }
     }
+
 
     /**
      * 查找品牌
@@ -47,7 +53,11 @@ public class ItemCategoryDao {
      * @return
      */
     public List<ItemCategory> findBrands(){
-        return jdbcTemplate.query("SELECT * FROM item_categories WHERE parent_category_id = 0", new Object[]{}, mapper);
+        try{
+            return jdbcTemplate.query("SELECT * FROM item_categories WHERE parent_category_id = '0'", new Object[]{}, mapper);
+        }catch (EmptyResultDataAccessException ex){
+            return null;
+        }
     }
 
     /**
@@ -56,7 +66,11 @@ public class ItemCategoryDao {
      * @return
      */
     public String getItemCategoryName(String typeId){
-        return jdbcTemplate.queryForObject("SELECT name FROM item_categories WHERE category_id = ?", new Object[]{typeId}, String.class);
+        try{
+            return jdbcTemplate.queryForObject("SELECT name FROM item_categories WHERE category_id = ?", new Object[]{typeId}, String.class);
+        }catch (EmptyResultDataAccessException ex){
+            return "";
+        }
     }
 
     public void insert(String categoryId, String parentCategoryId, String name){
@@ -81,12 +95,8 @@ public class ItemCategoryDao {
         jdbcTemplate.update("DELETE FROM item_categories WHERE category_id = ?", categoryId);
     }
 
-    /**
-     * 删除Model数据
-     *
-     * @param parentCategoryId
-     */
-    public void deleteByParentId(String parentCategoryId){
+
+    public void deleteByParentCategoryId(String parentCategoryId){
         jdbcTemplate.update("DELETE FROM item_categories WHERE parent_category_id = ?", parentCategoryId);
     }
 

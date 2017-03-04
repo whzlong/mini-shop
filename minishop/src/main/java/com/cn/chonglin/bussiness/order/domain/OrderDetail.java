@@ -18,24 +18,14 @@ public class OrderDetail {
     private String itemId;
 
     /**
-     * 商品名称
-     */
-    private String itemName;
-
-    /**
      * 购买数量
      */
     private int quantity;
 
     /**
-     * 商品单价
+     * 订单价（订单支付完毕后，当时商品的单价）
      */
-    private BigDecimal unitPrice;
-
-    /**
-     * 商品折扣价
-     */
-    private BigDecimal discountPrice;
+    private BigDecimal orderPrice;
 
     /**
      * 更新日时
@@ -63,14 +53,6 @@ public class OrderDetail {
         this.itemId = itemId;
     }
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -79,20 +61,12 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
+    public BigDecimal getOrderPrice() {
+        return orderPrice;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public BigDecimal getDiscountPrice() {
-        return discountPrice;
-    }
-
-    public void setDiscountPrice(BigDecimal discountPrice) {
-        this.discountPrice = discountPrice;
+    public void setOrderPrice(BigDecimal orderPrice) {
+        this.orderPrice = orderPrice;
     }
 
     public Timestamp getUpdatedAt() {

@@ -7,11 +7,6 @@ import java.math.BigDecimal;
  */
 public class OrderVo {
     /**
-     * 行号
-     */
-    private int rowNum;
-
-    /**
      * 订单号
      */
     private long orderId;
@@ -19,12 +14,22 @@ public class OrderVo {
     /**
      * 客户名
      */
-    private String customerName;
+    private String userName;
 
     /**
-     * 下单日时（预约日时）
+     * 订单创建日时
      */
-    private String datetime;
+    private String orderDatetime;
+
+    /**
+     * 支付日期
+     */
+    private String payDate;
+
+    /**
+     * 快递地址
+     */
+    private String shipAddress;
 
     /**
      * 订单总金额
@@ -41,14 +46,6 @@ public class OrderVo {
      */
     private String comment;
 
-    public int getRowNum() {
-        return rowNum;
-    }
-
-    public void setRowNum(int rowNum) {
-        this.rowNum = rowNum;
-    }
-
     public long getOrderId() {
         return orderId;
     }
@@ -57,20 +54,28 @@ public class OrderVo {
         this.orderId = orderId;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getPayDate() {
+        return payDate;
     }
 
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
+    public void setPayDate(String payDate) {
+        this.payDate = payDate;
+    }
+
+    public String getShipAddress() {
+        return shipAddress;
+    }
+
+    public void setShipAddress(String shipAddress) {
+        this.shipAddress = shipAddress;
     }
 
     public BigDecimal getTotalAmount() {
@@ -95,5 +100,13 @@ public class OrderVo {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getOrderDatetime() {
+        return orderDatetime;
+    }
+
+    public void setOrderDatetime(String orderDatetime) {
+        this.orderDatetime = orderDatetime;
     }
 }

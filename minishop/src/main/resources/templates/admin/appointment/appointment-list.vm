@@ -28,7 +28,6 @@
 </div>
 
 
-
 <div class="table-responsive" id="appointmentList">
     <div class="row" style="text-align: center;">
         <a href="#" class="btn btn-primary" @click="search">Search</a>

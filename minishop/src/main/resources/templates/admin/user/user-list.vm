@@ -1,42 +1,28 @@
 #set($layout="/admin/layout/layout-admin.vm")
 
-<form action="/admin/user-list" method="post" id="userListForm" class="form-horizontal">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="email" class="col-sm-2 control-label">Email</label>
-                <div class="col-sm-6">
-                    <input type="email" class="form-control" name="email" value="${listPageVo.email}">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="firstname" class="col-sm-2 control-label">Firstname</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" name="firstname" value="${listPageVo.firstname}">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="state" class="col-sm-2 control-label">state</label>
-                <div class="col-sm-6">
-                    <select class="form-control" id="state" name="state">
-                        <option value="0">Active</option>
-                        <option value="1">Verification pending</option>
-                        <option value="2">Shielded</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12" style="text-align: center;">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
+<table class="search-condition-table">
+    <tr>
+        <td><label for="emailSearch" class="control-label">Email</label></td>
+        <td><input type="email" class="form-control" name="emailSearch" id="emailSearch"></td>
+        <td><label for="firstNameSearch" class="control-label">Firstname</label></td>
+        <td><input type="text" class="form-control" id="firstNameSearch"></td>
+    </tr>
+    <tr>
+        <td><label for="stateSearch" class="control-label">state</label></td>
+        <td>
+            <select class="form-control" id="stateSearch">
+                <option>Active</option>
+                <option>Pending</option>
+                <option>Shielded</option>
+             </select>
+        </td>
+    </tr>
+</table>
+<div id="user-list">
+
+<div>
+    <div class="row" style="text-align: center;">
+        <a href="#" @click="search" class="btn btn-primary">Search</a>
     </div>
 
     <div class="table-responsive">
@@ -54,118 +40,124 @@
                 </tr>
             </thead>
             <tbody>
-
-                #foreach($user in $users)
-                    #set($rowNum = $foreach.count + ${listPageVo.listSize} * (${listPageVo.currentPage} - 1))
-                    <tr>
-                        <td>
-                            $rowNum
-                        </td>
-                        <td>
-                            $user.firstName &nbsp; $user.lastName
-                        </td>
-                        <td>
-                            $user.email
-                        </td>
-                        <td>
-                            $user.phone
-                        </td>
-                        <td>
-                            $user.address
-                        </td>
-                        <td>
-                            $user.postcode
-                        </td>
-                        <td>
-                            $user.role
-                        </td>
-                        <td>
-                            $user.state
-                        </td>
-                        <td>
-                            <a href="#" name="btnEdit" value="$user.id"> <span class="glyphicon glyphicon-edit"></span></a>
-                            &nbsp;
-                            <a href="#" name="btnDisable" value="$user.id"> <span class="glyphicon glyphicon-ban-circle"></span></a>
-                            &nbsp;
-                            <a href="#" name="btnDelete" value="$user.id"> <span class="glyphicon glyphicon-trash"></span></a>
-                        </td>
-                    </tr>
-                #end
+                <tr v-for="(item, index) in users">
+                    <td>{{(pagination.currentPage - 1) * pagination.size + 1 + index }}</td>
+                    <td>{{item.firstName}}&nbsp;{{item.lastName}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.phone}}</td>
+                    <td>{{item.address}}</td>
+                    <td>{{item.postcode}}</td>
+                    <td>{{item.role}}</td>
+                    <td>{{item.state}}</td>
+                    <td>
+                        <a href="#" @click="editItem" data-toggle="modal" data-target="#pageFormModal" > <span :id="item.userId" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">
-                        <ul class="pagination">
-
-                            #if(${listPageVo.currentPage} > ${listPageVo.pageSize})
-                                #set($previousBeginPage = ${listPageVo.beginPage} - ${listPageVo.pageSize})
-                                <li><a href="#" title="previous 10 page" id="previousPage" value="${previousBeginPage}"> &laquo; </a></li>
-                            #end
-
-                            #if(${listPageVo.endPage} != 0)
-                                #foreach($pageNum in [${listPageVo.beginPage}..${listPageVo.endPage}])
-                                    #if(${listPageVo.currentPage} == $pageNum)
-                                        <li class="active">
-                                            <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
-                                        </li>
-                                    #else
-                                        <li>
-                                            <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
-                                        </li>
-                                    #end
-                                #end
-                            #end
-
-
-                            #if(${listPageVo.leftPage} >= ${listPageVo.pageSize})
-                                #set($nextBeginPage = ${listPageVo.endPage} + 1)
-                                <li>
-                                    <a href="#" value="${nextBeginPage}" title="next 10 page" id="nextPage"> &raquo; </a>
+                    <td colspan="8">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li v-if="pagination.currentPage > 1">
+                                    <a href="#" aria-label="Previous" @click="previousPage">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
                                 </li>
-                            #end
 
-                            &nbsp;
-                            <span style="text-align: center; font-size: larger;vertical-align: middle;">(total: ${listPageVo.totalPage})</span>
+                                <template v-for="pageNum in pageNums">
+                                    <li class="active" v-if="pageNum == pagination.currentPage"><a href="#">{{pageNum}}</a></li>
+                                    <li v-else><a href="#" @click="queryCurrentPage">{{pageNum}}</a></li>
+                                </template>
 
-                        </ul>
-                        <input type="hidden" value="${listPageVo.beginPage}" name="beginPage" id="beginPage"/>
-                        <input type="hidden" value="${listPageVo.currentPage}" name="currentPage" id="currentPage"/>
+                                <li v-if="pagination.currentPage < pagination.totalPage">
+                                    <a href="#" aria-label="Next" @click="nextPage">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a aria-label="Total">
+                                        <span aria-hidden="true">Total: {{pagination.totalPage}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </td>
                 </tr>
             </tfoot>
         </table>
     </div>
-</form>
 
-<script type="text/javascript">
-    $(function () {
-        $('#state').val("${listPageVo.state}");
+    <div class="modal fade" tabindex="-1" role="dialog" id="pageFormModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">User</h4>
+                </div>
+                    <div class="modal-body">
 
-        $('a[name="btnDisable"]').click(function () {
-            var result = confirm("You will disable this user, are you sure? ")
-            if(result == true){
-                $('#userListForm').attr("action", "/admin/users/" + $(this).attr("value"));
+                        <input type="hidden" v-model="pageForm.userId" name="userId">
+                        <div class="form-group">
+                            <label for="firstName">First name</label>
+                            <input type="text" class="form-control" v-model="pageForm.firstName" name="firstName"></input>
+                        </div>
 
-                $('#userListForm').submit();
-            }
+                        <div class="form-group">
+                            <label for="lastName">Last name</label>
+                            <input type="text" class="form-control" v-model="pageForm.lastName" name="lastName"></input>
+                        </div>
 
-        });
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" v-model.trim="pageForm.email" name="email" maxlength="50">
+                        </div>
 
-        $('a[name="btnDelete"]').click(function () {
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" v-model.trim="pageForm.password" name="password" maxlength="30">
+                        </div>
 
-            var result = confirm("You will delete this user, are you sure? ")
-            if(result == true){
-                $('#userListForm').attr("action", "/admin/users/delete?id=" + $(this).attr("value"));
-                $('#userListForm').submit();
-            }
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" class="form-control" v-model.trim="pageForm.phone" name="phone" maxlength="20">
+                        </div>
 
-        });
+                        <div class="form-group">
+                            <label for="postcode">Postcode</label>
+                            <input type="text" class="form-control" v-model.trim="pageForm.postcode" name="postcode" maxlength="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea class="form-control" v-model.trim="pageForm.address" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="form-control" v-model="pageForm.role" name="role">
+                                <option>USER</option>
+                                <option>ADMIN</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select class="form-control" v-model="pageForm.state" name="state">
+                                <option>Active</option>
+                                <option>Pending</option>
+                                <option>Shielded</option>
+                            </select>
+                        </div>
 
-        $('a[name="btnEdit"]').click(function () {
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" @click="saveItem" class="btn btn-primary">Save</button>
+                    </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-            window.location.href = "/admin/users/edit?id=" + $(this).attr("value");
+</div>
 
-        });
+</div>
 
-    })
-</script>
+<script src="/js/user-list.js"></script>

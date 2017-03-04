@@ -2,6 +2,7 @@ package com.cn.chonglin.bussiness.order.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 /**
  * 订单
@@ -15,22 +16,12 @@ public class Order {
     /**
      * 客户ID
      */
-    private String customerId;
+    private String userId;
 
     /**
-     * 客户名称
+     * 支付日期
      */
-    private String customerName;
-
-    /**
-     * 订单日期（预约日期）
-     */
-    private String orderDate;
-
-    /**
-     * 订单时间（预约时间）
-     */
-    private String orderTime;
+    private LocalDate payDate;
 
     /**
      * 寄送地址
@@ -48,7 +39,7 @@ public class Order {
     private String comment;
 
     /**
-     * 订单状态（appointment:预约; created:创建; paid:已支付；repairing：维修中；over:已完成）
+     * 订单状态（appointment:预约; unpaid:未支付; paid:已支付；repairing：维修中；over:已完成）
      */
     private String state;
 
@@ -70,36 +61,20 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public LocalDate getPayDate() {
+        return payDate;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(String orderTime) {
-        this.orderTime = orderTime;
+    public void setPayDate(LocalDate payDate) {
+        this.payDate = payDate;
     }
 
     public String getShipAddress() {

@@ -5,6 +5,7 @@ import com.cn.chonglin.bussiness.appointment.domain.Appointment;
 import com.cn.chonglin.bussiness.appointment.vo.AppointmentVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -41,6 +42,11 @@ public class AppointmentDao {
                             , appointment.getBookDate()
                             , appointment.getBookTime()
                             , appointment.getState());
+    }
+
+    public void delete(String id){
+        jdbcTemplate.update("DELETE FROM appointments WHERE id = ?"
+                            , id);
     }
 
     public Appointment findByKey(String id){
@@ -83,14 +89,20 @@ public class AppointmentDao {
         parameters.add(limit);
         parameters.add(offset);
 
-        return jdbcTemplate.query("SELECT a.id, concat_ws(' ', b.first_name, b.last_name) AS user_name," +
-                " b.phone, c.item_name, a.book_date, a.book_time, a.state, a.comment " +
-                "FROM appointments a " +
-                "INNER JOIN users b ON a.user_id = b.id " +
-                "INNER JOIN items c ON a.item_id = c.item_id " +
-                whereSql.toString() +
-                "ORDER BY a.book_date, a.book_time " +
-                "LIMIT ? OFFSET ?", parameters.toArray(), appointmentVoRowMapper);
+        try{
+            return jdbcTemplate.query("SELECT a.id, concat_ws(' ', b.first_name, b.last_name) AS user_name," +
+                    " b.phone, c.item_name, a.book_date, a.book_time, a.state, a.comment " +
+                    "FROM appointments a " +
+                    "INNER JOIN users b ON a.user_id = b.id " +
+                    "INNER JOIN items c ON a.item_id = c.item_id " +
+                    whereSql.toString() +
+                    "ORDER BY a.book_date, a.book_time " +
+                    "LIMIT ? OFFSET ?", parameters.toArray(), appointmentVoRowMapper);
+
+        }catch (EmptyResultDataAccessException ex){
+            return null;
+        }
+
     }
 
     public void update(Appointment appointment){

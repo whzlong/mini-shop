@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import java.util.List;
 
 @Controller
 @RequestMapping("admin")
@@ -31,53 +29,53 @@ public class AdminAccountController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "user-list", method = {RequestMethod.GET, RequestMethod.POST})
-    public String list(@RequestParam(required = false, defaultValue = "") String email
-                       , @RequestParam(required = false, defaultValue = "") String firstname
-                       , @RequestParam(required = false, defaultValue = "0") String state
-                        , @RequestParam(required = false, defaultValue = "1") @Min(1) int beginPage
-                        , @RequestParam(required = false, defaultValue = "1") @Min(1) int currentPage
-                        ,ModelMap modelMap){
-        int totalPage = 0;
-        int recordCount = userService.count(email, firstname, Integer.valueOf(state));
-
-        List<User> users = userService.query(email, firstname, Integer.valueOf(state), listSize, listSize*(currentPage - 1));
-
-        modelMap.addAttribute("users", users);
-
-        if(recordCount % listSize == 0){
-            totalPage = recordCount/listSize;
-        }else{
-            totalPage = recordCount/listSize + 1;
-        }
-
-        int endPage;
-        if(totalPage - beginPage >= pageSize){
-            endPage = beginPage + pageSize - 1;
-        }else {
-            endPage = totalPage;
-        }
-
-        UserListPageVo listPageVo = new UserListPageVo();
-
-        listPageVo.setTotalPage(totalPage);
-        listPageVo.setCurrentPage(currentPage);
-        listPageVo.setBeginPage(beginPage);
-        listPageVo.setEndPage(endPage);
-        listPageVo.setLeftPage(totalPage - beginPage);
-        listPageVo.setListSize(listSize);
-        listPageVo.setPageSize(pageSize);
-
-
-        listPageVo.setEmail(email);
-        listPageVo.setFirstname(firstname);
-        listPageVo.setState(state);
-
-        modelMap.addAttribute("listPageVo", listPageVo);
-
-        modelMap.addAttribute("userActive", true);
-        return "admin/user/user-list";
-    }
+//    @RequestMapping(value = "user-list", method = {RequestMethod.GET, RequestMethod.POST})
+//    public String list(@RequestParam(required = false, defaultValue = "") String email
+//                       , @RequestParam(required = false, defaultValue = "") String firstname
+//                       , @RequestParam(required = false, defaultValue = "0") String state
+//                        , @RequestParam(required = false, defaultValue = "1") @Min(1) int beginPage
+//                        , @RequestParam(required = false, defaultValue = "1") @Min(1) int currentPage
+//                        ,ModelMap modelMap){
+//        int totalPage = 0;
+//        int recordCount = userService.count(email, firstname, Integer.valueOf(state));
+//
+//        List<User> users = userService.query(email, firstname, Integer.valueOf(state), listSize, listSize*(currentPage - 1));
+//
+//        modelMap.addAttribute("users", users);
+//
+//        if(recordCount % listSize == 0){
+//            totalPage = recordCount/listSize;
+//        }else{
+//            totalPage = recordCount/listSize + 1;
+//        }
+//
+//        int endPage;
+//        if(totalPage - beginPage >= pageSize){
+//            endPage = beginPage + pageSize - 1;
+//        }else {
+//            endPage = totalPage;
+//        }
+//
+//        UserListPageVo listPageVo = new UserListPageVo();
+//
+//        listPageVo.setTotalPage(totalPage);
+//        listPageVo.setCurrentPage(currentPage);
+//        listPageVo.setBeginPage(beginPage);
+//        listPageVo.setEndPage(endPage);
+//        listPageVo.setLeftPage(totalPage - beginPage);
+//        listPageVo.setListSize(listSize);
+//        listPageVo.setPageSize(pageSize);
+//
+//
+//        listPageVo.setEmail(email);
+//        listPageVo.setFirstname(firstname);
+//        listPageVo.setState(state);
+//
+//        modelMap.addAttribute("listPageVo", listPageVo);
+//
+//        modelMap.addAttribute("userActive", true);
+//        return "admin/user/user-list";
+//    }
 
 
     @PostMapping(value = "users/{id}")
@@ -123,7 +121,7 @@ public class AdminAccountController {
     @PostMapping(value = "users/edit")
     public String updateUserInfo(@Valid UserForm userForm, ModelMap modelMap){
         try{
-            userService.update(userForm.toDomain());
+            userService.save(userForm.toDomain());
         }catch (AppException ex){
             modelMap.addAttribute("error", ex.getMessage());
             modelMap.addAttribute("user", userForm);

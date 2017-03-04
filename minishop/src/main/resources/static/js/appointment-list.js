@@ -42,7 +42,13 @@ $(function () {
                     success: function (res) {
                         vm.appointments = res.data;
 
+                        vm.pagination.currentPage = res.page + 1;
+
                         setPagination(res.count);
+
+                        if(res.count == 0){
+                            alert("Relevant information is not available！");
+                        }
 
                     }
                 });
@@ -189,8 +195,6 @@ $(function () {
                         success: function (res) {
                             if(res.code == 0){
                                 vm.query(vm.pagination.currentPage);
-
-                                clearEditContent();
                             }
                         }
                     });

@@ -1,6 +1,7 @@
 package com.cn.chonglin.bussiness.item.dao;
 
 import com.cn.chonglin.bussiness.item.domain.Item;
+import com.cn.chonglin.bussiness.item.vo.ItemVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,6 +23,8 @@ import java.util.List;
 @Repository
 public class ItemDao {
     private final RowMapper<Item> mapper = new ItemMapper();
+    private final RowMapper<ItemVo> itemVoRowMapper = new ItemVoMapper();
+
     private JdbcTemplate jdbcTemplate;
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -53,13 +56,13 @@ public class ItemDao {
     }
 
     /**
-     * 取List数据量
+     * 列表记录数量
      *
      * @param brand
      * @param model
      * @return
      */
-    public int getListCount(String brand, String model){
+    public int countItems(String brand, String model){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
@@ -78,7 +81,7 @@ public class ItemDao {
         return jdbcTemplate.queryForObject("SELECT COUNT(item_id) FROM items " + sqlWhere.toString(), paramObjects.toArray(), Integer.class);
     }
 
-    public List<Item> queryForList(String brand, String model, int limit, int offset){
+    public List<ItemVo> query(String brand, String model, int limit, int offset){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
@@ -101,20 +104,19 @@ public class ItemDao {
         paramObjects.add(limit);
         paramObjects.add(offset);
 
-        return jdbcTemplate.query("SELECT * FROM items " + sqlWhere.toString(), paramObjects.toArray(), mapper);
+        return jdbcTemplate.query("SELECT * FROM items " + sqlWhere.toString(), paramObjects.toArray(), itemVoRowMapper);
     }
 
     public void insert(Item item){
-        jdbcTemplate.update("INSERT INTO items(item_id, item_name, small_image, big_image" +
-                ", unit_price, discount_price, currency, description, brand_id, brand_name" +
-                ", model_id, model_name, stock, state) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+        jdbcTemplate.update("INSERT INTO items(item_id, item_name, item_list_image, item_detail_image" +
+                ", unit_price, discount_price, description, brand_id, brand_name" +
+                ", model_id, model_name, stock, state) values(?,?,?,?,?,?,?,?,?,?,?,?,?)"
          , item.getItemId()
          , item.getItemName()
-         , item.getSmallImage()
-         , item.getBigImage()
+         , item.getItemListImage()
+         , item.getItemDetailImage()
          , item.getUnitPrice()
          , item.getDiscountPrice()
-         , item.getCurrency()
          , item.getDescription()
          , item.getBrandId()
          , item.getBrandName()
@@ -125,15 +127,15 @@ public class ItemDao {
     }
 
     public void update(Item item){
-        jdbcTemplate.update("UPDATE items SET item_name = ?, small_image = ?, big_image = ?" +
-                        ", unit_price = ?, discount_price = ?, currency = ?, brand_id = ?, brand_name = ?" +
+
+        jdbcTemplate.update("UPDATE items SET item_name = ?, item_list_image = ?, item_detail_image = ?" +
+                        ", unit_price = ?, discount_price = ?, brand_id = ?, brand_name = ?" +
                         ", model_id = ?, model_name = ?, stock = ?, state = ?, updated_at = now()  WHERE item_id = ?"
                 , item.getItemName()
-                , item.getSmallImage()
-                , item.getBigImage()
+                , item.getItemListImage()
+                , item.getItemDetailImage()
                 , item.getUnitPrice()
                 , item.getDiscountPrice()
-                , item.getCurrency()
                 , item.getBrandId()
                 , item.getBrandName()
                 , item.getModelId()
@@ -152,20 +154,40 @@ public class ItemDao {
 
             t.setItemId(rs.getString("item_id"));
             t.setItemName(rs.getString("item_name"));
-            t.setSmallImage(rs.getString("small_image"));
-            t.setBigImage(rs.getString("big_image"));
+            t.setItemListImage(rs.getString("item_list_image"));
+            t.setItemDetailImage(rs.getString("item_detail_image"));
             t.setUnitPrice(rs.getBigDecimal("unit_price"));
             t.setDiscountPrice(rs.getBigDecimal("discount_price"));
             t.setBrandId(rs.getString("brand_id"));
             t.setBrandName(rs.getString("brand_name"));
             t.setModelId(rs.getString("model_id"));
             t.setModelName(rs.getString("model_name"));
-            t.setCurrency(rs.getString("currency"));
             t.setDescription(rs.getString("description"));
             t.setStock(rs.getInt("stock"));
             t.setState(rs.getString("state"));
             t.setUpdatedAt(rs.getTimestamp("updated_at"));
             t.setCreatedAt(rs.getTimestamp("created_at"));
+
+            return t;
+        }
+    }
+
+    static class ItemVoMapper implements RowMapper<ItemVo> {
+
+        @Override
+        public ItemVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ItemVo t = new ItemVo();
+
+            t.setItemId(rs.getString("item_id"));
+            t.setItemName(rs.getString("item_name"));
+            t.setUnitPrice(rs.getBigDecimal("unit_price"));
+            t.setDiscountPrice(rs.getBigDecimal("discount_price"));
+            t.setBrandId(rs.getString("brand_id"));
+            t.setBrandName(rs.getString("brand_name"));
+            t.setModelId(rs.getString("model_id"));
+            t.setModelName(rs.getString("model_name"));
+            t.setStock(rs.getInt("stock"));
+            t.setState(rs.getString("state"));
 
             return t;
         }

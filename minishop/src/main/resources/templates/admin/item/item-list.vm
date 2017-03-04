@@ -1,224 +1,170 @@
 #set($layout="/admin/layout/layout-admin.vm")
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-horizontal"" id="brandForm">
+                <div class="form-group">
+                    <label for="brandSearch" class="col-sm-3 control-label">Brand</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="brandSearch" name="brandSearch" onchange="findSearchModels(this)">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-horizontal"">
+                <div class="form-group" id="modelForm">
+                    <label for="modelSearch" class="col-sm-3 control-label">Model</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="modelSearch" name="modelSearch">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<form action="/admin/item-list" method="post" id="itemListForm">
-    <table class="search-condition-table">
-        <tr id="dropDownList">
-            <td style="width: 15%">
-                <label for="brand" >Brand</label>
-            </td>
-            <td style="width: 35%">
-                <select class="form-control" id="brand" name="brand" v-on:change="findModels">
-                    <option v-for="option in brands" v-bind:value="option.value">{{option.text}}</option>
-                </select>
-            </td>
-            <td style="width: 15%">
-                <label for="orderId" >Model</label>
-            </td>
-            <td style="width: 35%">
-                <select class="form-control" id="model" name="model">
-                    <option v-for="option in models" v-bind:value="option.value">{{option.text}}</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="6" style="text-align: center;padding-right: 30px;">
-                <button type="submit" id="btnSearch" class="btn btn-primary">Search</button>
-                &nbsp;
-                <button type="button" id="btnAdd" class="btn btn-primary">Add</button>
-            </td>
-        </tr>
-    </table>
+<div id="item-list">
+    <div>
+        <div class="row" style="text-align: center;">
+            <a href="#" @click="search" class="btn btn-primary">Search</a>
+            &nbsp;
+            <a href="#" @click="addItem" class="btn btn-primary" data-toggle="modal" data-target="#itemFormModal">Add</a>
+        </div>
 
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>＃</th>
-                <th>Item</th>
-                <th>Brand/Model</th>
-                <th>Unit price/Discount price</th>
-                <th>Stock</th>
-                <th>State</th>
-                <th></th>
-            </tr>
-        </thead>
-       <tbody>
-            #foreach($item in $items)
-                #set($rowNum = $foreach.count + ${listPageVo.listSize} * (${listPageVo.currentPage} - 1))
-                <tr>
-                    <td>
-                        $rowNum
-                    </td>
-                    <td>
-                        $item.itemName
-                    </td>
-                    <td>
-                        $item.brandName / $item.modelName
-                    </td>
-                    <td>
-                        #if($item.state=="discount")
-                            <span style="text-decoration:line-through;color: red;">$item.unitPrice</span>/<span>$item.discountPrice</span>
-                        #else
-                            <span>$item.unitPrice</span>
-                        #end
+        <div class="table-responsive">
 
-
-                    </td>
-                    <td>
-                        $item.stock
-                    </td>
-                    <td>
-                        $item.state
-                    </td>
-                    <td>
-                        <a href="#" name="btnEdit" value="$item.itemId"> <span class="glyphicon glyphicon-edit"></span></a>
-                        &nbsp;
-                        <a href="#" name="btnDisable" value="$item.itemId"> <span class="glyphicon glyphicon-ban-circle"></span></a>
-                        &nbsp;
-                        <a href="#" name="btnDelete" value="$item.itemId"> <span class="glyphicon glyphicon-trash"></span></a>
-                    </td>
-                </tr>
-            #end
-
-       </tbody>
-       <tfoot>
-           <tr>
-               <td colspan="7">
-                   <ul class="pagination">
-
-                       #if(${listPageVo.currentPage} > ${listPageVo.pageSize})
-                           #set($previousBeginPage = ${listPageVo.beginPage} - ${listPageVo.pageSize})
-                           <li><a href="#" title="previous 10 page" id="previousPage" value="${previousBeginPage}"> &laquo; </a></li>
-                       #end
-
-                       #if(${listPageVo.endPage} != 0)
-                           #foreach($pageNum in [${listPageVo.beginPage}..${listPageVo.endPage}])
-                               #if(${listPageVo.currentPage} == $pageNum)
-                                   <li class="active">
-                                       <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>＃</th>
+                        <th>Item</th>
+                        <th>Brand/Model</th>
+                        <th>Unit price/Discount price</th>
+                        <th>Stock</th>
+                        <th>State</th>
+                        <th></th>
+                    </tr>
+                </thead>
+               <tbody>
+                   <tr v-for="(item, index) in items">
+                       <td>{{(pagination.currentPage - 1) * pagination.size + 1 + index }}</td>
+                       <td>{{item.itemName}}</td>
+                       <td>{{item.brandName}}/{{item.modelName}}</td>
+                       <td>{{item.unitPrice}}/{{item.discountPrice}}</td>
+                       <td>{{item.stock}}</td>
+                       <td>{{item.state}}</td>
+                       <td>
+                           <a href="#" @click="editItem" data-toggle="modal" data-target="#itemFormModal" > <span :id="item.itemId" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
+                       </td>
+                   </tr>
+               </tbody>
+               <tfoot>
+                   <tr>
+                       <td colspan="7">
+                           <nav aria-label="Page navigation">
+                               <ul class="pagination">
+                                   <li v-if="pagination.currentPage > 1">
+                                       <a href="#" aria-label="Previous" @click="previousPage">
+                                           <span aria-hidden="true">&laquo;</span>
+                                       </a>
                                    </li>
-                               #else
+
+                                   <template v-for="pageNum in pageNums">
+                                       <li class="active" v-if="pageNum == pagination.currentPage"><a href="#">{{pageNum}}</a></li>
+                                       <li v-else><a href="#" @click="queryCurrentPage">{{pageNum}}</a></li>
+                                   </template>
+
+                                   <li v-if="pagination.currentPage < pagination.totalPage">
+                                       <a href="#" aria-label="Next" @click="nextPage">
+                                           <span aria-hidden="true">&raquo;</span>
+                                       </a>
+                                   </li>
                                    <li>
-                                       <a href="#" name="tablePage" value="${pageNum}">$pageNum</a>
+                                       <a aria-label="Total">
+                                           <span aria-hidden="true">Total: {{pagination.totalPage}}</span>
+                                       </a>
                                    </li>
-                               #end
-                           #end
-                       #end
+                               </ul>
+                           </nav>
+                       </td>
+                   </tr>
+               </tfoot>
+            </table>
 
+            <div class="modal fade" tabindex="-1" role="dialog" id="itemFormModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Item</h4>
+                        </div>
+                        <form enctype="multipart/form-data" id="itemForm">
+                        <div class="modal-body">
 
-                       #if(${listPageVo.leftPage} >= ${listPageVo.pageSize})
-                           #set($nextBeginPage = ${listPageVo.endPage} + 1)
-                           <li>
-                               <a href="#" value="${nextBeginPage}" title="next 10 page" id="nextPage"> &raquo; </a>
-                           </li>
-                       #end
+                            <input type="hidden" v-model="itemForm.itemId" name="itemId">
+                            <div class="form-group">
+                                <label for="brand">Brand</label>
+                                <select class="form-control" v-model="itemForm.brand" id="brand" name="brand" onchange="findModels(this)"></select>
+                            </div>
 
-                       &nbsp;
-                       <span style="text-align: center; font-size: larger;vertical-align: middle;">(total: ${listPageVo.totalPage})</span>
+                            <div class="form-group">
+                                <label for="model">Model</label>
+                                <select class="form-control" v-model="itemForm.model" id="model" name="model"></select>
+                            </div>
 
-                   </ul>
-                   <input type="hidden" value="${listPageVo.beginPage}" name="beginPage" id="beginPage"/>
-                   <input type="hidden" value="${listPageVo.currentPage}" name="currentPage" id="currentPage"/>
-               </td>
-           </tr>
-       </tfoot>
-    </table>
+                            <div class="form-group">
+                                <label for="itemName">Item name</label>
+                                <input type="text" class="form-control" v-model.trim="itemForm.itemName" name="itemName" maxlength="50">
+                            </div>
 
+                            <div class="form-group">
+                                <label for="unitPrice">Unit price</label>
+                                <input type="number" class="form-control" v-model.number="itemForm.unitPrice" name="unitPrice" maxlength="10">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="discountPrice">Discount price</label>
+                                <input type="number" class="form-control" v-model.number="itemForm.discountPrice" name="discountPrice" maxlength="10">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bigImage">Detail image</label>
+                                <input type="file" class="form-control" accept="image/png,image/jpg" name="itemDetailImage"  maxlength="30">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="smallImage">List image</label>
+                                <input type="file" class="form-control" accept="image/png,image/gif" name="itemListImage"  maxlength="20">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stock">Stock</label>
+                                <input type="number" class="form-control" v-model.number="itemForm.stock" max="10000" min="0" name="stock" maxlength="10">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <select class="form-control" v-model="itemForm.state" name="state">
+                                    <option>active</option>
+                                    <option>inactive</option>
+                                    <option>new</option>
+                                    <option>discount</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" @click="saveItem" class="btn btn-primary">Save</button>
+                        </div>
+                        </form>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+        </div>
+
+    </div>
 </div>
-
-</form>
-<script type="text/javascript">
-    $(function () {
-        var vm = new Vue({
-            el: '#dropDownList'
-            , data: {brands: []
-                    , models:[]}
-            , created: function () {
-
-                 $.ajax({
-                     type: "GET"
-                     , url: "http://localhost:8080/api/brands"
-                     , success: function (result) {
-                         if(result.code == "0"){
-                             vm.brands = result["rs"];
-                         }else{
-                             alert(result.message);
-                         }
-                     }
-
-                 });
-
-            }
-            , methods: {
-                findModels:function (event) {
-
-                    if(event.target.value != ""){
-                        $.ajax({
-                            type: "GET"
-                            , url: "http://localhost:8080/api/models?brand=" + event.target.value
-                            , success: function (result) {
-                                if(result.code == "0"){
-                                    vm.models = result["rs"];
-                                }else{
-                                    alert(result.message);
-                                }
-                            }
-
-                        });
-                    }
-                }
-            }
-
-        });
-
-        $('#previousPage').click(function () {
-            $('#beginPage').val($('#previousPage').attr("value"));
-            $('#currentPage').val($('#previousPage').attr("value"));
-            $('#btnSearch').click();
-        });
-
-        $('#nextPage').click(function () {
-            $('#beginPage').val($('#nextPage').attr("value"));
-            $('#currentPage').val($('#nextPage').attr("value"));
-            $('#btnSearch').click();
-        });
-
-        $('a[name="tablePage"]').click(function () {
-            $('#currentPage').val($(this).attr("value"));
-            $('#btnSearch').click();
-        });
-
-
-        $('a[name="btnDisable"]').click(function () {
-            var result = confirm("You will disable this user, are you sure? ")
-
-            if(result == true){
-                $('#itemListForm').attr("action", "/admin/items/" + $(this).attr("value"));
-                $('#itemListForm').submit();
-            }
-        });
-
-        $('a[name="btnDelete"]').click(function () {
-            var result = confirm("You will delete this user, are you sure? ")
-
-            if(result == true){
-                $('#itemListForm').attr("action", "/admin/items/delete?itemId=" + $(this).attr("value"));
-                $('#itemListForm').submit();
-            }
-
-        });
-
-        $('a[name="btnEdit"]').click(function () {
-
-            window.location.href = "/admin/items/edit?itemId=" + $(this).attr("value")
-                    + "&beginPage=" + $('#beginPage').val()
-                    + "&currentPage=" + $('#currentPage').val();
-
-        });
-
-        $('#btnAdd').click(function () {
-            window.location.href = "/admin/items/add";
-        });
-
-    })
-</script>
+<script src="/js/item-list.js"></script>

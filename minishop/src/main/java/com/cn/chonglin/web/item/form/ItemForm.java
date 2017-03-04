@@ -1,10 +1,12 @@
-package com.cn.chonglin.web.admin.item.form;
+package com.cn.chonglin.web.item.form;
 
 import com.cn.chonglin.bussiness.item.domain.Item;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
@@ -16,22 +18,21 @@ public class ItemForm {
     private String itemName;
 
     @DecimalMin(value = "0", message = "Please input valid unit price.")
+    @DecimalMax(value = "999999999", message = "Please input valid unit price.")
     private BigDecimal unitPrice;
 
     @DecimalMin(value = "0", message = "Please input valid discount price.")
+    @DecimalMax(value = "999999999", message = "Please input valid discount price.")
     private BigDecimal discountPrice;
 
-    private String smallImage;
-    private String bigImage;
-
-    @NotEmpty(message = "Please input the currency.")
-    private String currency;
+    private MultipartFile itemListImage;
+    private MultipartFile itemDetailImage;
 
     @Range(min = 0, max = 99999, message = "Please input the number in 0 to 99999")
     private int stock;
 
-    private String brandId;
-    private String modelId;
+    private String brand;
+    private String model;
     private String state;
 
     public String getItemId() {
@@ -66,28 +67,20 @@ public class ItemForm {
         this.discountPrice = discountPrice;
     }
 
-    public String getSmallImage() {
-        return smallImage;
+    public MultipartFile getItemListImage() {
+        return itemListImage;
     }
 
-    public void setSmallImage(String smallImage) {
-        this.smallImage = smallImage;
+    public void setItemListImage(MultipartFile itemListImage) {
+        this.itemListImage = itemListImage;
     }
 
-    public String getBigImage() {
-        return bigImage;
+    public MultipartFile getItemDetailImage() {
+        return itemDetailImage;
     }
 
-    public void setBigImage(String bigImage) {
-        this.bigImage = bigImage;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setItemDetailImage(MultipartFile itemDetailImage) {
+        this.itemDetailImage = itemDetailImage;
     }
 
     public int getStock() {
@@ -98,20 +91,20 @@ public class ItemForm {
         this.stock = stock;
     }
 
-    public String getBrandId() {
-        return brandId;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setBrandId(String brandId) {
-        this.brandId = brandId;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public String getModelId() {
-        return modelId;
+    public String getModel() {
+        return model;
     }
 
-    public void setModelId(String modelId) {
-        this.modelId = modelId;
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public String getState() {
@@ -129,8 +122,10 @@ public class ItemForm {
         item.setItemName(this.itemName);
         item.setUnitPrice(this.unitPrice);
         item.setDiscountPrice(this.discountPrice);
-        item.setBrandId(this.brandId);
-        item.setModelId(this.modelId);
+        item.setItemDetailImage(this.itemDetailImage.getName());
+        item.setItemListImage(this.itemListImage.getName());
+        item.setBrandId(this.brand);
+        item.setModelId(this.model);
         item.setStock(this.stock);
         item.setState(this.state);
 

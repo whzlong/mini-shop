@@ -4,9 +4,11 @@ import com.cn.chonglin.bussiness.base.dao.UserDao;
 import com.cn.chonglin.bussiness.base.dao.VerificationDao;
 import com.cn.chonglin.bussiness.base.domain.User;
 import com.cn.chonglin.bussiness.base.domain.Verification;
+import com.cn.chonglin.bussiness.base.vo.UserVo;
 import com.cn.chonglin.bussiness.mail.UserMailSender;
 import com.cn.chonglin.common.AppException;
 import com.cn.chonglin.common.IdGenerator;
+import com.cn.chonglin.common.ListPage;
 import com.cn.chonglin.common.mail.MailService;
 import com.cn.chonglin.common.mail.maillogger.MailLogService;
 import com.cn.chonglin.constants.DropdownListContants;
@@ -51,6 +53,18 @@ public class UserService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public User save(User user){
+        String userId = user.getId();
+
+        if(StringUtils.isEmpty(user.getId())){
+            userId = add(user);
+        }else{
+            update(user);
+        }
+
+        return userDao.findByKey(userId);
+    }
+
+    private String add(User user){
         checkInput(user);
 
         try{
@@ -58,7 +72,9 @@ public class UserService {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setEnabled(DropdownListContants.USER_STATE_PENDING_VALUE);
             user.setState(DropdownListContants.USER_STATE_PENDING);
-            user.setRole(RoleContants.ROLE_GENERAL);
+            if(StringUtils.isEmpty(user.getRole())){
+                user.setRole(RoleContants.ROLE_GENERAL);
+            }
 
             userDao.insert(user);
 
@@ -78,13 +94,16 @@ public class UserService {
             logger.error("Email sending is failed.(customerId:{}, email:{})", user.getId(), user.getEmail());
         }
 
-        return userDao.findByKey(user.getId());
+        return user.getId();
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void update(User user){
-        if(userDao.checkEmail(user.getId(), user.getEmail())){
-            throw new AppException("The email have been registered, please use another email.");
+    private void update(User user){
+        User currentUser = userDao.findByKey(user.getId());
+
+        if(!currentUser.getEmail().equals(user.getEmail())){
+            if(userDao.checkEmail(user.getId(), user.getEmail())){
+                throw new AppException("The email have been registered, please use another email.");
+            }
         }
 
         if(!StringUtils.isEmpty(user.getPassword())){
@@ -144,19 +163,19 @@ public class UserService {
      * @return
      */
     public User getUserByUsername(String username){
-        return userDao.findValidUser(username);
+        return userDao.findUserByState(username, DropdownListContants.USER_STATE_ACTIVE);
     }
 
     public User findByKey(String id){
         return userDao.findByKey(id);
     }
 
-    public int count(String email, String firstname, int state){
-        return userDao.count(email, firstname, state);
-    }
+    public ListPage<UserVo> query(String email, String firstname, String state, int limit, int offset){
+        int count = userDao.count(email, firstname, state);
 
-    public List<User> query(String email, String firstname, int state, int limit, int offset){
-        return userDao.query(email, firstname, state, limit, offset);
+        List<UserVo> userVos = userDao.query(email, firstname, state, limit, offset*limit);
+
+        return new ListPage<>(count, userVos);
     }
 
     /**

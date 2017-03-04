@@ -35,7 +35,7 @@ public class ResponseResult<T> {
         StringBuffer builder = new StringBuffer();
 
         fieldErrors.forEach(e -> {
-            builder.append(String.format("%s &nbsp;--> &nbsp;%s<br>", e.getField(), e.getDefaultMessage()));
+            builder.append(String.format("%s &nbsp;--> &nbsp;%s<br> ", e.getField(), e.getDefaultMessage()));
         });
 
         return error(1, builder.toString());

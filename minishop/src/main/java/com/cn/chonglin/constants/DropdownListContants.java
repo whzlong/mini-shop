@@ -13,4 +13,13 @@ public final class DropdownListContants {
 
     public static final int USER_STATE_SHIELDED_VALUE = 2;
     public static final String USER_STATE_SHIELDED = "Shielded";
+
+    public static final String ITEM_STATE_DISCOUNT = "discount";
+
+    public static final String ORDER_STATE_APPOINTMENT = "Appointment";
+    public static final String ORDER_STATE_PAID= "Paid";
+
+    public static final String APPOINTMENT_STATE_PENGING = "Pending";
+    public static final String APPOINTMENT_STATE_CONFIRMED = "Confirmed";
+
 }

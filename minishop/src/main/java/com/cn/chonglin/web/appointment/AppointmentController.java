@@ -84,4 +84,14 @@ public class AppointmentController{
 
         return ResponseResult.success(null);
     }
+
+    @PostMapping(value = "admin/appointments/delete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+            ResponseResult<Object> delete(@RequestParam String id){
+
+        appointmentService.delete(id);
+
+        return ResponseResult.success(null);
+    }
+
 }

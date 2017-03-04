@@ -24,7 +24,7 @@ public class ItemCategoryService {
     }
 
     public List<ItemCategory> findModels(String brandId){
-        return itemCategoryDao.findItemCategories(brandId);
+        return itemCategoryDao.findByParentCategoryId(brandId);
     }
 
     public ItemCategory findByKey(String categoryId){
@@ -32,9 +32,9 @@ public class ItemCategoryService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ItemCategory save(String brandName){
+    public ItemCategory save(String parentCategoryId, String categoryName){
         String categoryId = IdGenerator.getUuid();
-        itemCategoryDao.insert(categoryId, "0", brandName);
+        itemCategoryDao.insert(categoryId, parentCategoryId, categoryName);
 
         return itemCategoryDao.findByKey(categoryId);
     }
@@ -45,10 +45,14 @@ public class ItemCategoryService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteBrand(String brandId){
-        //删除属于Brand的Model数据
-        itemCategoryDao.deleteByParentId(brandId);
-        //删除Brand数据
-        itemCategoryDao.delete(brandId);
+    public void delete(String categoryId){
+
+        List<ItemCategory> itemCategories = itemCategoryDao.findByParentCategoryId(categoryId);
+
+        if(itemCategories != null){
+            itemCategoryDao.deleteByParentCategoryId(categoryId);
+        }
+
+        itemCategoryDao.delete(categoryId);
     }
 }

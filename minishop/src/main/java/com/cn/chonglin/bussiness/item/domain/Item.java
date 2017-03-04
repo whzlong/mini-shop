@@ -21,12 +21,12 @@ public class Item {
     /**
      * 商品列表显示图片
      */
-    private String smallImage;
+    private String itemListImage;
 
     /**
      * 商品详情显示图片
      */
-    private String bigImage;
+    private String itemDetailImage;
 
     /**
      * 商品单价
@@ -37,11 +37,6 @@ public class Item {
      * 商品折扣价
      */
     private BigDecimal discountPrice;
-
-    /**
-     * 币种
-     */
-    private String currency;
 
     /**
      * 商品描述
@@ -107,20 +102,20 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public String getSmallImage() {
-        return smallImage;
+    public String getItemListImage() {
+        return itemListImage;
     }
 
-    public void setSmallImage(String smallImage) {
-        this.smallImage = smallImage;
+    public void setItemListImage(String itemListImage) {
+        this.itemListImage = itemListImage;
     }
 
-    public String getBigImage() {
-        return bigImage;
+    public String getItemDetailImage() {
+        return itemDetailImage;
     }
 
-    public void setBigImage(String bigImage) {
-        this.bigImage = bigImage;
+    public void setItemDetailImage(String itemDetailImage) {
+        this.itemDetailImage = itemDetailImage;
     }
 
     public BigDecimal getUnitPrice() {
@@ -137,14 +132,6 @@ public class Item {
 
     public void setDiscountPrice(BigDecimal discountPrice) {
         this.discountPrice = discountPrice;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public String getDescription() {

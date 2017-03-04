@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("client")
-public class ItemController{
+public class ItemClientController {
     @Autowired
     private ItemService itemService;
 

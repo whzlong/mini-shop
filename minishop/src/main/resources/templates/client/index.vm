@@ -21,7 +21,7 @@
 
         #foreach($item in $discountItems)
             <div class="col-md-3">
-                <img src="${item.smallImage}" class="img-thumbnail">
+                <img src="${item.itemListImage}" class="img-thumbnail">
                 <p>${item.itemName} </p>
 
                 <p><a class="btn btn-default" href="/client/items/${item.itemId}" role="button">View details &raquo;</a></p>
@@ -35,7 +35,7 @@
 
         #foreach($item in $newItems)
             <div class="col-md-3">
-                <img src="${item.smallImage}" class="img-thumbnail">
+                <img src="${item.itemListImage}" class="img-thumbnail">
                 <p>${item.itemName} </p>
 
                 <p><a class="btn btn-default" href="/client/items/${item.itemId}" role="button">View details &raquo;</a></p>

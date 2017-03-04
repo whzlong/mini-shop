@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("client")
-public class AccountController {
+public class ClientAccountController {
     @Autowired
     private ItemService itemService;
 

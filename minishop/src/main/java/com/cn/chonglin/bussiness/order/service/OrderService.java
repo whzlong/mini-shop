@@ -1,5 +1,6 @@
 package com.cn.chonglin.bussiness.order.service;
 
+import com.cn.chonglin.bussiness.appointment.domain.Appointment;
 import com.cn.chonglin.bussiness.base.dao.UserDao;
 import com.cn.chonglin.bussiness.base.domain.User;
 import com.cn.chonglin.bussiness.item.domain.Item;
@@ -8,9 +9,11 @@ import com.cn.chonglin.bussiness.order.dao.OrderDao;
 import com.cn.chonglin.bussiness.order.dao.OrderDetailDao;
 import com.cn.chonglin.bussiness.order.domain.Order;
 import com.cn.chonglin.bussiness.order.domain.OrderDetail;
+import com.cn.chonglin.bussiness.order.vo.OrderDetailVo;
 import com.cn.chonglin.bussiness.order.vo.OrderVo;
+import com.cn.chonglin.common.ListPage;
+import com.cn.chonglin.constants.DropdownListContants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,47 +41,51 @@ public class OrderService {
     @Autowired
     private ItemService itemService;
 
+    /**
+     * 预约完成确认后生成订单
+     *
+     * @param appointment
+     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void save(String itemId, String bookDate, String bookTime){
+    public void createOrderFromAppointment(Appointment appointment){
         Order order = new Order();
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userDao.findByEmail(email);
-        Item item = itemService.findByKey(itemId);
+        User user = userDao.findByKey(appointment.getUserId());
+
+        Item item = itemService.findByKey(appointment.getItemId());
 
         //订单号
         long orderId = createOrderId();
 
         order.setOrderId(orderId);
-        order.setCustomerId(user.getId());
-        order.setCustomerName(user.getFirstName() + " " + user.getLastName());
-        order.setOrderDate(bookDate);
-        order.setOrderTime(bookTime);
-        //折扣价一般情况下与单价一样
-        order.setTotalAmount(item.getDiscountPrice());
-        order.setComment(" ");
-        order.setState("Appointment");
+        order.setUserId(appointment.getUserId());
+        if(DropdownListContants.ITEM_STATE_DISCOUNT.equals(item.getState())){
+            order.setTotalAmount(item.getDiscountPrice());
+        }else{
+            order.setTotalAmount(item.getUnitPrice());
+        }
+
+        order.setState(DropdownListContants.ORDER_STATE_APPOINTMENT);
 
         orderDao.insert(order);
 
         OrderDetail orderDetail = new OrderDetail();
 
         orderDetail.setOrderId(orderId);
-        orderDetail.setItemId(itemId);
-        orderDetail.setItemName(item.getItemName());
+        orderDetail.setItemId(appointment.getItemId());
         orderDetail.setQuantity(1);
-        orderDetail.setUnitPrice(item.getUnitPrice());
-        orderDetail.setDiscountPrice(item.getDiscountPrice());
 
         orderDetailDao.insert(orderDetail);
+
     }
 
-    public int getOrdersCount(String orderId,  String orderDateFrom, String orderDateTo, String state){
-        return orderDao.getRecordCount(orderId, orderDateFrom, orderDateTo, state);
-    }
+    public ListPage<OrderVo> query(String orderId, String orderDateFrom, String orderDateTo, String state, int limit, int page){
 
-    public List<OrderVo> queryForList(String orderId,  String orderDateFrom, String orderDateTo, String state, int limit, int offset){
-        return orderDao.queryForList(orderId, orderDateFrom, orderDateTo, state, limit, offset);
+        int count = orderDao.getRecordCount(orderId, orderDateFrom, orderDateTo, state);
+
+        List<OrderVo> orderVos = orderDao.query(orderId, orderDateFrom, orderDateTo, state, limit, page*limit);
+
+        return new ListPage<>(count, orderVos);
     }
 
     /**
@@ -109,14 +116,40 @@ public class OrderService {
         return orderId;
     }
 
-    public List<OrderDetail> queryOrderDetails(String orderId){
-        return orderDetailDao.findByKey(Long.valueOf(orderId));
+    public List<OrderDetailVo> queryOrderDetails(String orderId){
+        return orderDetailDao.query(Long.valueOf(orderId));
     }
-
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void delete(Long id){
         orderDao.delete(id);
         orderDetailDao.delete(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void update(Order order){
+        Order currentOrder = orderDao.findByKey(order.getOrderId());
+
+        currentOrder.setPayDate(order.getPayDate());
+        currentOrder.setState(order.getState());
+        currentOrder.setShipAddress(order.getShipAddress());
+        currentOrder.setComment(order.getComment());
+
+        orderDao.update(currentOrder);
+
+        //当支付完成后，将商品成交价更新至订单明细表
+        if(DropdownListContants.ORDER_STATE_PAID.equals(order.getState())){
+            List<OrderDetailVo> orderDetailVos = orderDetailDao.query(order.getOrderId());
+
+            for(OrderDetailVo orderDetailVo : orderDetailVos){
+                if(DropdownListContants.ITEM_STATE_DISCOUNT.equals(orderDetailVo.getItemState())){
+                    orderDetailDao.updateOrderPrice(order.getOrderId(), orderDetailVo.getItemId(), orderDetailVo.getDiscountPrice());
+                }else{
+                    orderDetailDao.updateOrderPrice(order.getOrderId(), orderDetailVo.getItemId(), orderDetailVo.getUnitPrice());
+                }
+
+            }
+        }
+
     }
 }

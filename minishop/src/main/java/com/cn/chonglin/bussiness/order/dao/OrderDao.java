@@ -4,6 +4,7 @@ import com.cn.chonglin.bussiness.order.domain.Order;
 import com.cn.chonglin.bussiness.order.vo.OrderVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -19,7 +22,7 @@ import java.util.List;
 @Repository
 public class OrderDao {
     private RowMapper<OrderVo> orderVoMapper = new OrderVoMapper();
-
+    private RowMapper<Order> orderRowMapper = new OrderMapper();
 
     private JdbcTemplate jdbcTemplate;
 
@@ -28,6 +31,18 @@ public class OrderDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    public Order findByKey(long orderId){
+        return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE order_id = ?", new Object[]{orderId}, orderRowMapper);
+    }
+
+    public void update(Order order){
+        jdbcTemplate.update("UPDATE orders SET pay_date = ?, state = ?, ship_address = ?, comment = ? WHERE order_id = ?"
+                            , order.getPayDate()
+                            , order.getState()
+                            , order.getShipAddress()
+                            , order.getComment()
+                            , order.getOrderId());
+    }
     /**
      * 订单号存在检查
      *
@@ -40,13 +55,11 @@ public class OrderDao {
     }
 
     public void insert(Order order){
-        jdbcTemplate.update("INSERT INTO orders(order_id, customer_id, customer_name, order_date, order_time, ship_address" +
-                        ", total_amount,comment,state) VALUES(?,?,?,?,?,?,?,?,?)"
+        jdbcTemplate.update("INSERT INTO orders(order_id, user_id, pay_date, ship_address" +
+                        ", total_amount,comment,state) VALUES(?,?,?,?,?,?,?)"
                 , order.getOrderId()
-                , order.getCustomerId()
-                , order.getCustomerName()
-                , order.getOrderDate()
-                , order.getOrderTime()
+                , order.getUserId()
+                , order.getPayDate()
                 , order.getShipAddress()
                 , order.getTotalAmount()
                 , order.getComment()
@@ -76,15 +89,14 @@ public class OrderDao {
         }
 
         if(!StringUtils.isEmpty(orderDateFrom)){
-            sqlWhere.append(" AND order_date >= ?");
-            paramObjects.add(orderDateFrom);
+            sqlWhere.append(" AND created_at >= ?");
+            paramObjects.add(LocalDate.parse(orderDateFrom, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
 
         if(!StringUtils.isEmpty(orderDateTo)){
-            sqlWhere.append(" AND order_date <= ?");
-            paramObjects.add(orderDateTo);
+            sqlWhere.append(" AND created_at <= ?");
+            paramObjects.add(LocalDate.parse(orderDateTo, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
-
 
         Object[] params = new Object[paramObjects.size()];
 
@@ -112,42 +124,43 @@ public class OrderDao {
      *          显示页起始
      * @return
      */
-    public List<OrderVo> queryForList(String orderId, String orderDateFrom, String orderDateTo,String state, int limit, int offset){
+    public List<OrderVo> query(String orderId, String orderDateFrom, String orderDateTo,String state, int limit, int offset){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
-        sqlWhere.append(" WHERE state = ?");
+        sqlWhere.append(" WHERE a.state = ?");
         paramObjects.add(state);
 
         if (!StringUtils.isEmpty(orderId)){
-            sqlWhere.append(" AND order_id = ?");
+            sqlWhere.append(" AND a.order_id = ?");
             paramObjects.add(orderId);
         }
 
         if(!StringUtils.isEmpty(orderDateFrom)){
-            sqlWhere.append(" AND order_date >= ?");
-            paramObjects.add(orderDateFrom);
+            sqlWhere.append(" AND a.created_at >= ?");
+            paramObjects.add(LocalDate.parse(orderDateFrom, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
 
         if(!StringUtils.isEmpty(orderDateTo)){
-            sqlWhere.append(" AND order_date <= ?");
-            paramObjects.add(orderDateTo);
+            sqlWhere.append(" AND a.created_at <= ?");
+            paramObjects.add(LocalDate.parse(orderDateTo, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
 
-        sqlWhere.append(" ORDER BY created_at ");
+        sqlWhere.append(" ORDER BY a.created_at ");
         sqlWhere.append(" LIMIT ?");
         sqlWhere.append(" OFFSET ?");
 
         paramObjects.add(limit);
         paramObjects.add(offset);
 
-        Object[] params = new Object[paramObjects.size()];
-
-        for(int i = 0; i < paramObjects.size(); i++){
-            params[i] = paramObjects.get(i);
+        try{
+            return jdbcTemplate.query("SELECT a.order_id, concat_ws(' ', b.first_name, b.last_name) user_name, " +
+                    "a.pay_date, a.ship_address, a.total_amount, a.comment, a.state, a.created_at " +
+                    "FROM orders a INNER JOIN users b ON a.user_id = b.id " + sqlWhere.toString(), paramObjects.toArray(), orderVoMapper);
+        }catch(EmptyResultDataAccessException ex){
+            return null;
         }
 
-        return jdbcTemplate.query("SELECT * FROM orders " + sqlWhere.toString(), params, orderVoMapper);
     }
 
     public void delete(long id){
@@ -160,10 +173,18 @@ public class OrderDao {
             Order order = new Order();
 
             order.setOrderId(rs.getLong("order_id"));
-            order.setCustomerId(rs.getString("customer_id"));
-            order.setOrderDate(rs.getString("order_date"));
+            order.setUserId(rs.getString("user_id"));
+            if(rs.getDate("pay_date") != null){
+                order.setPayDate(rs.getDate("pay_date").toLocalDate());
+            }
+            order.setShipAddress(rs.getString("ship_address"));
+            order.setTotalAmount(rs.getBigDecimal("total_amount"));
+            order.setState(rs.getString("state"));
+            order.setComment(rs.getString("comment"));
+            order.setUpdatedAt(rs.getTimestamp("updated_at"));
+            order.setCreatedAt(rs.getTimestamp("created_at"));
 
-            return null;
+            return order;
         }
     }
 
@@ -173,11 +194,17 @@ public class OrderDao {
             OrderVo orderVo = new OrderVo();
 
             orderVo.setOrderId(rs.getLong("order_id"));
-            orderVo.setDatetime(rs.getString("order_date") + " " + rs.getString("order_time"));
-            orderVo.setCustomerName(rs.getString("customer_name"));
+            orderVo.setUserName(rs.getString("user_name"));
+
+            if(rs.getDate("pay_date") != null){
+                orderVo.setPayDate(rs.getDate("pay_date").toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            }
+
+            orderVo.setShipAddress(rs.getString("ship_address"));
             orderVo.setTotalAmount(rs.getBigDecimal("total_amount"));
             orderVo.setComment(rs.getString("comment"));
             orderVo.setState(rs.getString("state"));
+            orderVo.setOrderDatetime(rs.getTimestamp("created_at").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy a hh:MM")));
 
             return orderVo;
         }

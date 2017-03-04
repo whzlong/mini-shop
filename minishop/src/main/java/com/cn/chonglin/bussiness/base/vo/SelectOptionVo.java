@@ -1,4 +1,4 @@
-package com.cn.chonglin.web.api.vo;
+package com.cn.chonglin.bussiness.base.vo;
 
 
 public class SelectOptionVo {
