@@ -105,7 +105,6 @@ public class OrderService {
 
             java.util.Random random = new java.util.Random();
 
-
             orderId = Long.valueOf(orderDate + String.valueOf(random.nextInt(999999)));
 
             if(orderDao.checkOrderId(orderId) == 0){

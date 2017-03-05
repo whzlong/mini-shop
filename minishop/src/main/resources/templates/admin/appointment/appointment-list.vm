@@ -6,7 +6,7 @@
             <div class="form-group">
                 <label for="bookDateQuery" class="col-sm-3 control-label">Book date</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control datepicker" id="bookDateQuery">
+                    <input type="text" class="form-control" id="bookDateQuery" name="bookDateQuery" data-date-format="dd-mm-yyyy" readonly></input>
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
                     <form id="appointmentForm">
                         <div class="form-group">
                             <label for="bookDate">Date</label>
-                            <input type="text" v-model="bookDate" class="form-control datepicker" id="bookDate" placeholder="Appointment date">
+                            <input type="text" class="form-control" v-model="bookDate" id="bookDate" name="bookDate" data-date-format="dd-mm-yyyy" readonly></input>
                         </div>
                         <div class="form-group">
                             <label for="bookTime">Time</label>

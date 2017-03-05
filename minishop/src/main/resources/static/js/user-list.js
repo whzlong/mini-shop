@@ -36,7 +36,7 @@ $(function () {
                            setPagination();
 
                            if(res.count == 0){
-                               alert("Relevant information is not available！");
+                               alert("Relevant information is not available");
                            }
                        }else{
                            alert(res.message);

@@ -243,8 +243,19 @@ $(function () {
     }
 
 
-    $("#bookDateQuery").bootstrapDatepickr({date_format: "d-m-Y"});
+    $("#").bootstrapDatepickr({date_format: "d-m-Y"});
 
+    $( "#bookDateQuery" ).datetimepicker({
+        format: 'dd-mm-yyyy',
+        minView: "month",
+        autoclose: 1
+    });
+
+    $( "#bookDate" ).datetimepicker({
+        format: 'dd-mm-yyyy',
+        minView: "month",
+        autoclose: 1
+    });
 
 });
 

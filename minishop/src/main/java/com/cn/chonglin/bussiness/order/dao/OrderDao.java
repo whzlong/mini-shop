@@ -21,8 +21,8 @@ import java.util.List;
  */
 @Repository
 public class OrderDao {
-    private RowMapper<OrderVo> orderVoMapper = new OrderVoMapper();
-    private RowMapper<Order> orderRowMapper = new OrderMapper();
+    private final RowMapper<OrderVo> orderVoMapper = new OrderVoMapper();
+    private final RowMapper<Order> orderRowMapper = new OrderMapper();
 
     private JdbcTemplate jdbcTemplate;
 
@@ -56,7 +56,7 @@ public class OrderDao {
 
     public void insert(Order order){
         jdbcTemplate.update("INSERT INTO orders(order_id, user_id, pay_date, ship_address" +
-                        ", total_amount,comment,state) VALUES(?,?,?,?,?,?,?)"
+                        ", total_amount,comment,state, coupon_code) VALUES(?,?,?,?,?,?,?,?)"
                 , order.getOrderId()
                 , order.getUserId()
                 , order.getPayDate()
@@ -64,6 +64,7 @@ public class OrderDao {
                 , order.getTotalAmount()
                 , order.getComment()
                 , order.getState()
+                , order.getCouponCode()
         );
     }
 

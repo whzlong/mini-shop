@@ -44,6 +44,11 @@ public class Order {
     private String state;
 
     /**
+     * 优惠券代码
+     */
+    private String couponCode;
+
+    /**
      * 更新日时
      */
     private Timestamp updatedAt;
@@ -107,6 +112,14 @@ public class Order {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
     }
 
     public Timestamp getUpdatedAt() {

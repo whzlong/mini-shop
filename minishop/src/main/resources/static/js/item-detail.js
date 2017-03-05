@@ -33,10 +33,10 @@ $(function () {
 
                 $.ajax({
                     type: "post",
-                    contentType: "application/json;charset=UTF-8",
+                    contentType: "application/x-www-form-urlencoded",
                     dataType:"json",
                     url: "http://localhost:8080/client/book",
-                    data: JSON.stringify(appointmentParams),
+                    data: appointmentParams,
                     success: function (res) {
                         if(res.code == "0"){
                             alert("You have booked an appointment successfully!");
@@ -106,10 +106,11 @@ $(function () {
         }
 
         $.ajax({
-            type: "get",
-            contentType: "application/json;charset=UTF-8",
+            type: "post",
+            contentType: "application/x-www-form-urlencoded",
             dataType:"json",
-            url: "http://localhost:8080/client/cart-item?itemId=" + $('#itemId').val() + "&quantity=" + $('#quantity').val(),
+            url: "http://localhost:8080/client/cart-items",
+            data: {itemId: $('#itemId').val(), quantity: $('#quantity').val()},
             success: function (res) {
                 if(res.code == "0"){
                     alert("This item has been added in your cart.");

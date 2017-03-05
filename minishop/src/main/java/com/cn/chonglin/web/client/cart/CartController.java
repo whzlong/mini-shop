@@ -5,6 +5,7 @@ import com.cn.chonglin.bussiness.cart.vo.CartVo;
 import com.cn.chonglin.common.ResponseResult;
 import com.cn.chonglin.web.client.cart.form.CartItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class CartController {
         return ResponseResult.success(cartVo);
     }
 
-    @GetMapping("cart-item")
+    @PostMapping(value = "cart-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody ResponseResult<Object> addCartItem(@Valid CartItemForm cartItemForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return ResponseResult.error(bindingResult.getFieldErrors());

@@ -14,7 +14,7 @@ import java.io.IOException;
 public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        if(MediaType.APPLICATION_JSON_UTF8_VALUE.equals(request.getContentType())){
+        if(MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(request.getContentType())){
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }

@@ -32,7 +32,7 @@ public class AppointmentController{
      * @return
      */
     @PostMapping(value = "client/book", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody ResponseResult<Object> book(@RequestBody @Valid AppointmentForm appointmentForm, BindingResult bindingResult){
+    public @ResponseBody ResponseResult<Object> book(@Valid AppointmentForm appointmentForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return ResponseResult.error(bindingResult.getFieldErrors());
         }

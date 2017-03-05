@@ -60,6 +60,9 @@ $(function () {
                 this.query(vm.pagination.currentPage);
             },
             editItem: function (event) {
+                clearFormElements(this.orderForm);
+
+                $('#payDate').val("");
 
                 for (var index in this.orders){
 
@@ -76,6 +79,8 @@ $(function () {
 
             },
             updateItem: function (event) {
+
+                this.orderForm.payDate = $('#payDate').val();
 
                 $.ajax({
                     type: "post",
@@ -174,12 +179,27 @@ $(function () {
         this.orderForm.comment = "";
     }
 
+    function clearFormElements(form) {
+        for(var index in form){
+            form[index] = "";
+        }
+    }
 
-    //设定选择日期
-    $('#orderDateFrom').pickadate({format:'dd-mm-yyyy'});
-    //设定选择日期
-    $('#orderDateTo').pickadate({format:'dd-mm-yyyy'});
-
+    $( "#orderDateFrom" ).datetimepicker({
+        format: 'dd-mm-yyyy',
+        minView: "month",
+        autoclose: 1
+    });
+    $( "#orderDateTo" ).datetimepicker({
+        format: 'dd-mm-yyyy',
+        minView: "month",
+        autoclose: 1
+    });
+    $( "#payDate" ).datetimepicker({
+        format: 'dd-mm-yyyy',
+        minView: "month",
+        autoclose: 1
+    });
 
 });
 

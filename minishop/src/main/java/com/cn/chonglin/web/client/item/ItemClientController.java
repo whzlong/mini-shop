@@ -1,5 +1,6 @@
 package com.cn.chonglin.web.client.item;
 
+import com.cn.chonglin.bussiness.base.dao.SettingDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.domain.ItemCategory;
 import com.cn.chonglin.bussiness.item.service.ItemService;
@@ -19,6 +20,9 @@ import java.util.List;
 public class ItemClientController {
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private SettingDao settingDao;
 
     @GetMapping(value = "items")
     public String itemList(@RequestParam(required = false) String brandId, @RequestParam(required = false) String modelId, ModelMap modelMap){
@@ -95,7 +99,10 @@ public class ItemClientController {
     public String index(ModelMap model, @PathVariable String id){
         Item item = itemService.findByKey(id);
 
+
+
         model.addAttribute("item", item);
+        model.addAttribute("setting",settingDao.queryForObject());
 
         return "client/item-detail";
     }
