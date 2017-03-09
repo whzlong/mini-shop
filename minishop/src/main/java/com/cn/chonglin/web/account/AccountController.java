@@ -4,6 +4,7 @@ import com.cn.chonglin.bussiness.base.service.UserService;
 import com.cn.chonglin.bussiness.base.vo.UserVo;
 import com.cn.chonglin.common.PaginationResult;
 import com.cn.chonglin.common.ResponseResult;
+import com.cn.chonglin.constants.DropdownListContants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
@@ -28,7 +29,7 @@ public class AccountController {
     @GetMapping(value = "admin/user-list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public PaginationResult<UserVo> query(@RequestParam(required = false, defaultValue = "") String email,
                                           @RequestParam(required = false, defaultValue = "") String firstName,
-                                          @RequestParam(required = false, defaultValue = "") String state,
+                                          @RequestParam(required = false, defaultValue = DropdownListContants.USER_STATE_ACTIVE) String state,
                                           @RequestParam(required = false, defaultValue = "0") @Min(0) int currentPage,
                                           @RequestParam(required = false, defaultValue = "15") @Min(0) @Max(200) int size){
 

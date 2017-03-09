@@ -143,6 +143,9 @@ $(function () {
 
             },
             updateItem: function (event) {
+                this.bookDate = $('#bookDate').val();
+                this.bookTime = $('#bookTime').val();
+
                 var paras = {id: this.appointmentId, bookDate: this.bookDate, bookTime: this.bookTime, state: this.state, comment: this.comment};
 
                 $.ajax({
@@ -243,18 +246,29 @@ $(function () {
     }
 
 
-    $("#").bootstrapDatepickr({date_format: "d-m-Y"});
 
     $( "#bookDateQuery" ).datetimepicker({
         format: 'dd-mm-yyyy',
         minView: "month",
-        autoclose: 1
+        autoclose: 1,
+        clearBtn:true
     });
 
     $( "#bookDate" ).datetimepicker({
         format: 'dd-mm-yyyy',
         minView: "month",
         autoclose: 1
+
+    });
+
+    $( "#bookTime" ).datetimepicker({
+        format: 'hh:ii',
+        startView: 'day',
+        minView: "hour",
+        startDate: "09:00",
+        endDate: "18:00",
+        autoclose: 1,
+        minuteStep: 30
     });
 
 });

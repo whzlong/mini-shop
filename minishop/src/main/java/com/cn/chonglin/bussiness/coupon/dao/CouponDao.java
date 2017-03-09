@@ -47,7 +47,7 @@ public class CouponDao {
         return jdbcTemplate.queryForObject("SELECT count(code) FROM coupons WHERE code = ?", new Object[]{code}, Integer.class) > 0;
     }
 
-    public int count(String code, String couponName, String state){
+    public int count(String code, String couponName){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
@@ -61,17 +61,12 @@ public class CouponDao {
         if(!StringUtils.isEmpty(couponName)){
             sqlWhere.append(" AND coupon_name like ?");
             paramObjects.add("%" + couponName + "%");
-        }
-
-        if(!StringUtils.isEmpty(state)){
-            sqlWhere.append(" AND state = ?");
-            paramObjects.add(state);
         }
 
         return jdbcTemplate.queryForObject("SELECT count(code) FROM coupons " + sqlWhere.toString(), paramObjects.toArray(), Integer.class);
     }
 
-    public List<CouponVo> query(String code, String couponName, String state, int limit, int offset){
+    public List<CouponVo> query(String code, String couponName, int limit, int offset){
         StringBuffer sqlWhere = new StringBuffer();
         List<Object> paramObjects = new java.util.ArrayList<Object>();
 
@@ -87,10 +82,6 @@ public class CouponDao {
             paramObjects.add("%" + couponName + "%");
         }
 
-        if(!StringUtils.isEmpty(state)){
-            sqlWhere.append(" AND state = ?");
-            paramObjects.add(state);
-        }
 
         sqlWhere.append(" ORDER BY created_at ");
         sqlWhere.append(" LIMIT ?");
@@ -104,20 +95,20 @@ public class CouponDao {
 
 
     public void insert(Coupon coupon){
-        jdbcTemplate.update("INSERT INTO coupons(code, coupon_name, valid_date_from, valid_date_to, state) VALUES(?,?,?,?,?)"
+        jdbcTemplate.update("INSERT INTO coupons(code, coupon_name, valid_date_from, valid_date_to, amount) VALUES(?,?,?,?,?)"
                             , coupon.getCode()
                             , coupon.getCouponName()
                             , coupon.getValidDateFrom()
                             , coupon.getValidDateTo()
-                            , coupon.getState());
+                            , coupon.getAmount());
     }
 
     public void update(Coupon coupon){
-        jdbcTemplate.update("UPDATE coupons SET coupon_name = ?, valid_date_from = ?, valid_date_to = ?, state = ? WHERE code = ?"
+        jdbcTemplate.update("UPDATE coupons SET coupon_name = ?, valid_date_from = ?, valid_date_to = ?, amount = ? WHERE code = ?"
                             , coupon.getCouponName()
                             , coupon.getValidDateFrom()
                             , coupon.getValidDateTo()
-                            , coupon.getState()
+                            , coupon.getAmount()
                             , coupon.getCode());
     }
 
@@ -130,7 +121,7 @@ public class CouponDao {
             couponVo.setCouponName(rs.getString("coupon_name"));
             couponVo.setValidDateFrom(rs.getDate("valid_date_from").toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyy")));
             couponVo.setValidDateTo(rs.getDate("valid_date_to").toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyy")));
-            couponVo.setState(rs.getString("state"));
+            couponVo.setAmount(rs.getBigDecimal("amount"));
 
             return couponVo;
         }
@@ -145,7 +136,7 @@ public class CouponDao {
             coupon.setCouponName(rs.getString("coupon_name"));
             coupon.setValidDateFrom(rs.getDate("valid_date_from").toLocalDate());
             coupon.setValidDateTo(rs.getDate("valid_date_to").toLocalDate());
-            coupon.setState(rs.getString("state"));
+            coupon.setAmount(rs.getBigDecimal("amount"));
             coupon.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
             coupon.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
 

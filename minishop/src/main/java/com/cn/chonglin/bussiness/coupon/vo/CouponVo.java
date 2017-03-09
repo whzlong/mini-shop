@@ -1,5 +1,7 @@
 package com.cn.chonglin.bussiness.coupon.vo;
 
+import java.math.BigDecimal;
+
 public class CouponVo {
     /**
      * 优惠券代码
@@ -20,9 +22,9 @@ public class CouponVo {
     private String validDateTo;
 
     /**
-     * 状态
+     * 优惠金额
      */
-    private String state;
+    private BigDecimal amount;
 
     public String getCode() {
         return code;
@@ -56,11 +58,11 @@ public class CouponVo {
         this.validDateTo = validDateTo;
     }
 
-    public String getState() {
-        return state;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }

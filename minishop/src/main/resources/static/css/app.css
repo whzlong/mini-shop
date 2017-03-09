@@ -219,3 +219,27 @@ ul li{
 .checkout-button-papal img{
     height: 1.3em !important;
 }
+
+
+.checkout-page{
+    margin-top: 40px;
+    height: 600px;
+    color: #898989;
+}
+
+.checkout-row-label{
+    padding-left: 5px;
+    padding-bottom: 10px;
+    font-size: larger;
+    color: #1e201d;
+
+}
+
+.checkout-row-content{
+    padding-left: 30px;
+    font-size: large;
+}
+
+.checkout-form{
+    width: 450px;
+}

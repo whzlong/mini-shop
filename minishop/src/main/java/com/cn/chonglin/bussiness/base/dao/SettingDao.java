@@ -33,7 +33,8 @@ public class SettingDao {
         public Setting mapRow(ResultSet rs, int rowNum) throws SQLException {
             Setting setting = new Setting();
 
-            setting.setCurrency(rs.getString("currency"));
+            setting.setCurrency(rs.getString("currency_symbol"));
+            setting.setCurrencyAbbreviation(rs.getString("currency_abbreviation"));
             setting.setEmail(rs.getString("email"));
 
             return setting;

@@ -9,7 +9,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container backgroundImage">
-        <p><a class="btn btn-primary btn-lg" href="/client/items" role="button">PICK UP SERVICE &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="/client/select-item" role="button">PICK UP SERVICE &raquo;</a></p>
         <p>Speedy, high quality and hossie-free repairs for your iPhone.</p>
     </div>
 </div>

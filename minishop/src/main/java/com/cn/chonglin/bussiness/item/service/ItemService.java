@@ -5,6 +5,7 @@ import com.cn.chonglin.bussiness.item.dao.ItemDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.domain.ItemCategory;
 import com.cn.chonglin.bussiness.item.vo.ItemVo;
+import com.cn.chonglin.bussiness.payment.PaymentService;
 import com.cn.chonglin.common.IdGenerator;
 import com.cn.chonglin.common.ListPage;
 import com.cn.chonglin.web.item.form.ItemForm;
@@ -43,7 +44,11 @@ public class ItemService {
     @Autowired
     private ItemCategoryDao itemCategoryDao;
 
+    @Autowired
+    private PaymentService paymentService;
+
     public Item findByKey(String id){
+        paymentService.saveTransaction();
         return itemDao.findByKey(id);
     }
 

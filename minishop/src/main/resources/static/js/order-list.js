@@ -188,17 +188,22 @@ $(function () {
     $( "#orderDateFrom" ).datetimepicker({
         format: 'dd-mm-yyyy',
         minView: "month",
-        autoclose: 1
+        autoclose: 1,
+        clearBtn:true
     });
+
     $( "#orderDateTo" ).datetimepicker({
         format: 'dd-mm-yyyy',
         minView: "month",
-        autoclose: 1
+        autoclose: 1,
+        clearBtn:true
     });
+
     $( "#payDate" ).datetimepicker({
         format: 'dd-mm-yyyy',
         minView: "month",
-        autoclose: 1
+        autoclose: 1,
+        clearBtn:true
     });
 
 });

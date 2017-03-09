@@ -5,11 +5,30 @@ $(function () {
            coupons: [],
            pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 3},
            pageNums: [],
-           searchConditions: {code: "", couponName:"", state:""},
-           pageForm: {code: "", couponName: "", validDateFrom: "", validDateTo: "", state: ""}
+           selectedCoupons: [],
+           selectedUsers: [],
+           searchUsersConditions: {email:"", username: ""},
+           searchConditionsOfEmail: "",
+           searchConditionsOfUsername: "",
+           testValue:"",
+           searchConditions: {code: "", couponName:""},
+           users: [],
+           hasNotUsers: true,
+           pageForm: {code: "", couponName: "", validDateFrom: "", validDateTo: "", amount: ""}
        },
        created: function () {
            this.query(1);
+       },
+       watch: {
+           pageForm: function (newValue, oldValue) {
+               validateForm(this.validateFields);
+           },
+           searchConditionsOfEmail: function (newValue) {
+               this.queryUsers();
+           },
+           searchConditionsOfUsername: function (newValue) {
+               this.queryUsers();
+           }
        },
        methods: {
            query: function (page) {
@@ -17,10 +36,8 @@ $(function () {
 
                this.searchConditions.code = $('#codeSearch').val();
                this.searchConditions.couponName = $('#couponNameSearch').val();
-               this.searchConditions.state = $('#stateSearch').val();
 
                var queryParas = {code: this.searchConditions.code
-                                , state: this.searchConditions.state
                                 , couponName: this.searchConditions.couponName
                                 , currentPage: this.pagination.currentPage
                                 , size: this.pagination.size};
@@ -65,8 +82,6 @@ $(function () {
            },
            addItem: function () {
                clearFormElements(this.pageForm);
-
-               this.pageForm.state = "Unused";
            },
            editItem: function (event) {
                for(var index in this.coupons){
@@ -75,11 +90,15 @@ $(function () {
                        this.pageForm.couponName = this.coupons[index].couponName;
                        this.pageForm.validDateFrom = this.coupons[index].validDateFrom;
                        this.pageForm.validDateTo = this.coupons[index].validDateTo;
-                       this.pageForm.state = this.coupons[index].state;
+                       this.pageForm.amount = this.coupons[index].amount;
                    }
                }
            },
            saveItem: function () {
+               if(validateForm(this.validateFields)){
+                   return;
+               }
+
                vm.pageForm.validDateFrom = $('#validDateFrom').val();
                vm.pageForm.validDateTo = $('#validDateTo').val();
 
@@ -98,9 +117,138 @@ $(function () {
                        }
                    }
                });
+           },
+           openAssignPage: function () {
+                this.hasNotUsers = false;
+
+                this.queryUsers();
+           },
+           queryUsers: function () {
+               var paras = {email: this.searchConditionsOfEmail, firstName: this.searchConditionsOfUsername, currentPage: 1, size: 10};
+
+               $.ajax({
+                   type: "get",
+                   contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                   dataType:"json",
+                   url: "http://localhost:8080/admin/user-list",
+                   data: paras,
+                   success: function (res) {
+                       if(res.code == "0"){
+                           vm.users = res.data;
+                       }else{
+                           alert(res.message);
+                       }
+
+                       if(vm.users.length == 0){
+                           vm.hasNotUsers = true;
+                       }else{
+                           vm.hasNotUsers = false;
+                       }
+                   }
+               });
+           },
+           clearSelectedUsers: function () {
+                this.selectedUsers = [];
+           },
+           assign: function () {
+
+               if(vm.selectedCoupons.length == 0){
+                   alert("Please select the coupons");
+               }
+
+               if(vm.assignedUsers.length == 0){
+                   alert("Please select the users");
+               }
+
+               if(this.selectedUsers.length > 0){
+                   var paras = {assignedUsers: vm.selectedUsers, coupons: vm.selectedCoupons};
+
+                   $.ajax({
+                       type: "post",
+                       dataType:"json",
+                       url: "http://localhost:8080/admin/assign-coupons",
+                       contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                       data: paras,
+                       success: function (res) {
+                           if(res.code == "0"){
+                               $('#pageFormModal').modal('hide');
+                               vm.query(vm.pagination.currentPage);
+                           }else{
+                               alert(res.message);
+                           }
+
+                           vm.selectedUsers = [];
+                           vm.selectedCoupons = [];
+
+                           $('#assignFormModal').modal('hide');
+                       }
+                   });
+               }
            }
+
        }
    });
+
+    vm.validateFields = {couponName:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The name is required'
+                                    }
+                                }
+                            }
+                            , validDateFrom:
+                                {validators:
+                                    {
+                                        notEmpty: {
+                                            message: 'The valid date(From) is required'
+                                        }
+                                    }
+                                }
+                            , validDateTo:
+                                {validators:
+                                    {
+                                        notEmpty: {
+                                            message: 'The valid date(To) is required'
+                                        }
+                                    }
+                                }
+                            , amount:
+                                {validators:
+                                    {
+                                        notEmpty: {
+                                            message: 'The amount is required'
+                                        }
+                                    }
+                                }
+                        };
+
+
+    function validateForm(validateFields) {
+        var ret = false;
+
+        for(var fieldName in validateFields){
+
+            var validators = validateFields[fieldName].validators;
+
+            for(var validatorName in validators){
+                if(validatorName == "notEmpty"){
+                    if($('#' + fieldName).val() == null || $('#' + fieldName).val() == ""){
+                        $('#'+fieldName + ' ~ .error-message').remove();
+                        $('#'+fieldName).after("<span class='error-message'>"+ validators[validatorName].message +"</span>");
+                        ret = true;
+                    }else{
+                        $('#'+fieldName + ' ~ .error-message').remove();
+                    }
+                }
+            }
+
+
+        }
+
+        return ret;
+    }
+
 
     function setPagination() {
 

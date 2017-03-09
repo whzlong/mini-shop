@@ -16,12 +16,15 @@
                 </template>
             </transition-group>
         </div>
-        <div style="text-align: center;padding: 5px;font-size: larger;">
+        <div style="text-align: center;padding: 5px;font-size: larger;" v-if="hasBrand">
             <a href="#" v-on:click="addBrand" data-toggle="modal" data-target="#brandModal"> <span class="glyphicon glyphicon-plus"></span></a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="#" v-on:click="editBrand" data-toggle="modal" data-target="#brandModal"> <span class="glyphicon glyphicon-edit"></span></a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="#" v-on:click="deleteBrand"> <span class="glyphicon glyphicon-minus"></span></a>
+        </div>
+        <div style="text-align: center;padding: 5px;font-size: larger;" v-else>
+            <a href="#" v-on:click="addBrand" data-toggle="modal" data-target="#brandModal"> <span class="glyphicon glyphicon-plus"></span></a>
         </div>
     </div>
     <div class="col-md-6">
@@ -39,12 +42,15 @@
             </transition-group>
 
         </div>
-        <div style="text-align: center;padding: 5px;font-size: larger;">
+        <div style="text-align: center;padding: 5px;font-size: larger;" v-if="hasModel">
             <a href="#" v-on:click="addModel" data-toggle="modal" data-target="#modelModal"> <span class="glyphicon glyphicon-plus"></span></a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="#" v-on:click="editModel"  data-toggle="modal" data-target="#modelModal"> <span class="glyphicon glyphicon-edit"></span></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="#" v-on:click="deleteModel" value="$item.itemId"> <span class="glyphicon glyphicon-minus"></span></a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" v-on:click="deleteModel"  value="$item.itemId"> <span class="glyphicon glyphicon-minus"></span></a>
+        </div>
+        <div style="text-align: center;padding: 5px;font-size: larger;" v-else>
+            <a href="#" v-on:click="addModel" data-toggle="modal" data-target="#modelModal"> <span class="glyphicon glyphicon-plus"></span></a>
         </div>
     </div>
 </div>

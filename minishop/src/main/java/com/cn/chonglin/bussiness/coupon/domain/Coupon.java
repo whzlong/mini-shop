@@ -1,5 +1,6 @@
 package com.cn.chonglin.bussiness.coupon.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -29,9 +30,9 @@ public class Coupon {
     private LocalDate validDateTo;
 
     /**
-     * 状态
+     * 优惠金额
      */
-    private String state;
+    private BigDecimal amount;
 
     /**
      * 更新日时
@@ -75,12 +76,12 @@ public class Coupon {
         this.validDateTo = validDateTo;
     }
 
-    public String getState() {
-        return state;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public LocalDateTime getUpdatedAt() {

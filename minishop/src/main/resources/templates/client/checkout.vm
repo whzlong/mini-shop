@@ -1,0 +1,73 @@
+<div class="container" id="checkout-page">
+    <div class="checkout-page">
+        <div class="checkout-row">
+            <div class="checkout-row-label">
+                <span>Shipping address</span>
+            </div>
+            <div class="checkout-row-content">
+                <div class="checkout-form">
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="address" placeholder="Address">
+                        </div>
+                    </form>
+                    <form role="form" class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="city" placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="postcode" placeholder="Postcode">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="checkout-row">
+            <div class="checkout-row-label">
+                <span>Shop address</span>
+            </div>
+            <div class="checkout-row-content">
+                <span>London ddd</span>
+            </div>
+        </div>
+        <hr>
+        <div class="checkout-row">
+            <div class="checkout-row-label">
+                <span>Pay method</span>
+            </div>
+            <div class="checkout-row-content">
+                <div>
+                    <a href="#" class="btn btn-default checkout-button-papal" title="Paypal"><img alt="PayPal" src="/images/paypal-logo.png"></a>
+                    <a href="#" class="btn btn-default">Credit card</a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="checkout-row">
+            <div class="checkout-row-label">
+                <span>Coupon</span>
+            </div>
+            <div class="checkout-row-content">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="">
+                        Option one is this and that&mdash;be sure to include why it's great
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="">
+                        Option one is this and that&mdash;be sure to include why it's great
+                    </label>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+
+        <input type="hidden" id="clientToken" value=""/>
+    </div>
+</div>
+
+<script src="/js/checkout.js"></script>

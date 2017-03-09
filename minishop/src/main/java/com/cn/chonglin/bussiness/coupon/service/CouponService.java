@@ -1,5 +1,6 @@
 package com.cn.chonglin.bussiness.coupon.service;
 
+import com.cn.chonglin.bussiness.coupon.dao.AssignCouponDao;
 import com.cn.chonglin.bussiness.coupon.dao.CouponDao;
 import com.cn.chonglin.bussiness.coupon.domain.Coupon;
 import com.cn.chonglin.bussiness.coupon.vo.CouponVo;
@@ -22,10 +23,13 @@ public class CouponService {
     @Autowired
     private CouponDao couponDao;
 
-    public ListPage<CouponVo> query(String code, String couponName, String state, int limit, int offset){
-        int count = couponDao.count(code, couponName, state);
+    @Autowired
+    private AssignCouponDao assignCouponDao;
 
-        List<CouponVo> listItems = couponDao.query(code, couponName, state, limit, offset*limit);
+    public ListPage<CouponVo> query(String code, String couponName, int limit, int offset){
+        int count = couponDao.count(code, couponName);
+
+        List<CouponVo> listItems = couponDao.query(code, couponName, limit, offset*limit);
 
         return new ListPage<>(count, listItems);
     }
@@ -66,9 +70,24 @@ public class CouponService {
         currentCoupon.setCouponName(coupon.getCouponName());
         currentCoupon.setValidDateFrom(coupon.getValidDateFrom());
         currentCoupon.setValidDateTo(coupon.getValidDateTo());
-        currentCoupon.setState(coupon.getState());
+        currentCoupon.setAmount(coupon.getAmount());
 
         couponDao.update(currentCoupon);
 
+    }
+
+    /**
+     * 给用户分配优惠券
+     *
+     * @param userIds
+     *          目标用户
+     * @param coupons
+     *          优惠券
+     */
+    public void assignCoupons(String[] userIds, String[] coupons){
+
+        for (String userId : userIds){
+
+        }
     }
 }

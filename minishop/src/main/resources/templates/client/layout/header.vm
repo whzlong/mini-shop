@@ -12,7 +12,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <div class="navbar-form navbar-right">
                 #if($isAuth)
-
+                    <!--
                     <div class="form-group">
                         <div class="dropdown">
                             <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
@@ -27,6 +27,7 @@
                             </ul>
                         </div>
                     </div>
+                    -->
                     <div class="form-group">
                         <a class="btn btn-success" id="btnCart" href="/client/cart"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                     </div>
@@ -38,6 +39,10 @@
                         </div>
 
                     #end
+                    <div class="form-group">
+                        <a class="btn btn-success" href="/logout"><span class="glyphicon glyphicon-log-out"></span></a>
+                    </div>
+
 
                 #else
                     <a href="/client/login" class="btn btn-success active" role="button">Login</a>

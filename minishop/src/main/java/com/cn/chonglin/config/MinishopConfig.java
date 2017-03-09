@@ -1,7 +1,9 @@
 package com.cn.chonglin.config;
 
+import com.cn.chonglin.config.properties.BraintreeProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -16,6 +18,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableScheduling
+@EnableConfigurationProperties({BraintreeProperties.class})
 public class MinishopConfig {
 //    @Bean
 //    public ObjectMapper jacksonObjectMapper() {

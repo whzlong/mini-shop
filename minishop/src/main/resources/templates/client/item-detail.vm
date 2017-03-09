@@ -69,10 +69,7 @@
                 <div class="cart-input-form">
                     <label for="quantity">Quantity</label>
                     <input type="text" name="quantity" id="quantity" maxlength="2" />
-                    <select>
-                        <option>Black</option>
-                        <option>White</option>
-                    </select>
+
                     <button  id="btnAddCartItem" class="btn btn-primary">ADD TO CART</button>
                 </div>
             </div>

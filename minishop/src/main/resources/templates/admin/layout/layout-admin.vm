@@ -12,6 +12,7 @@
     <link href="/css/jumbotron.css" rel="stylesheet" />
     <link href="/libs/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/css/admin-home.css" rel="stylesheet">
+    <link href="/css/common.css" rel="stylesheet">
     <link href="/libs/pickerdate/themes/default.css" rel="stylesheet"/>
     <link href="/libs/pickerdate/themes/default.date.css" rel="stylesheet"/>
     <link href="/libs/pickerdate/themes/default.time.css" rel="stylesheet"/>

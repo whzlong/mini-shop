@@ -8,6 +8,7 @@ import com.cn.chonglin.web.coupon.form.CouponForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +29,12 @@ public class CouponController {
     @RequestMapping(value = "admin/coupon-list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public PaginationResult<CouponVo> query(@RequestParam(required = false, defaultValue = "") String code,
                                             @RequestParam(required = false, defaultValue = "") String couponName,
-                                            @RequestParam(required = false, defaultValue = "") String state,
                                             @RequestParam(required = false, defaultValue = "0") @Min(0) int currentPage,
                                             @RequestParam(required = false, defaultValue = "15") @Min(0) @Max(200) int size){
 
         currentPage -= 1;
 
-        return PaginationResult.success(couponService.query(code, couponName, state, size, currentPage));
+        return PaginationResult.success(couponService.query(code, couponName, size, currentPage));
     }
 
     @RequestMapping(value = "admin/coupons", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -44,5 +44,13 @@ public class CouponController {
         }
 
         return ResponseResult.success(couponService.save(couponForm.toDomain()));
+    }
+
+    @PostMapping(value = "admin/assign-coupons", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<Object> assignCoupons(@RequestParam(value = "coupons[]") String[] coupons, @RequestParam(value = "assignedUsers[]") String[] assignedUsers){
+
+
+
+        return ResponseResult.success(null);
     }
 }

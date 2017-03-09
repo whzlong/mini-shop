@@ -1,5 +1,7 @@
 package com.cn.chonglin.web.entrypage;
 
+import com.cn.chonglin.bussiness.base.service.SettingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class EntryPageController {
+
+    @Autowired
+    private SettingService settingService;
     /**
      * 订单
      *
@@ -43,6 +48,8 @@ public class EntryPageController {
      */
     @GetMapping(value = "admin/item-category")
     public String itemCategoryPage(ModelMap modelMap){
+        modelMap.addAttribute("itemCategoryActive", true);
+
         return "admin/item/item-category";
     }
 
@@ -63,5 +70,21 @@ public class EntryPageController {
         modelMap.addAttribute("couponActive", true);
 
         return "admin/coupon/coupon-list";
+    }
+
+    @GetMapping(value = "client/cart")
+    public String cartEntryPage(ModelMap modelMap){
+
+        modelMap.addAttribute("currency", settingService.findSetting().getCurrency());
+
+        return "client/cart";
+    }
+
+    @GetMapping(value="client/checkout")
+    public String checkoutEntryPage(ModelMap modelMap){
+        //支付时携带此token向Braintree服务器发送请求
+//        modelMap.addAttribute("clientToken", Application.gateway.clientToken().generate());
+
+        return "client/checkout";
     }
 }

@@ -6,16 +6,7 @@
         <td><label for="couponNameSearch" class="control-label">Name</label></td>
         <td><input type="text" class="form-control" id="couponNameSearch"></td>
     </tr>
-    <tr>
-        <td><label for="stateSearch" class="control-label">state</label></td>
-        <td>
-            <select class="form-control" id="stateSearch">
-                <option>Unused</option>
-                <option>Used</option>
-                <option>Disuse</option>
-            </select>
-        </td>
-    </tr>
+
 </table>
 
 <div id="coupon-list">
@@ -24,29 +15,33 @@
             <a href="#" @click="search" class="btn btn-primary">Search</a>
             &nbsp;
             <a href="#" @click="addItem" class="btn btn-primary" data-toggle="modal" data-target="#pageFormModal">Add</a>
+            &nbsp;&nbsp;&nbsp;
+            <a href="#" @click="openAssignPage" class="btn btn-primary" data-toggle="modal" data-target="#assignFormModal">Assign</a>
         </div>
 
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>#</th>
                         <th>Code</th>
                         <th>Coupon name</th>
                         <th>Valid date(From)</th>
                         <th>Valid date(To)</th>
-                        <th>State</th>
+                        <th>Amount</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in coupons">
+                        <td><input type="checkbox" v-bind:value="item.code" v-model="selectedCoupons"></td>
                         <td>{{(pagination.currentPage - 1) * pagination.size + 1 + index }}</td>
                         <td>{{item.code}}</td>
                         <td>{{item.couponName}}</td>
                         <td>{{item.validDateFrom}}</td>
                         <td>{{item.validDateTo}}</td>
-                        <td>{{item.state}}</td>
+                        <td>{{item.amount}}</td>
                         <td>
                             <a href="#" @click="editItem" data-toggle="modal" data-target="#pageFormModal" > <span :id="item.code" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
                         </td>
@@ -98,7 +93,7 @@
                         <input type="hidden" v-model="pageForm.code" name="code">
                         <div class="form-group">
                             <label for="couponName">Name</label>
-                            <input type="text" class="form-control" v-model="pageForm.couponName" name="couponName"></input>
+                            <input type="text" class="form-control" v-model="pageForm.couponName" id="couponName" name="couponName"></input>
                         </div>
 
                         <div class="form-group">
@@ -112,12 +107,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="state">State</label>
-                            <select class="form-control" v-model="pageForm.state" name="state">
-                                <option>Unused</option>
-                                <option>Used</option>
-                                <option>Disuse</option>
-                            </select>
+                            <label for="amount">Amount</label>
+                            <input type="text" class="form-control" v-model.number="pageForm.amount" id="amount" name="amount"></input>
                         </div>
 
                     </div>
@@ -130,6 +121,56 @@
         </div><!-- /.modal -->
 
 
+        <div class="modal fade" tabindex="-1" role="dialog" id="assignFormModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Assignment</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <input class="form-control" v-model="searchConditionsOfEmail" placeholder="Email"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" v-model="searchConditionsOfUsername" placeholder="User name"/>
+                                        </div>
+                                    </form>
+                            </tr>
+                        </table>
+                        <div v-if="hasNotUsers">
+                            <span style="color: red;">Not found.</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in users">
+                                        <td><input type="checkbox" v-bind:value="item.userId" v-model="selectedUsers"></td>
+                                        <td>{{item.firstName}}&nbsp;{{item.lastName}}</td>
+                                        <td>{{item.email}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" @click="clearSelectedUsers" class="btn btn-primary">Clear</button>
+                        <button type="button" @click="assign" class="btn btn-primary">Assign</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
     </div>
 </div>

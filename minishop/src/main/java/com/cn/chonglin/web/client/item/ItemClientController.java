@@ -24,7 +24,7 @@ public class ItemClientController {
     @Autowired
     private SettingDao settingDao;
 
-    @GetMapping(value = "items")
+    @GetMapping(value = "select-item")
     public String itemList(@RequestParam(required = false) String brandId, @RequestParam(required = false) String modelId, ModelMap modelMap){
         List<ItemCategory> brands = itemService.findItemTypes("0");
         modelMap.addAttribute("brands", getItemTypeVo(brands));
@@ -46,7 +46,7 @@ public class ItemClientController {
 
         }
 
-        return "client/item-list";
+        return "client/select-item";
     }
 
 

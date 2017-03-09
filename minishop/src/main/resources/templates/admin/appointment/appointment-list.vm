@@ -112,7 +112,7 @@
                         </div>
                         <div class="form-group">
                             <label for="bookTime">Time</label>
-                            <input type="text" v-model="bookTime" class="form-control timepicker" id="bookTime" placeholder="Appointment time">
+                            <input type="text" v-model="bookTime" class="form-control timepicker" id="bookTime" data-date-format="hh:ii" placeholder="Appointment time" readonly>
                         </div>
                         <div class="form-group">
                             <label for="state">State</label>

@@ -1,4 +1,4 @@
-package com.cn.chonglin.web.client.cart;
+package com.cn.chonglin.web.cart;
 
 import com.cn.chonglin.bussiness.cart.service.CartService;
 import com.cn.chonglin.bussiness.cart.vo.CartVo;
@@ -6,7 +6,6 @@ import com.cn.chonglin.common.ResponseResult;
 import com.cn.chonglin.web.client.cart.form.CartItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,31 +13,23 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 购物车控制器
+ * 购物车
  *
  */
-@Controller
-@RequestMapping("client")
+@RestController
 public class CartController {
-
     @Autowired
     private CartService cartService;
 
-    @GetMapping("cart")
-    public String index(){
-        return "client/cart";
-    }
-
-    @GetMapping("cart-items")
-    public @ResponseBody
-    ResponseResult<CartVo> getCart(){
+    @GetMapping("client/cart-items")
+    public ResponseResult<CartVo> getCart(){
         CartVo cartVo = cartService.getCart();
 
         return ResponseResult.success(cartVo);
     }
 
-    @PostMapping(value = "cart-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody ResponseResult<Object> addCartItem(@Valid CartItemForm cartItemForm, BindingResult bindingResult){
+    @PostMapping(value = "client/cart-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<Object> addCartItem(@Valid CartItemForm cartItemForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return ResponseResult.error(bindingResult.getFieldErrors());
         }
@@ -48,16 +39,16 @@ public class CartController {
         return ResponseResult.success(null);
     }
 
-    @PostMapping("cart-items/{itemId}/delete")
-    public @ResponseBody ResponseResult<CartVo> deleteCartItem(@PathVariable String itemId){
+    @PostMapping(value = "client/cart-items/{itemId}/delete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<CartVo> deleteCartItem(@PathVariable String itemId){
 
         CartVo cartVo = cartService.deleteCartItem(itemId);
 
         return ResponseResult.success(cartVo);
     }
 
-    @PostMapping("cart-items/update")
-    public @ResponseBody ResponseResult<CartVo> updateCart(@RequestBody List<CartItemForm> cartItemForms){
+    @PostMapping(value = "client/cart-items/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<CartVo> updateCart(@RequestBody List<CartItemForm> cartItemForms){
         CartVo cartVo = cartService.updateCartItems(cartItemForms);
 
         return ResponseResult.success(cartVo);

@@ -70,8 +70,8 @@ $(function () {
     $('#bookTime').pickatime({formatSubmit: 'HH:i'
         , hiddenName: true
         , min: [9,00]
-        , max: [18,0]
-        , interval: 15
+        , max: [18,00]
+        , interval: 30
     });
 
     // $('#btnBook').click(function () {
@@ -100,8 +100,7 @@ $(function () {
 
     $('#btnAddCartItem').click(function () {
 
-        if($('#quantity').val() == ""){
-            alert("Please input the quantity");
+        if(hasValidatorErrors()){
             return;
         }
 
@@ -114,6 +113,7 @@ $(function () {
             success: function (res) {
                 if(res.code == "0"){
                     alert("This item has been added in your cart.");
+                    $('#quantity').val("");
                 }else{
                     alert(res.message);
                 }
@@ -128,6 +128,25 @@ $(function () {
     });
 
 })
+
+
+function hasValidatorErrors() {
+    if($('#quantity').val() == ""){
+        alert("Please input the quantity");
+        return true;
+    }
+
+
+    var r = /^\+?[1-9][0-9]*$/;
+
+    if(!r.test($('#quantity').val())){
+        alert("Please input the positive integer");
+        return true;
+    }
+
+    return false;
+
+}
 
 function validateAppointmentForm() {
     $('#appointmentForm').bootstrapValidator({

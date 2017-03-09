@@ -31,8 +31,13 @@ public class ItemForm {
     @Range(min = 0, max = 99999, message = "Please input the number in 0 to 99999")
     private int stock;
 
+    @NotEmpty(message = "Please input the brand.")
     private String brand;
+
+    @NotEmpty(message = "Please input the model.")
     private String model;
+
+    @NotEmpty(message = "Please input the state.")
     private String state;
 
     public String getItemId() {

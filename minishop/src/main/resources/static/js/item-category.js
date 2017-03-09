@@ -12,7 +12,9 @@ $(function () {
             selectedModelId: "",
             selectedModelName: "",
             operateState: "add",
-            operateModelState: "add"
+            operateModelState: "add",
+            hasModel: true,
+            hasBrand: true
         },
         created: function () {
 
@@ -44,13 +46,13 @@ $(function () {
                     return;
                 }
 
-                $('#brandModal').modal('hide');
+
 
                 if(this.operateState == "update"){
                     $.ajax({
                         type: "POST",
                         url: "http://localhost:8080/admin/item-categories/update",
-                        data: {categoryId: this.selectedBrandId, categoryName: this.selectedBrandName},
+                        data: {categoryId: vm.selectedBrandId, categoryName: vm.selectedBrandName},
                         success: function (result) {
                             if(result.code == "0"){
                                 for(var i = 0; i < vm.brands.length; i++){
@@ -59,23 +61,25 @@ $(function () {
                                     }
                                 };
                             }
+
+                            $('#brandModal').modal('hide');
                         }
                     });
                 }else{
                     $.ajax({
                         type: "POST",
                         url: "http://localhost:8080/admin/item-categories/add",
-                        data: {categoryName: this.selectedBrandName},
+                        data: {categoryName: vm.selectedBrandName},
                         success: function (res) {
                             if(res.code == "0"){
                                 vm.brands.splice(vm.brands.length, 0, res.rs);
                                 setSelectedBrand(res["rs"].value);
                             }
+
+                            $('#brandModal').modal('hide');
                         }
                     });
                 }
-
-
 
             },
             findModels: function (event) {
@@ -201,6 +205,10 @@ $(function () {
                                     }
                                 }
 
+                                if(vm.models.length == 0){
+                                    vm.hasModel = false;
+                                }
+
                             }
                         }
                     });
@@ -212,7 +220,7 @@ $(function () {
                     return;
                 }
 
-                $('#modelModal').modal('hide');
+
 
                 if(this.operateModelState == "update"){
                     $.ajax({
@@ -227,6 +235,8 @@ $(function () {
                                     }
                                 };
                             }
+
+                            $('#modelModal').modal('hide');
                         }
                     });
                 }else{
@@ -240,6 +250,8 @@ $(function () {
                                 vm.models.splice(vm.models.length, 0, res.rs);
                                 setSelectedModel(res["rs"].value);
                             }
+
+                            $('#modelModal').modal('hide');
                         }
                     });
                 }
@@ -270,6 +282,12 @@ $(function () {
             }
         }
 
+        if(vm.brands.length > 0){
+            vm.hasBrand = true;
+        }else{
+            vm.hasBrand = false;
+        }
+
         getModelsByBrandId(brandValue);
     }
 
@@ -290,6 +308,12 @@ $(function () {
                 Vue.set(vm.models, index, newItem);
             }
         }
+
+        if(vm.models.length > 0){
+            vm.hasModel = true;
+        }else{
+            vm.hasModel = false;
+        }
     }
     
     function getModelsByBrandId(brandId) {
@@ -302,8 +326,12 @@ $(function () {
                     //默认选中行
                     if(vm.models.length > 0){
                         setSelectedModel(vm.models[0].value);
+                        vm.hasModel = true;
                     }else{
                         vm.selectedModelId = "";
+                        vm.selectedModelName = "";
+
+                        vm.hasModel = false;
                     }
 
                 }

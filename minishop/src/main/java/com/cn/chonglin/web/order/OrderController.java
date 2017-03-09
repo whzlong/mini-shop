@@ -64,4 +64,5 @@ public class OrderController {
     public ResponseResult<List<OrderDetailVo>> queryOrderDetails(@RequestParam String orderId){
         return ResponseResult.success(orderService.queryOrderDetails(orderId));
     }
+
 }

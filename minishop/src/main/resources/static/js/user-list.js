@@ -12,6 +12,11 @@ $(function () {
        created: function () {
            this.query(1);
        },
+       watch: {
+           pageForm: function (newValue, oldValue) {
+               validateForm(this.validateFields);
+           }
+       },
        methods: {
            query: function (page) {
                this.pagination.currentPage = page;
@@ -83,6 +88,10 @@ $(function () {
                }
            },
            saveItem: function () {
+               if(validateForm(this.validateFields)){
+                   return;
+               }
+
                $.ajax({
                    type: "post",
                    dataType:"json",
@@ -102,6 +111,49 @@ $(function () {
 
        }
    });
+
+    vm.validateFields = {firstName:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The name is required'
+                                    }
+                                }
+                            }
+                        , email:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The valid date(From) is required'
+                                    }
+                                }
+                            }
+                    };
+
+    function validateForm(validateFields) {
+        var ret = false;
+
+        for(var fieldName in validateFields){
+
+            var validators = validateFields[fieldName].validators;
+
+            for(var validatorName in validators){
+                if(validatorName == "notEmpty"){
+                    if($('#' + fieldName).val() == null || $('#' + fieldName).val() == ""){
+                        $('#'+fieldName + ' ~ .error-message').remove();
+                        $('#'+fieldName).after("<span class='error-message'>"+ validators[validatorName].message +"</span>");
+                        ret = true;
+                    }else{
+                        $('#'+fieldName + ' ~ .error-message').remove();
+                    }
+                }
+            }
+
+
+        }
+
+        return ret;
+    }
 
     function setPagination() {
 

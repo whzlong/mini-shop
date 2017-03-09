@@ -1,3 +1,27 @@
+<style type="text/css">
+    /*
+ *  Usage:
+ *
+      <div class="sk-circle">
+        <div class="sk-circle1 sk-child"></div>
+        <div class="sk-circle2 sk-child"></div>
+        <div class="sk-circle3 sk-child"></div>
+        <div class="sk-circle4 sk-child"></div>
+        <div class="sk-circle5 sk-child"></div>
+        <div class="sk-circle6 sk-child"></div>
+        <div class="sk-circle7 sk-child"></div>
+        <div class="sk-circle8 sk-child"></div>
+        <div class="sk-circle9 sk-child"></div>
+        <div class="sk-circle10 sk-child"></div>
+        <div class="sk-circle11 sk-child"></div>
+        <div class="sk-circle12 sk-child"></div>
+      </div>
+ *
+ */
+
+
+</style>
+
 <div class="container" style="height: 700px;" id="cartForm">
     <div class="item-list">
         <table class="table">
@@ -15,6 +39,7 @@
                            {{cartItem.itemName}}---{{cartItem.itemId}}
                        </td>
                        <td>
+                           <span>{{currency}}</span>
                            <template v-if="cartItem.state=='discount'">
                                <span style="text-decoration: line-through; color: red;">{{cartItem.unitPrice}}</span>
                                /
@@ -28,6 +53,7 @@
                            <input class="form-control cart-item-quantity" type="text" name="quantity" v-model.number="cartItem.quantity" />
                        </td>
                        <td>
+                           <span>{{currency}}</span>
                            <template v-if="cartItem.state=='discount'">
                                {{cartItem.discountPrice * cartItem.quantity}}
                            </template>
@@ -49,7 +75,26 @@
         </table>
     </div>
     <div style="margin-top:20px;margin-bottom: 40px;">
-        <button class="btn btn-primary" v-on:click="updateCart">Update cart</button>
+        <a href="#" class="btn btn-primary" v-on:click="updateCart" id="btnUpdateCart">
+            <div id="updateCartLabel">
+                Update cart
+            </div>
+            <div class="sk-circle">
+                <div class="sk-circle1 sk-child"></div>
+                <div class="sk-circle2 sk-child"></div>
+                <div class="sk-circle3 sk-child"></div>
+                <div class="sk-circle4 sk-child"></div>
+                <div class="sk-circle5 sk-child"></div>
+                <div class="sk-circle6 sk-child"></div>
+                <div class="sk-circle7 sk-child"></div>
+                <div class="sk-circle8 sk-child"></div>
+                <div class="sk-circle9 sk-child"></div>
+                <div class="sk-circle10 sk-child"></div>
+                <div class="sk-circle11 sk-child"></div>
+                <div class="sk-circle12 sk-child"></div>
+            </div>
+
+        </a>
     </div>
     <div class="divider">
         <div class="order-note">
@@ -61,12 +106,18 @@
         <div class="total-area">
             <div class="checkout-col">
                 <h2 class="subtotal" >{{currency}} {{totalPrice}}</h2>
-                <button class="btn btn-danger">CHECKOUT</button>
+                <a href="/client/checkout" class="btn btn-danger">CHECKOUT</a>
                 <br><br>
-                <button class="btn btn-warning checkout-button-papal">Checkout with <img alt="PayPal" src="/images/paypal-logo.png"></button>
+
+                <input type="hidden" id="currency" value="${currency}" />
+                <a href="#" id="checkout" class="btn btn-warning checkout-button-papal">Checkout with <img alt="PayPal" src="/images/paypal-logo.png"></a>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 
 <script src="/js/cart.js"></script>

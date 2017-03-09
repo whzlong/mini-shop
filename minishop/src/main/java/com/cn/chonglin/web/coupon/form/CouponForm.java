@@ -4,6 +4,7 @@ import com.cn.chonglin.bussiness.coupon.domain.Coupon;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -34,10 +35,10 @@ public class CouponForm {
     private String validDateTo;
 
     /**
-     * 状态
+     * 优惠券金额
      */
-    @NotEmpty(message = "Please input the state")
-    private String state;
+    @NotEmpty(message = "Please input the amount")
+    private String amount;
 
     public String getCode() {
         return code;
@@ -71,12 +72,12 @@ public class CouponForm {
         this.validDateTo = validDateTo;
     }
 
-    public String getState() {
-        return state;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public Coupon toDomain(){
@@ -91,7 +92,10 @@ public class CouponForm {
         if(!StringUtils.isEmpty(this.validDateTo)){
             coupon.setValidDateTo(LocalDate.parse(this.validDateTo, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         }
-        coupon.setState(this.state);
+
+        if(!StringUtils.isEmpty(this.amount)){
+            coupon.setAmount(new BigDecimal(this.amount));
+        }
 
         return coupon;
     }

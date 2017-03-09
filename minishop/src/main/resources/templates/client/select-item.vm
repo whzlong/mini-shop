@@ -56,7 +56,7 @@
                 #foreach($item in $repairs)
                     <div class="col-md-3" style="padding: 3px;">
                         <a href="/client/items/${item.itemId}">
-                            <img src="${item.smallImage}" class="img-thumbnail">
+                            <img src="${item.itemListImage}" class="img-thumbnail">
                             <p class="item-name">${item.itemName}</p>
                         </a>
                     </div>

@@ -14,6 +14,11 @@ $(function(){
         created: function () {
             this.query(1);
         },
+        watch: {
+            itemForm: function (newValue, oldValue) {
+                validateForm(this.validateFields);
+            }
+        },
         methods: {
             query: function (page) {
                 this.pagination.currentPage = page;
@@ -61,9 +66,12 @@ $(function(){
                 this.query(vm.pagination.currentPage);
             },
             addItem: function () {
+                // alert(this.validateFields.brand.validators.notEmpty.message);
                 clearFormElements(this.itemForm);
             },
             editItem: function (event) {
+
+
                 for(var index in this.items){
                     if(event.target.id == this.items[index].itemId){
                         this.itemForm.itemId = this.items[index].itemId;
@@ -107,6 +115,10 @@ $(function(){
 
             },
             saveItem: function () {
+                if(validateForm(this.validateFields)){
+                    return;
+                }
+
                 var formData = new FormData($('#itemForm')[0]);
 
                 $.ajax({
@@ -132,6 +144,84 @@ $(function(){
         }
     });
 
+    vm.validateFields = {brand:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The brand is required'
+                                    }
+                                }
+                            }
+                        , model:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The model is required'
+                                    }
+                                }
+                            }
+                        , itemName:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The item name is required'
+                                    }
+                                }
+                            }
+                        , unitPrice:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The unit price is required'
+                                    }
+                                }
+                            }
+                        , stock:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The stock is required'
+                                    }
+                                }
+                            }
+                        , state:
+                            {validators:
+                                {
+                                    notEmpty: {
+                                        message: 'The state is required'
+                                    }
+                                }
+                            }
+
+
+                        };
+
+    function validateForm(validateFields) {
+        var ret = false;
+
+        for(var fieldName in validateFields){
+
+            var validators = validateFields[fieldName].validators;
+
+            for(var validatorName in validators){
+                if(validatorName == "notEmpty"){
+                    if($('#' + fieldName).val() == null || $('#' + fieldName).val() == ""){
+                        $('#'+fieldName + ' ~ .error-message').remove();
+                        $('#'+fieldName).after("<span class='error-message'>"+ validators[validatorName].message +"</span>");
+                        ret = true;
+                    }else{
+                        $('#'+fieldName + ' ~ .error-message').remove();
+                    }
+                }
+            }
+
+
+        }
+
+
+
+        return ret;
+    }
 
     function setPagination() {
 
