@@ -25,7 +25,7 @@ public class SettingDao {
     }
 
     public Setting queryForObject(){
-        return jdbcTemplate.queryForObject("SELECT * FROM setting", new Object[]{}, settingRowMapper);
+        return jdbcTemplate.queryForObject("SELECT * FROM setting WHERE id = '0'", new Object[]{}, settingRowMapper);
     }
 
     static class SettingMapper implements RowMapper<Setting>{
@@ -36,6 +36,8 @@ public class SettingDao {
             setting.setCurrency(rs.getString("currency_symbol"));
             setting.setCurrencyAbbreviation(rs.getString("currency_abbreviation"));
             setting.setEmail(rs.getString("email"));
+            setting.setShopAddress(rs.getString("shop_address"));
+            setting.setShopPostcode(rs.getString("shop_postcode"));
 
             return setting;
         }

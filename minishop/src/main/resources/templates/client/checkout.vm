@@ -28,7 +28,7 @@
                 <span>Shop address</span>
             </div>
             <div class="checkout-row-content">
-                <span>London ddd</span>
+                <span>{{pageVo.shopAddress}}&nbsp;Postcode: {{pageVo.shopPostcode}}</span>
             </div>
         </div>
         <hr>
@@ -38,35 +38,60 @@
             </div>
             <div class="checkout-row-content">
                 <div>
-                    <a href="#" class="btn btn-default checkout-button-papal" title="Paypal"><img alt="PayPal" src="/images/paypal-logo.png"></a>
-                    <a href="#" class="btn btn-default">Credit card</a>
+                    <div class="radio">
+                        <label class="checkout-button-papal">
+                            <input type="radio" name="payPal" id="payPal" value="0" v-model="payMethod">
+                            <img alt="PayPal" src="/images/paypal-logo.png">
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="creditCard" id="creditCard" value="1" v-model="payMethod">
+                            Credit card
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
         <hr>
-        <div class="checkout-row">
+        <div class="checkout-row" v-show="coupons.length > 0">
             <div class="checkout-row-label">
                 <span>Coupon</span>
             </div>
             <div class="checkout-row-content">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">
-                        Option one is this and that&mdash;be sure to include why it's great
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">
-                        Option one is this and that&mdash;be sure to include why it's great
-                    </label>
+
+                <template v-for="item of coupons">
+                    <input type="checkbox"  v-bind:value="item.couponCode" v-model="selectedCoupons">
+                    <label for="jack">{{pageVo.currency}} {{item.amount}}</label>
+                </template>
+            </div>
+            <hr>
+        </div>
+        <div class="checkout-row">
+            <div class="order-summary">
+                <div class="statistics">
+                    <div class="list">
+                        <span>Sub total:</span>
+                        <em class="price">{{pageVo.currency}} &nbsp;{{pageVo.subtotal}}</em>
+                    </div>
+                    <div class="list">
+                        <span>Discount:</span>
+                        <em class="price">{{pageVo.currency}} &nbsp;0</em>
+                    </div>
+                    <div class="list">
+                        <span>Payable:</span>
+                        <em class="to-be-payed">{{pageVo.currency}} &nbsp;{{payableAmount}}</em>
+                    </div>
                 </div>
             </div>
         </div>
-        <hr>
+        <div class="checkout-row">
+            <div class="checkout-button">
+                <a id="checkout" class="btn btn-danger">Submit</a>
+            </div>
+        </div>
 
-
-        <input type="hidden" id="clientToken" value=""/>
+        <input type="hidden" id="clientToken" value="${clientToken}"/>
     </div>
 </div>
 

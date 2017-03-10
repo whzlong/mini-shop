@@ -1,13 +1,18 @@
 package com.cn.chonglin.web.client.cart.form;
 
 import com.cn.chonglin.bussiness.cart.domain.CartItem;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Pattern;
 
 /**
  * 购物车商品
  */
 public class CartItemForm {
     private String itemId;
-    private int quantity;
+    @NotEmpty(message = "Please input the quantity.")
+    @Pattern(regexp = "^[0-9]*[1-9][0-9]*$", message = "Please input the integer quantity")
+    private String quantity;
     private String color;
 
     public String getItemId() {
@@ -18,11 +23,11 @@ public class CartItemForm {
         this.itemId = itemId;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
@@ -38,7 +43,7 @@ public class CartItemForm {
         CartItem cartItem = new CartItem();
 
         cartItem.setItemId(this.itemId);
-        cartItem.setQuantity(this.quantity);
+        cartItem.setQuantity(Integer.valueOf(this.quantity));
         cartItem.setColor(this.color);
 
         return cartItem;

@@ -127,7 +127,7 @@ public class CartService {
 
         for (CartItemForm form : cartItemForms){
             cartItem = cartItemDao.findByKey(cart.getCartId(), form.getItemId());
-            cartItem.setQuantity(form.getQuantity());
+            cartItem.setQuantity(Integer.valueOf(form.getQuantity()));
 
             cartItemDao.update(cartItem);
         }

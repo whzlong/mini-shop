@@ -1,6 +1,7 @@
 package com.cn.chonglin.web.coupon;
 
 import com.cn.chonglin.bussiness.coupon.service.CouponService;
+import com.cn.chonglin.bussiness.coupon.vo.AssignCouponVo;
 import com.cn.chonglin.bussiness.coupon.vo.CouponVo;
 import com.cn.chonglin.common.PaginationResult;
 import com.cn.chonglin.common.ResponseResult;
@@ -8,14 +9,12 @@ import com.cn.chonglin.web.coupon.form.CouponForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * 优惠券
@@ -49,8 +48,13 @@ public class CouponController {
     @PostMapping(value = "admin/assign-coupons", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<Object> assignCoupons(@RequestParam(value = "coupons[]") String[] coupons, @RequestParam(value = "assignedUsers[]") String[] assignedUsers){
 
-
+        couponService.assignCoupons(assignedUsers, coupons);
 
         return ResponseResult.success(null);
+    }
+
+    @GetMapping(value = "admin/assign-coupons", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<List<AssignCouponVo>> queryAssignedCoupons(@RequestParam String userId){
+        return ResponseResult.success(couponService.queryAssignedCoupons(userId));
     }
 }

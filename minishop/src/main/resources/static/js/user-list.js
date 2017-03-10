@@ -7,7 +7,8 @@ $(function () {
            pageNums: [],
            searchConditions: {email: "", firstName:"", state:""},
            pageForm: {userId: "", firstName: "", lastName: "", email: ""
-               , password:"", phone:"", postcode:"", address:"", role: "", state: ""}
+               , password:"", phone:"", postcode:"", address:"", role: "", state: ""},
+           assignedCoupons: []
        },
        created: function () {
            this.query(1);
@@ -102,6 +103,23 @@ $(function () {
                        if(res.code == "0"){
                            $('#pageFormModal').modal('hide');
                            vm.query(vm.pagination.currentPage);
+                       }else{
+                           alert(res.message);
+                       }
+                   }
+               });
+           },
+           showCoupons: function (event) {
+               var paras = {userId: event.target.id};
+
+               $.ajax({
+                   type: "get",
+                   dataType:"json",
+                   url: "http://localhost:8080/admin/assign-coupons",
+                   data: paras,
+                   success: function (res) {
+                       if(res.code == "0"){
+                           vm.assignedCoupons = res['rs'];
                        }else{
                            alert(res.message);
                        }

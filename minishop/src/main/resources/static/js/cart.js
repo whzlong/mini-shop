@@ -32,20 +32,6 @@ $(function () {
                 }
             });
 
-            // $.ajax({
-            //     type: "GET",
-            //     contentType: "application/json;charset=UTF-8",
-            //     dataType:"json",
-            //     url: "http://localhost:8080/client/cart-items",
-            //     success: function (res) {
-            //         if(res.code == "0"){
-            //             vm.cartItems = res.rs["cartItemVos"];
-            //             vm.totalPrice = res.rs["totalPrice"];
-            //             vm.currency = res.rs["currency"];
-            //         }
-            //     }
-            // });
-
         },
         methods: {
             deleteCartItem: function (event) {
@@ -80,9 +66,6 @@ $(function () {
 
                     $('.sk-circle').show();
 
-
-
-
                     var cartItemForm = {};
                     var cartItemForms = new Array();
 
@@ -104,6 +87,8 @@ $(function () {
                             if(res.code == "0"){
                                 vm.cartItems = res.rs["cartItemVos"];
                                 vm.totalPrice = res.rs["totalPrice"];
+                            }else{
+                                alert(res.message);
                             }
 
 
@@ -119,47 +104,7 @@ $(function () {
 
     });
 
-    // var checkoutByPaypal = document.getElementById('checkout');
 
-    // Create a Client component
-    braintree.client.create({
-        authorization: $('#clientToken').val()
-    }, function (clientErr, clientInstance) {
-        // Create PayPal component
-        braintree.paypal.create({
-            client: clientInstance
-        }, function (err, paypalInstance) {
-
-            $('#checkout').click(function () {
-                // Tokenize here!
-                paypalInstance.tokenize({
-                    flow: 'checkout', // Required
-                    amount: 10.00, // Required
-                    currency: 'GBP', // Required
-                    locale: 'en_GB',
-                    enableShippingAddress: true,
-                    shippingAddressEditable: false,
-                    shippingAddressOverride: {
-                        recipientName: 'Scruff McGruff',
-                        line1: '1234 Main St.',
-                        line2: 'Unit 1',
-                        city: 'Chicago',
-                        countryCode: 'US',
-                        postalCode: '60652',
-                        state: 'IL',
-                        phone: '123.456.7890'
-                    }
-                }, function (err, tokenizationPayload) {
-                    // Tokenization complete
-                    // Send tokenizationPayload.nonce to server
-                    alert(tokenizationPayload.nonce);
-
-
-                });
-            });
-
-        });
-    });
 
 
 })

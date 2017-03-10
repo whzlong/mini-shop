@@ -154,13 +154,15 @@ $(function () {
 
                if(vm.selectedCoupons.length == 0){
                    alert("Please select the coupons");
+                   return;
                }
 
-               if(vm.assignedUsers.length == 0){
+               if(vm.selectedUsers.length == 0){
                    alert("Please select the users");
+                   return;
                }
 
-               if(this.selectedUsers.length > 0){
+               if(vm.selectedUsers.length > 0 && vm.selectedCoupons.length > 0){
                    var paras = {assignedUsers: vm.selectedUsers, coupons: vm.selectedCoupons};
 
                    $.ajax({

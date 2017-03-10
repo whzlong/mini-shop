@@ -22,4 +22,6 @@ public final class DropdownListContants {
     public static final String APPOINTMENT_STATE_PENGING = "Pending";
     public static final String APPOINTMENT_STATE_CONFIRMED = "Confirmed";
 
+    public static final String COUPON_STATE_ACTIVE = "Used";
+
 }

@@ -50,7 +50,7 @@
                            </template>
                        </td>
                        <td>
-                           <input class="form-control cart-item-quantity" type="text" name="quantity" v-model.number="cartItem.quantity" />
+                           <input class="form-control cart-item-quantity" type="text" name="quantity" v-model.number="cartItem.quantity" maxlength="5"/>
                        </td>
                        <td>
                            <span>{{currency}}</span>

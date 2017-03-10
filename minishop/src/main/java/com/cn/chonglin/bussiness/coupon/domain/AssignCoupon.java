@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class AssignCoupon {
     private String userId;
     private String couponCode;
+    private int quantity;
     private String state;
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
@@ -26,6 +27,14 @@ public class AssignCoupon {
 
     public void setCouponCode(String couponCode) {
         this.couponCode = couponCode;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getState() {
