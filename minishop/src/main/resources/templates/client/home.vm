@@ -1,0 +1,50 @@
+<style>
+    /*
+.backgroundImage{
+    background-image: url("/images/toppage_repairman.png");
+}
+*/
+</style>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div id="index-page">
+    <div class="special-items">
+        <div class="jumbotron">
+            <div class="container backgroundImage">
+                <p><a class="btn btn-primary btn-lg" @click="selectService">PICK UP SERVICE &raquo;</a></p>
+                <p>Speedy, high quality and hossie-free repairs for your iPhone.</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Example row of columns -->
+            <div v-show="hasDiscountItems">
+                <h4>Special Price Service</h4>
+                <div class="row">
+                    <div class="col-md-3" v-for="item in discountItems">
+                        <img v-bind:src="item.itemListImage" class="img-thumbnail">
+                        <p>{{item.itemName}} </p>
+                        <p><a class="btn btn-default" @click="jumpToDetail" v-bind:id="item.itemId" href="#" role="button">View details &raquo;</a></p>
+                    </div>
+
+                </div>
+            </div>
+            <div v-show="hasNewItems">
+                <hr>
+                <h4>New Repair Service</h4>
+                <div class="row">
+
+                    <div class="col-md-3" v-for="item in newItems">
+                        <img v-bind:src="item.itemListImage" class="img-thumbnail">
+                        <p>{{item.itemName}} </p>
+                        <p><a class="btn btn-default" @click="jumpToDetail" v-bind:id="item.itemId" href="#" role="button">View details &raquo;</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div> <!-- /container -->
+
+    </div>
+</div>
+
+<script src="/js/home.js"></script>

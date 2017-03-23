@@ -1,11 +1,33 @@
 $(function () {
-    var waitVm = new Vue({
-        el: "#waitTab",
+    var vm = new Vue({
+        el: "#item-detail-page",
         data: {
             bookDate: "",
             bookTime: "",
             hasErrorDate: false,
-            hasErrorTime: false
+            hasErrorTime: false,
+            brandId: "",
+            brandName: "",
+            item: {}
+        },
+        created: function () {
+
+            $.ajax({
+                type: "get",
+                contentType: "application/x-www-form-urlencoded",
+                dataType:"json",
+                url: "/client/items/" + $('#itemId').val(),
+                success: function (res) {
+                    if(res.code == "0"){
+                        vm.item = res.rs;
+
+                        store.set('selectedBrand', vm.item.brandId);
+                        store.set('selectedModel', vm.item.modelId);
+                    }else{
+                        alert(res.message);
+                    }
+                }
+            });
         },
         methods: {
             bookAppointment: function (event){
@@ -35,13 +57,13 @@ $(function () {
                     type: "post",
                     contentType: "application/x-www-form-urlencoded",
                     dataType:"json",
-                    url: "http://localhost:8080/client/book",
+                    url: "/client/book",
                     data: appointmentParams,
                     success: function (res) {
                         if(res.code == "0"){
                             alert("You have booked an appointment successfully!");
-                            waitVm.bookDate = "";
-                            waitVm.bookTime = "";
+                            vm.bookDate = "";
+                            vm.bookTime = "";
                         }else{
                             alert(res.message);
                         }
@@ -49,14 +71,43 @@ $(function () {
                     error: function (res) {
                         var result = $.parseJSON(res.responseText);
                         if(result.status == 401){
-                            window.location.href = "http://localhost:8080/client/login";
+                            window.location.href = "/client/login";
                         }
                     }
                 });
+            },
+            addCartItem: function () {
+                if(hasValidatorErrors()){
+                    return;
+                }
+
+                $.ajax({
+                    type: "post",
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType:"json",
+                    url: "/client/cart-items",
+                    data: {itemId: $('#itemId').val(), quantity: $('#quantity').val()},
+                    success: function (res) {
+                        if(res.code == "0"){
+                            alert("This item has been added in your cart.");
+                            $('#quantity').val("");
+                        }else{
+                            alert(res.message);
+                        }
+                    },
+                    error: function (res) {
+                        var result = $.parseJSON(res.responseText);
+                        if(result.status == 401){
+                            window.location.href = "/client/login";
+                        }
+                    }
+                });
+            },
+            jumpToSelectService: function () {
+                window.location.href = "/client/select-service";
             }
         }
     });
-
 
 
     //设定选择日期
@@ -74,106 +125,23 @@ $(function () {
         , interval: 30
     });
 
-    // $('#btnBook').click(function () {
-    //     var submitAbled = true;
-    //     $('.app-error').remove();
-    //
-    //     if($('#bookDate').val() == ""){
-    //         $('#bookDate').after("<span class='app-error'>The date is required.</span>");
-    //         submitAbled = false;
-    //     }
-    //
-    //     if($('#bookTime').val() == ""){
-    //         $('#bookTime').after("<span class='app-error'>The time is required.</span>")
-    //         submitAbled = false;
-    //     }
-    //
-    //     return submitAbled;
-    // });
 
-    // $("#bookDate").change(function(){
-    //     $('.app-error').remove();
-    // });
-    // $("#bookTime").change(function(){
-    //     $('.app-error').remove();
-    // });
-
-    $('#btnAddCartItem').click(function () {
-
-        if(hasValidatorErrors()){
-            return;
+    function hasValidatorErrors() {
+        if($('#quantity').val() == ""){
+            alert("Please input the quantity");
+            return true;
         }
 
-        $.ajax({
-            type: "post",
-            contentType: "application/x-www-form-urlencoded",
-            dataType:"json",
-            url: "http://localhost:8080/client/cart-items",
-            data: {itemId: $('#itemId').val(), quantity: $('#quantity').val()},
-            success: function (res) {
-                if(res.code == "0"){
-                    alert("This item has been added in your cart.");
-                    $('#quantity').val("");
-                }else{
-                    alert(res.message);
-                }
-            },
-            error: function (res) {
-                var result = $.parseJSON(res.responseText);
-                if(result.status == 401){
-                    window.location.href = "http://localhost:8080/client/login";
-                }
-            }
-        });
-    });
+        var r = /^\+?[1-9][0-9]*$/;
 
-})
-
-
-function hasValidatorErrors() {
-    if($('#quantity').val() == ""){
-        alert("Please input the quantity");
-        return true;
-    }
-
-
-    var r = /^\+?[1-9][0-9]*$/;
-
-    if(!r.test($('#quantity').val())){
-        alert("Please input the positive integer");
-        return true;
-    }
-
-    return false;
-
-}
-
-function validateAppointmentForm() {
-    $('#appointmentForm').bootstrapValidator({
-        message: 'This value is not valid',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            bookDate:{
-                validators:{
-                    notEmpty: {
-                        message: 'The date is required'
-                    }
-                }
-            },
-            bookTime: {
-                validators: {
-                    notEmpty: {
-                        message: 'The time is required'
-                    }
-                }
-            }
-
+        if(!r.test($('#quantity').val())){
+            alert("Please input the positive integer");
+            return true;
         }
 
-    });
+        return false;
 
-}
+    }
+});
+
+

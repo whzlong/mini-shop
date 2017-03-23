@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -27,12 +28,12 @@ public class ItemDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private NamedParameterJdbcTemplate namedTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+        this.namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     public Item findByKey(String id){
@@ -53,6 +54,11 @@ public class ItemDao {
         }catch (EmptyResultDataAccessException ex){
             return null;
         }
+    }
+
+    public List<Item> findItemsByItemIds(List<String> itemIds){
+        return namedTemplate.query("SELECT * FROM items WHERE item_id IN(:itemIds)"
+        , new MapSqlParameterSource().addValue("itemIds", itemIds), mapper);
     }
 
     /**
@@ -130,7 +136,7 @@ public class ItemDao {
 
         jdbcTemplate.update("UPDATE items SET item_name = ?, item_list_image = ?, item_detail_image = ?" +
                         ", unit_price = ?, discount_price = ?, brand_id = ?, brand_name = ?" +
-                        ", model_id = ?, model_name = ?, stock = ?, state = ?, updated_at = now()  WHERE item_id = ?"
+                        ", model_id = ?, model_name = ?, stock = ?, state = ?, description = ?, updated_at = now()  WHERE item_id = ?"
                 , item.getItemName()
                 , item.getItemListImage()
                 , item.getItemDetailImage()
@@ -142,6 +148,7 @@ public class ItemDao {
                 , item.getModelName()
                 , item.getStock()
                 , item.getState()
+                , item.getDescription()
                 , item.getItemId());
 
     }
@@ -188,6 +195,7 @@ public class ItemDao {
             t.setModelName(rs.getString("model_name"));
             t.setStock(rs.getInt("stock"));
             t.setState(rs.getString("state"));
+            t.setDescription(rs.getString("description"));
 
             return t;
         }

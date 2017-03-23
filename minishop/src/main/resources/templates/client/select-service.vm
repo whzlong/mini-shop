@@ -1,0 +1,57 @@
+<div class="container" id="select-service">
+    <div>
+        <div class="select-brand">
+            <div class="select-title">
+                <span>Select brand</span>
+            </div>
+            <hr style="border : 1px dashed;" />
+            <div class="select-body">
+                <div class="row" id="brand-row">
+                    <div class="col-md-3 select-item" v-for="item in brands">
+                        <span>
+                            <a @click="findModels" class="btn btn-info btn-lg btn-block active"  v-bind:id="item.value" v-if="item.selected">{{item.text}}</a>
+                            <a @click="findModels" class="btn btn-default btn-lg btn-block"  v-bind:id="item.value" v-else>{{item.text}}</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="select-model">
+            <div class="select-title">
+                <span>Select model</span>
+            </div>
+            <hr style="border : 1px dashed;" />
+            <div class="select-body">
+                <div class="row">
+                    <div class="col-md-4 select-item" v-for="item in models">
+                        <span>
+                            <a @click="findItems" class="btn btn-info btn-lg btn-block active" v-bind:id="item.value" v-if="item.selected">{{item.text}}</a>
+                            <a @click="findItems" class="btn btn-default btn-lg btn-block" v-bind:id="item.value" v-else>{{item.text}}</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="select-repair">
+            <div class="select-title">
+                <span>Select repair</span>
+            </div>
+            <hr style="border : 1px dashed;" />
+            <div class="select-body">
+                <div class="row">
+                    <div class="col-md-6" style="padding: 3px;" v-for="item in items">
+                        <a href="#" @click="jumpToItemDetail" v-bind:id="item.itemId">
+                            <img v-bind:src="item.itemListImage" class="img-thumbnail">
+                            <p class="item-name">{{item.itemName}}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<script src="/js/select-service.js"></script>

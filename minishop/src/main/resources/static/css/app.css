@@ -2,7 +2,7 @@ body{
     font-family: 'Open Sans', sans-serif;
 }
 .page-footer{
-    padding: 0 0 150px;
+    padding: 0 0 100px;
     font-size: 12px;
     text-transform: uppercase;
     font-family: 'Open Sans',sans-serif;
@@ -222,8 +222,8 @@ ul li{
 
 
 .checkout-page{
-    margin-top: 40px;
-    height: 650px;
+    margin-top: 20px;
+    height: 800px;
     color: #898989;
 }
 
@@ -291,4 +291,10 @@ ul li{
     clear: right;
     text-align: right;
     margin-right: 20px;
+}
+
+
+/* 首页 */
+.special-items{
+    height: 600px;
 }

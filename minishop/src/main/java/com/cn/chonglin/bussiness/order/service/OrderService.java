@@ -3,6 +3,9 @@ package com.cn.chonglin.bussiness.order.service;
 import com.cn.chonglin.bussiness.appointment.domain.Appointment;
 import com.cn.chonglin.bussiness.base.dao.UserDao;
 import com.cn.chonglin.bussiness.base.domain.User;
+import com.cn.chonglin.bussiness.cart.service.CartService;
+import com.cn.chonglin.bussiness.cart.vo.CartItemVo;
+import com.cn.chonglin.bussiness.cart.vo.CartVo;
 import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.service.ItemService;
 import com.cn.chonglin.bussiness.order.dao.OrderDao;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -40,6 +44,9 @@ public class OrderService {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private CartService cartService;
 
     /**
      * 预约完成确认后生成订单
@@ -76,6 +83,57 @@ public class OrderService {
         orderDetail.setQuantity(1);
 
         orderDetailDao.insert(orderDetail);
+
+    }
+
+    /**
+     * 对购物车中的商品进行结算后生成订单
+     *
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void createOrderFromCart(){
+        CartVo cartVo = cartService.getCart();
+        //订单号
+        long orderId = createOrderId();
+
+
+        //增加订单明细
+        OrderDetail orderDetail;
+        Item item;
+        for(CartItemVo cartItemVo : cartVo.getCartItemVos()){
+            orderDetail = new OrderDetail();
+
+            orderDetail.setOrderId(orderId);
+            orderDetail.setItemId(cartItemVo.getItemId());
+            orderDetail.setQuantity(cartItemVo.getQuantity());
+
+            item = itemService.findByKey(cartItemVo.getItemId());
+            if(DropdownListContants.ITEM_STATE_DISCOUNT.equals(item.getState())){
+                orderDetail.setOrderPrice(item.getDiscountPrice());
+            }else{
+                orderDetail.setOrderPrice(item.getUnitPrice());
+            }
+
+            orderDetailDao.insert(orderDetail);
+
+            //减库存
+            item.setStock(item.getStock() - cartItemVo.getQuantity());
+            itemService.update(item);
+        }
+
+        //增加订单详细
+        Order order = new Order();
+
+        order.setOrderId(orderId);
+        order.setUserId(cartVo.getCartId());
+        order.setPayDate(LocalDate.now());
+        order.setTotalAmount(orderDetailDao.getSumPrice(orderId));
+        order.setState(DropdownListContants.ORDER_STATE_PAID);
+
+        orderDao.insert(order);
+
+        //清空购物车中的商品
+        cartService.clearCart(cartVo.getCartId());
 
     }
 

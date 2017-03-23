@@ -1,0 +1,21 @@
+<div class="container">
+    <div>
+        #if($result)
+            <div style="text-align: center;margin-top: 200px;height: 500px;">
+                <div style="padding-bottom: 20px;"><span style="font-size: large;">You have been paid successfully!</span></div>
+                <div>
+                    <a href="/" class="btn btn-primary">Return to home page</a>
+                </div>
+            </div>
+        #else
+            <div style="text-align: center;margin-top: 200px;height: 500px;">
+                <div style="padding-bottom: 20px;"><span style="font-size: large;">Payment failure</span></div>
+                <div>
+                    <a href="/client/cart" class="btn btn-primary">Return to Cart</a>
+                </div>
+            </div>
+        #end
+
+
+    </div>
+</div>

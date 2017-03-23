@@ -18,7 +18,7 @@ $(function () {
                 type: "get",
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                 dataType:"json",
-                url: "http://localhost:8080/admin/appointment-list",
+                url: "/admin/appointment-list",
                 data: queryParas,
                 success: function (res) {
                     vm.appointments = res.data;
@@ -37,7 +37,7 @@ $(function () {
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType:"json",
-                    url: "http://localhost:8080/admin/appointment-list",
+                    url: "/admin/appointment-list",
                     data: queryParas,
                     success: function (res) {
                         vm.appointments = res.data;
@@ -65,7 +65,7 @@ $(function () {
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType:"json",
-                    url: "http://localhost:8080/admin/appointment-list",
+                    url: "/admin/appointment-list",
                     data: queryParas,
                     success: function (res) {
                         vm.appointments = res.data;
@@ -90,7 +90,7 @@ $(function () {
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType: "json",
-                    url: "http://localhost:8080/admin/appointment-list",
+                    url: "/admin/appointment-list",
                     data: queryParas,
                     success: function (res) {
                         vm.appointments = res.data;
@@ -118,7 +118,7 @@ $(function () {
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType: "json",
-                    url: "http://localhost:8080/admin/appointment-list",
+                    url: "/admin/appointment-list",
                     data: queryParas,
                     success: function (res) {
                         vm.appointments = res.data;
@@ -152,7 +152,7 @@ $(function () {
                     type: "post",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType: "json",
-                    url: "http://localhost:8080/admin/appointments",
+                    url: "/admin/appointments",
                     data: paras,
                     success: function (res) {
                         if(res.code == 0){
@@ -171,7 +171,7 @@ $(function () {
                     type: "post",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType: "json",
-                    url: "http://localhost:8080/admin/appointments/confirm",
+                    url: "/admin/appointments/confirm",
                     data: paras,
                     success: function (res) {
                         if(res.code == 0){
@@ -193,7 +193,7 @@ $(function () {
                         type: "post",
                         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                         dataType: "json",
-                        url: "http://localhost:8080/admin/appointments/delete",
+                        url: "/admin/appointments/delete",
                         data: paras,
                         success: function (res) {
                             if(res.code == 0){

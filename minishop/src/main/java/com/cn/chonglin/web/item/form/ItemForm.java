@@ -40,6 +40,8 @@ public class ItemForm {
     @NotEmpty(message = "Please input the state.")
     private String state;
 
+    private String description;
+
     public String getItemId() {
         return itemId;
     }
@@ -120,6 +122,14 @@ public class ItemForm {
         this.state = state;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Item toDomain(){
         Item item = new Item();
 
@@ -133,6 +143,7 @@ public class ItemForm {
         item.setModelId(this.model);
         item.setStock(this.stock);
         item.setState(this.state);
+        item.setDescription(this.description);
 
         return item;
     }

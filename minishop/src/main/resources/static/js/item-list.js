@@ -9,7 +9,10 @@ $(function(){
             pageNums: [],
             searchConditions: {brandId: "", modelId:""},
             itemForm: {itemId: "", brand: "", model: "", itemName: "", unitPrice: ""
-                        , discountPrice:"", itemDetailImage:"", itemListImage:"", stock:"", state: ""}
+                        , discountPrice:"", itemDetailImage:"", itemListImage:"", stock:"", state: "", description: ""},
+            itemFormBrand: "",
+            itemFormModel: ""
+
         },
         created: function () {
             this.query(1);
@@ -17,6 +20,9 @@ $(function(){
         watch: {
             itemForm: function (newValue, oldValue) {
                 validateForm(this.validateFields);
+            },
+            itemFormBrand: function (newBrandId) {
+                this.findModels(newBrandId, vm.itemForm.model);
             }
         },
         methods: {
@@ -33,7 +39,7 @@ $(function(){
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType:"json",
-                    url: "http://localhost:8080/admin/item-list",
+                    url: "/admin/item-list",
                     data: queryParas,
                     success: function (res) {
                         if(res.code == "0"){
@@ -66,52 +72,27 @@ $(function(){
                 this.query(vm.pagination.currentPage);
             },
             addItem: function () {
-                // alert(this.validateFields.brand.validators.notEmpty.message);
                 clearFormElements(this.itemForm);
             },
             editItem: function (event) {
 
 
-                for(var index in this.items){
-                    if(event.target.id == this.items[index].itemId){
-                        this.itemForm.itemId = this.items[index].itemId;
-                        this.itemForm.brand = this.items[index].brandId;
-                        this.itemForm.model = this.items[index].modelId;
-                        this.itemForm.itemName = this.items[index].itemName;
-                        this.itemForm.unitPrice = this.items[index].unitPrice;
-                        this.itemForm.discountPrice = this.items[index].discountPrice;
-                        this.itemForm.stock = this.items[index].stock;
-                        this.itemForm.state = this.items[index].state;
+                for(var index in vm.items){
+                    if(event.target.id == vm.items[index].itemId){
+                        vm.itemForm.itemId = vm.items[index].itemId;
+
+                        vm.itemFormBrand = vm.items[index].brandId;
+                        vm.itemForm.brand = vm.items[index].brandId;
+
+                        vm.itemForm.model = vm.items[index].modelId;
+                        vm.itemForm.itemName = vm.items[index].itemName;
+                        vm.itemForm.unitPrice = vm.items[index].unitPrice;
+                        vm.itemForm.discountPrice = vm.items[index].discountPrice;
+                        vm.itemForm.stock = vm.items[index].stock;
+                        vm.itemForm.state = vm.items[index].state;
+                        vm.itemForm.description = vm.items[index].description;
                     }
                 }
-
-                $.ajax({
-                    type: "GET",
-                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                    dataType: "json",
-                    url: "http://localhost:8080/api/models",
-                    data: {brandId: this.itemForm.brand},
-                    success: function (res) {
-                        if(res.code == 0){
-                            if(res["rs"].length > 1){
-                                $('#model').html("");
-                                for(var index in res["rs"]){
-                                    if(vm.itemForm.model == res["rs"][index].value ){
-                                        $('#model').append("<option selected='selected' value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
-                                    }else{
-                                        $('#model').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
-                                    }
-
-                                }
-                            }else{
-                                $('#model').html("");
-                            }
-                        }else{
-                            alert(res.message);
-                        }
-                    }
-                });
-
 
             },
             saveItem: function () {
@@ -124,7 +105,7 @@ $(function(){
                 $.ajax({
                     type: "post",
                     dataType:"json",
-                    url: "http://localhost:8080/admin/items",
+                    url: "/admin/items",
                     async: false,
                     cache: false,
                     contentType: false,
@@ -139,6 +120,43 @@ $(function(){
                         }
                     }
                 });
+            },
+            findModels: function (brandId, selectedModel) {
+                    $.ajax({
+                        type: "GET",
+                        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                        dataType: "json",
+                        url: "/api/models",
+                        data: {brandId: brandId},
+                        success: function (res) {
+                            if(res.code == 0){
+                                if(res["rs"].length > 1){
+
+                                    $('#model').html("");
+
+                                    for(var index in res["rs"]){
+
+                                        if(selectedModel == res["rs"][index].value ){
+                                            $('#model').append("<option selected='selected' value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
+                                        }else{
+                                            $('#model').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
+                                        }
+
+                                    }
+                                }else{
+                                    $('#model').html("");
+                                }
+
+
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    });
+
+
+
+
             }
 
         }
@@ -218,8 +236,6 @@ $(function(){
 
         }
 
-
-
         return ret;
     }
 
@@ -271,7 +287,7 @@ function findBrands() {
         type: "GET",
         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
         dataType: "json",
-        url: "http://localhost:8080/api/brands",
+        url: "/api/brands",
         success: function (res) {
             if(res.code == 0){
                 for(var index in res["rs"]){
@@ -287,32 +303,34 @@ function findBrands() {
     });
 }
 
-function findModels(object) {
 
-    $.ajax({
-        type: "GET",
-        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-        dataType: "json",
-        url: "http://localhost:8080/api/models",
-        data: {brandId: object.value},
-        success: function (res) {
-            if(res.code == 0){
-                if(res["rs"].length > 1){
-                    $('#modelSearch').html("");
-                    for(var index in res["rs"]){
-                        $('#modelSearch').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
-                    }
-                }else{
-                    $('#modelSearch').html("");
-                }
-
-
-            }else{
-                alert(res.message);
-            }
-        }
-    });
-}
+//
+// function findModels(object) {
+//
+//     $.ajax({
+//         type: "GET",
+//         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+//         dataType: "json",
+//         url: "/api/models",
+//         data: {brandId: object.value},
+//         success: function (res) {
+//             if(res.code == 0){
+//                 if(res["rs"].length > 1){
+//                     $('#modelSearch').html("");
+//                     for(var index in res["rs"]){
+//                         $('#modelSearch').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
+//                     }
+//                 }else{
+//                     $('#modelSearch').html("");
+//                 }
+//
+//
+//             }else{
+//                 alert(res.message);
+//             }
+//         }
+//     });
+// }
 
 
 function findSearchModels(object) {
@@ -321,7 +339,7 @@ function findSearchModels(object) {
         type: "GET",
         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
         dataType: "json",
-        url: "http://localhost:8080/api/models",
+        url: "/api/models",
         data: {brandId: object.value},
         success: function (res) {
             if(res.code == 0){
@@ -342,31 +360,31 @@ function findSearchModels(object) {
     });
 }
 
-function findModels(object) {
-
-    $.ajax({
-        type: "GET",
-        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-        dataType: "json",
-        url: "http://localhost:8080/api/models",
-        data: {brandId: object.value},
-        success: function (res) {
-            if(res.code == 0){
-                if(res["rs"].length > 1){
-                    $('#model').html("");
-                    for(var index in res["rs"]){
-                        $('#model').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
-                    }
-                }else{
-                    $('#model').html("");
-                }
-
-
-            }else{
-                alert(res.message);
-            }
-        }
-    });
-}
+// function findModels(object) {
+//
+//     $.ajax({
+//         type: "GET",
+//         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+//         dataType: "json",
+//         url: "/api/models",
+//         data: {brandId: object.value},
+//         success: function (res) {
+//             if(res.code == 0){
+//                 if(res["rs"].length > 1){
+//                     $('#model').html("");
+//                     for(var index in res["rs"]){
+//                         $('#model').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
+//                     }
+//                 }else{
+//                     $('#model').html("");
+//                 }
+//
+//
+//             }else{
+//                 alert(res.message);
+//             }
+//         }
+//     });
+// }
 
 

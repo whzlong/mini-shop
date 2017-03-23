@@ -5,11 +5,8 @@
                 <a href="#" style="color:#ccc;padding:5px;">PhoneYou</a>
             </div>
             <div class="footer-right">
-                <div style="float:left;width:30%;">
-                    <a href="#" style="color: #ccc;">About Us</a><br>
-                    <a href="#" style="color:#ccc;">Contact Us</a>
-                </div>
-                <div style="float:left;width:70%">
+
+                <div style="float:left;width:100%">
                     <a href="#">About Us</a><br>
                     <a href="#">Contact Us</a>
                 </div>
@@ -28,5 +25,6 @@
                 </a>
             </div>
         </div>
+
     </div>
 </div>

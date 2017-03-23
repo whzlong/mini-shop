@@ -23,6 +23,13 @@ public class ItemCategoryController {
     @Autowired
     private ItemCategoryService itemCategoryService;
 
+    /**
+     * 获取所有品牌
+     *
+     * @param blank
+     *
+     * @return
+     */
     @GetMapping(value = "api/brands", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<List<SelectOptionVo>> getBrands(@RequestParam(defaultValue = "0") String blank){
         List<ItemCategory> itemCategories = itemCategoryService.findBrands();

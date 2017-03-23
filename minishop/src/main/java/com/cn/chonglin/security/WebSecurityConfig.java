@@ -38,8 +38,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         , "/client/itemTypes/**"
                         , "/file/**"
                         , "/client/register"
+                        , "/api/**"
+                        , "/client/select-service"
+                        , "/client/item-detail/**"
                         , "/client/confirm/**"
                         , "/admin/**"
+                        , "/anonym/**"
+                        , "/item-images/**"
                         , "/libs/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/cart/**").authenticated()

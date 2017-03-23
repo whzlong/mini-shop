@@ -14,6 +14,7 @@ public class ItemVo {
     private BigDecimal discountPrice;
     private int stock;
     private String state;
+    private String description;
 
     public String getItemId() {
         return itemId;
@@ -93,5 +94,13 @@ public class ItemVo {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

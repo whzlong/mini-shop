@@ -1,7 +1,6 @@
 package com.cn.chonglin.web.client.account;
 
 import com.cn.chonglin.bussiness.base.service.UserService;
-import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.service.ItemService;
 import com.cn.chonglin.common.AppException;
 import com.cn.chonglin.common.ResponseResult;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 帐户管理控制器
@@ -60,7 +59,7 @@ public class ClientAccountController {
      * @return
      */
     @RequestMapping(value = "/confirm/{id}", method = RequestMethod.GET)
-    public String confirmRegister(@PathVariable String id, ModelMap modelMap){
+    public String confirmRegister(@PathVariable String id, ModelMap modelMap, RedirectAttributes redirectAttributes){
         String infoMsg = "Your account has been validated.";
 
         try{
@@ -70,18 +69,20 @@ public class ClientAccountController {
             infoMsg = ex.getMessage();
         }
 
-        modelMap.addAttribute("infoMsg", infoMsg);
+//        modelMap.addAttribute("infoMsg", infoMsg);
 
-        //打折维修服务
-        List<Item> discountItems = itemService.findDiscountItems();
+        redirectAttributes.addFlashAttribute("infoMsg", infoMsg);
 
-        //新上线维修服务
-        List<Item> newItems = itemService.findNewItems();
+//        //打折维修服务
+//        List<Item> discountItems = itemService.findDiscountItems();
+//
+//        //新上线维修服务
+//        List<Item> newItems = itemService.findNewItems();
+//
+//        modelMap.addAttribute("discountItems", discountItems);
+//        modelMap.addAttribute("newItems", newItems);
 
-        modelMap.addAttribute("discountItems", discountItems);
-        modelMap.addAttribute("newItems", newItems);
-
-        return "client/index";
+        return "redirect:/";
 
     }
 

@@ -34,7 +34,9 @@ public class ItemCategoryService {
     @Transactional(propagation = Propagation.REQUIRED)
     public ItemCategory save(String parentCategoryId, String categoryName){
         String categoryId = IdGenerator.getUuid();
-        itemCategoryDao.insert(categoryId, parentCategoryId, categoryName);
+
+        int modelCount = itemCategoryDao.getModelCount(parentCategoryId);
+        itemCategoryDao.insert(categoryId, parentCategoryId, categoryName, modelCount + 1);
 
         return itemCategoryDao.findByKey(categoryId);
     }

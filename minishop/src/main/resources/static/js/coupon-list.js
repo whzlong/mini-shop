@@ -20,9 +20,6 @@ $(function () {
            this.query(1);
        },
        watch: {
-           pageForm: function (newValue, oldValue) {
-               validateForm(this.validateFields);
-           },
            searchConditionsOfEmail: function (newValue) {
                this.queryUsers();
            },
@@ -46,7 +43,7 @@ $(function () {
                    type: "get",
                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                    dataType:"json",
-                   url: "http://localhost:8080/admin/coupon-list",
+                   url: "/admin/coupon-list",
                    data: queryParas,
                    success: function (res) {
                        if(res.code == "0"){
@@ -105,7 +102,7 @@ $(function () {
                $.ajax({
                    type: "post",
                    dataType:"json",
-                   url: "http://localhost:8080/admin/coupons",
+                   url: "/admin/coupons",
                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                    data: vm.pageForm,
                    success: function (res) {
@@ -130,7 +127,7 @@ $(function () {
                    type: "get",
                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                    dataType:"json",
-                   url: "http://localhost:8080/admin/user-list",
+                   url: "/admin/user-list",
                    data: paras,
                    success: function (res) {
                        if(res.code == "0"){
@@ -168,7 +165,7 @@ $(function () {
                    $.ajax({
                        type: "post",
                        dataType:"json",
-                       url: "http://localhost:8080/admin/assign-coupons",
+                       url: "/admin/assign-coupons",
                        contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                        data: paras,
                        success: function (res) {
@@ -190,6 +187,10 @@ $(function () {
 
        }
    });
+
+    // vm.$watch('pageForm', function () {
+    //     validateForm(this.validateFields);;
+    // },{deep: true})
 
     vm.validateFields = {couponName:
                             {validators:

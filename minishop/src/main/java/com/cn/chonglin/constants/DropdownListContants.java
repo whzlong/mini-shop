@@ -24,4 +24,14 @@ public final class DropdownListContants {
 
     public static final String COUPON_STATE_ACTIVE = "Used";
 
+    /**
+     * 商品有库存
+     */
+    public static final String STOCK_STATUS_HASNOT_VALUE = "0";
+
+    /**
+     * 商品无库存
+     */
+    public static final String STOCK_STATUS_HAS_VALUE = "1";
+
 }

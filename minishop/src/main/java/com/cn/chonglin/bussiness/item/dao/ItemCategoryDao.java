@@ -40,7 +40,7 @@ public class ItemCategoryDao {
      */
     public List<ItemCategory> findByParentCategoryId(String parentCategoryId){
         try{
-            return jdbcTemplate.query("SELECT * FROM item_categories WHERE parent_category_id = ?", new Object[]{parentCategoryId}, mapper);
+            return jdbcTemplate.query("SELECT * FROM item_categories WHERE parent_category_id = ? ORDER BY order_by", new Object[]{parentCategoryId}, mapper);
         }catch (EmptyResultDataAccessException ex){
             return null;
         }
@@ -73,11 +73,21 @@ public class ItemCategoryDao {
         }
     }
 
-    public void insert(String categoryId, String parentCategoryId, String name){
-        jdbcTemplate.update("INSERT INTO item_categories(category_id, parent_category_id, name) VALUES(?,?,?)"
+    /**
+     * 品牌下型号数量
+     * @param parentCategoryId
+     * @return
+     */
+    public int getModelCount(String parentCategoryId){
+        return jdbcTemplate.queryForObject("SELECT count(category_id) FROM item_categories WHERE parent_category_id = ?", new Object[]{parentCategoryId}, Integer.class);
+    }
+
+    public void insert(String categoryId, String parentCategoryId, String name, int orderBy){
+        jdbcTemplate.update("INSERT INTO item_categories(category_id, parent_category_id, name, order_by) VALUES(?,?,?,?)"
                             , categoryId
                             , parentCategoryId
-                            , name);
+                            , name
+                            , orderBy);
     }
 
     public void update(String categoryId, String name){

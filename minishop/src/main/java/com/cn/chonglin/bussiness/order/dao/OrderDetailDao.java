@@ -35,22 +35,28 @@ public class OrderDetailDao {
                 , orderDetail.getOrderPrice());
     }
 
-    public List<OrderDetailVo> query(long orderId){
-        return jdbcTemplate.query("SELECT a.order_id, a.item_id, b.item_name, a.quantity, b.unit_price, " +
-                "b.discount_price, a.order_price, b.state item_state FROM order_details a INNER JOIN items b ON a.item_id = b.item_id WHERE order_id = ?"
-                , new Object[]{orderId}, mapper);
+    public void updateOrderPrice(long orderId, String itemId, BigDecimal orderPrice){
+        jdbcTemplate.update("UPDATE order_Details SET order_price = ? WHERE order_id = ? AND item_id = ?"
+                , orderPrice
+                , orderId
+                , itemId);
     }
 
     public void delete(long orderId){
         jdbcTemplate.update("DELETE FROM order_details WHERE order_id = ?", orderId);
     }
 
-    public void updateOrderPrice(long orderId, String itemId, BigDecimal orderPrice){
-        jdbcTemplate.update("UPDATE order_Details SET order_price = ? WHERE order_id = ? AND item_id = ?"
-                            , orderPrice
-                            , orderId
-                            , itemId);
+    public List<OrderDetailVo> query(long orderId){
+        return jdbcTemplate.query("SELECT a.order_id, a.item_id, b.item_name, a.quantity, b.unit_price, " +
+                "b.discount_price, a.order_price, b.state item_state FROM order_details a INNER JOIN items b ON a.item_id = b.item_id WHERE order_id = ?"
+                , new Object[]{orderId}, mapper);
     }
+
+    public BigDecimal getSumPrice(long orderId){
+        return jdbcTemplate.queryForObject("SELECT sum(order_price) total_amount FROM order_details WHERE order_id = ?"
+                                        , new Object[]{orderId}, BigDecimal.class);
+    }
+
 
     static final class OrderDetailVoMapper implements RowMapper<OrderDetailVo>{
         @Override

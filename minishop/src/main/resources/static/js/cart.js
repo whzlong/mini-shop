@@ -6,10 +6,13 @@ $(function () {
     var vm = new Vue({
         el: '#cartForm',
         data: {
+            cartId: "",
             cartItems: [],
             totalPrice: 0.00,
             currency: "",
-            clientToken: ""
+            clientToken: "",
+            checkedStockResult: [],
+            hasPageError: false
         },
         created: function () {
             this.currency = $('#currency').val();
@@ -17,12 +20,18 @@ $(function () {
             $.ajax({
                 type: "GET",
                 dataType:"json",
-                url: "http://localhost:8080/client/cart-items",
+                url: "/client/cart-items",
                 success: function (res) {
                     if(res.code == "0"){
+                        vm.cartId = res.rs["cartId"];
                         vm.cartItems = res.rs["cartItemVos"];
                         vm.totalPrice = res.rs["totalPrice"];
                         vm.currency = res.rs["currency"];
+
+                        for(var index in vm.cartItems){
+                            vm.cartItems[index].errorClass = "";
+                            vm.cartItems[index].hasError = false;
+                        }
                     }
 
                     if(vm.cartItems.length == 0){
@@ -39,7 +48,7 @@ $(function () {
                     $.ajax({
                         type: "POST",
                         dataType:"json",
-                        url: "http://localhost:8080/client/cart-items/" + event.target.id + "/delete",
+                        url: "/client/cart-items/" + event.target.id + "/delete",
                         success: function(res){
                             if(res.code == "0"){
                                 vm.cartItems = res.rs["cartItemVos"];
@@ -81,7 +90,7 @@ $(function () {
                         type: "POST",
                         contentType: "application/json;charset=UTF-8",
                         dataType:"json",
-                        url: "http://localhost:8080/client/cart-items/update",
+                        url: "/client/cart-items/update",
                         data: JSON.stringify(cartItemForms),
                         success: function(res){
                             if(res.code == "0"){
@@ -99,6 +108,45 @@ $(function () {
                     });
                 }
 
+            },
+            checkout: function () {
+                $.ajax({
+                    type: "GET",
+                    dataType:"json",
+                    url: "/item-stock/cart",
+                    data: {cartId: vm.cartId},
+                    success: function (res) {
+                        if(res.code == "0"){
+                            if(!vm.checkStock(res.rs)){
+                                window.location.href = "/client/check-out";
+                            }
+                        }
+
+                    }
+                });
+
+            },
+            checkStock: function (checkedStockResult) {
+                var hasPageError = false;
+
+                for(var index in vm.cartItems){
+                    for(var stockIndex in checkedStockResult){
+                        if(checkedStockResult[stockIndex].itemId == vm.cartItems[index].itemId
+                            && checkedStockResult[stockIndex]['stockStatus'] == "0"){
+
+                            vm.cartItems[index].errorClass = "has-error";
+                            vm.cartItems[index].hasError = true;
+
+                            Vue.set(vm.cartItems, index, vm.cartItems[index]);
+
+                            hasPageError = true;
+
+                            break;
+                        }
+                    }
+                }
+
+                return hasPageError;
             }
         }
 

@@ -3,7 +3,7 @@ package com.cn.chonglin.web.cart;
 import com.cn.chonglin.bussiness.cart.service.CartService;
 import com.cn.chonglin.bussiness.cart.vo.CartVo;
 import com.cn.chonglin.common.ResponseResult;
-import com.cn.chonglin.web.client.cart.form.CartItemForm;
+import com.cn.chonglin.web.cart.form.CartItemForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

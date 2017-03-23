@@ -1,84 +1,82 @@
-<script>
-    $.jgrid.defaults.width = 780;
-    $.jgrid.defaults.styleUI = 'Bootstrap';
-</script>
-
-<div class="container">
-    <div class="item-navigator">
-        <a href="/">Home</a> > iPhone > ${item.itemName}
-    </div>
-    <div id="item-info">
-        <div class="item-image">
-            <img src="${item.itemDetailImage}" class="img-responsive"/>
-        </div>
-        <div class="item-detail">
-            <h1>${item.itemName}</h1>
-            <p style="font-size:40px">${setting.currency}&nbsp;${item.unitPrice}</p>
-            <div style="width: 100%" class="item-description"><p style="margin-top: 20px;">${item.description}</p></div>
-
-        </div>
-    </div>
-    <hr>
-
-</div>
-<div class="container">
-    <div class="item-services">
-        <hr>
-        <h2 style="text-align: center;padding-bottom: 18px;">Choose your service</h2>
-
-        <ul class="nav nav-tabs nav-justified" role="tablist">
-            <li role="presentation" class="active"><a data-toggle="tab" href="#waitTab">WHILE YOU WAIT</a></li>
-            <li role="presentation"><a data-toggle="tab" href="#mailTab">EXPRESS MAIL</a></li>
-        </ul>
-        <div class="tab-content">
-            <div id="waitTab" class="tab-pane fade in active">
-                <h2>While you wait, West End</h2>
-                <h4>37 TOTTENHAM STREET, W1T 4RU</h4>
-                <p>You’ll get to experience the magic of the iPhone 6S screen repair first hand!</p>
-                <p>Bring your damaged iPhone 6S into our shop in central London and we’ll have it repaired within 30 minutes.
-                    Meanwhile, you can catch up on some email, get to know our friendly staff, or people watch from our window overlooking the street (and you may see some very strange things!).</p>
-                <p>Use the calendar below to book a time and date that works best for you or just come by. We’re open from 9am to 6pm Monday through Friday, 9am to 5pm on Saturday and 11am to 5pm on Sunday.
-                </p>
-
-                <h3 style="padding-top: 20px">Select the day and time for your appointment</h3>
-                #if($errors)
-                    <div class="alert alert-danger" role="alert">${errors}</div>
-                #end
-                <div class="appointment-form">
-                    <form id="appointmentForm" action="/client/book" method="post">
-
-                        <div class="form-group" v-bind:class="{'has-error': hasErrorDate}">
-                            <label for="bookDate">Date:</label>
-                            <input type="text" v-model="bookDate" class="form-control datepicker"  id="bookDate" name="bookDate"/>
-                        </div>
-                        <div class="form-group" v-bind:class="{'has-error': hasErrorTime}">
-                            <label for="bookTime">Time:</label>
-                            <input type="text" v-model="bookTime" class="form-control timepicker" id="bookTime" name="bookTime"/>
-                        </div>
-                        <a id="btnBook" v-on:click="bookAppointment" class="btn btn-primary btn-lg">BOOK AN APPOINTMENT NOW</a>
-                    </form>
+<div id="item-detail-page">
+    <div>
+        <div class="container">
+            <div class="item-navigator">
+                <a href="/">Home</a> &nbsp;&gt;&nbsp; <a @click="jumpToSelectService" href="#"> {{item.brandName}}</a> &nbsp;&gt;&nbsp; {{item.itemName}}
+            </div>
+            <div id="item-info">
+                <div class="item-image">
+                    <img v-bind:src="item.itemDetailImage" class="img-responsive"/>
+                </div>
+                <div class="item-detail">
+                    <h1>{{item.itemName}}</h1>
+                    <p style="font-size:40px">${currency}&nbsp;{{item.unitPrice}}</p>
+                    <div style="width: 100%" class="item-description"><p style="margin-top: 20px;">{{item.description}}</p></div>
 
                 </div>
             </div>
+            <hr>
 
-            <div id="mailTab" class="tab-pane fade">
-                <h1 style="text-align: center">Express mail</h1>
-                <p>We get it, our Express mail service is simply one of the most convenient ways to have your iPad Pro 9.7" screen repaired when you can’t make it to our location.</p>
-                <p>We designed it that way! Plus, when you see the postman approaching with that package you know is your good-as-new iPad Pro 9.7", it can feel a bit like Christmas, no matter what the time of year.</p>
-                <p>The process is simple. You send us your damaged iPad Pro 9.7" in a padded envelope via Royal Mail Special Delivery. Once we receive it, we’ll fix it right up and have it in the post for you same day. With next day delivery, you’ll be cradling your iPad Pro 9.7" again in just a couple of days! Order this service below and we’ll send you the complete mailing instructions straightaway.</p>
-                <div class="cart-input-form">
-                    <label for="quantity">Quantity</label>
-                    <input type="text" name="quantity" id="quantity" maxlength="2" />
-
-                    <button  id="btnAddCartItem" class="btn btn-primary">ADD TO CART</button>
-                </div>
-            </div>
         </div>
+        <div class="container">
+            <div class="item-services">
+                <hr>
+                <h2 style="text-align: center;padding-bottom: 18px;">Choose your service</h2>
 
+                <ul class="nav nav-tabs nav-justified" role="tablist">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#waitTab">WHILE YOU WAIT</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#mailTab">EXPRESS MAIL</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="waitTab" class="tab-pane fade in active">
+                        <h2>While you wait, West End</h2>
+                        <h4>37 TOTTENHAM STREET, W1T 4RU</h4>
+                        <p>You’ll get to experience the magic of the iPhone 6S screen repair first hand!</p>
+                        <p>Bring your damaged iPhone 6S into our shop in central London and we’ll have it repaired within 30 minutes.
+                            Meanwhile, you can catch up on some email, get to know our friendly staff, or people watch from our window overlooking the street (and you may see some very strange things!).</p>
+                        <p>Use the calendar below to book a time and date that works best for you or just come by. We’re open from 9am to 6pm Monday through Friday, 9am to 5pm on Saturday and 11am to 5pm on Sunday.
+                        </p>
+
+                        <h3 style="padding-top: 20px">Select the day and time for your appointment</h3>
+
+                        <div class="appointment-form">
+                            <form id="appointmentForm" action="/client/book" method="post">
+
+                                <div class="form-group" v-bind:class="{'has-error': hasErrorDate}">
+                                    <label for="bookDate">Date:</label>
+                                    <input type="text" v-model="bookDate" class="form-control datepicker"  id="bookDate" name="bookDate"/>
+                                </div>
+                                <div class="form-group" v-bind:class="{'has-error': hasErrorTime}">
+                                    <label for="bookTime">Time:</label>
+                                    <input type="text" v-model="bookTime" class="form-control timepicker" id="bookTime" name="bookTime"/>
+                                </div>
+                                <a id="btnBook" v-on:click="bookAppointment" class="btn btn-primary btn-lg">BOOK AN APPOINTMENT NOW</a>
+                            </form>
+
+                        </div>
+                    </div>
+
+                    <div id="mailTab" class="tab-pane fade">
+                        <h1 style="text-align: center">Express mail</h1>
+                        <p>We get it, our Express mail service is simply one of the most convenient ways to have your iPad Pro 9.7" screen repaired when you can’t make it to our location.</p>
+                        <p>We designed it that way! Plus, when you see the postman approaching with that package you know is your good-as-new iPad Pro 9.7", it can feel a bit like Christmas, no matter what the time of year.</p>
+                        <p>The process is simple. You send us your damaged iPad Pro 9.7" in a padded envelope via Royal Mail Special Delivery. Once we receive it, we’ll fix it right up and have it in the post for you same day. With next day delivery, you’ll be cradling your iPad Pro 9.7" again in just a couple of days! Order this service below and we’ll send you the complete mailing instructions straightaway.</p>
+                        <div class="cart-input-form">
+                            <label for="quantity">Quantity</label>
+                            <input type="text" name="quantity" id="quantity" maxlength="2" />
+
+                            <a  @click="addCartItem" id="btnAddCartItem" class="btn btn-primary">ADD TO CART</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
-
 </div>
 
-<input type="hidden" id="itemId" value="${item.itemId}">
+<input type="hidden" id="itemId" value="${itemId}">
+
 <script src="/js/item-detail.js"></script>
 

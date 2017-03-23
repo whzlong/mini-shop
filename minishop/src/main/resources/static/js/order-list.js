@@ -27,7 +27,7 @@ $(function () {
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType:"json",
-                    url: "http://localhost:8080/admin/order-list",
+                    url: "/admin/order-list",
                     data: queryParas,
                     success: function (res) {
                         if(res.code == "0"){
@@ -86,7 +86,7 @@ $(function () {
                     type: "post",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType: "json",
-                    url: "http://localhost:8080/admin/orders/update",
+                    url: "/admin/orders/update",
                     data: this.orderForm,
                     success: function (res) {
                         if(res.code == 0){
@@ -107,7 +107,7 @@ $(function () {
                         type: "post",
                         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                         dataType: "json",
-                        url: "http://localhost:8080/admin/orders/delete",
+                        url: "/admin/orders/delete",
                         data: paras,
                         success: function (res) {
                             if(res.code == 0){
@@ -124,7 +124,7 @@ $(function () {
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                     dataType: "json",
-                    url: "http://localhost:8080/admin/orderDetails",
+                    url: "/admin/orderDetails",
                     data: paras,
                     success: function (res) {
                         if(res.code == 0){

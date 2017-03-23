@@ -1,4 +1,4 @@
-#set($layout="/admin/layout/layout-admin.vm")
+#set($layout="admin/layout/layout-admin.vm")
 
 <div id="order-list">
     <table class="search-condition-table">

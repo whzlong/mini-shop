@@ -1,4 +1,4 @@
-#set($layout="/admin/layout/layout-admin.vm")
+#set($layout="admin/layout/layout-admin.vm")
 <table class="search-condition-table">
     <tr>
         <td><label for="codeSearch" class="control-label">Code</label></td>
@@ -98,12 +98,12 @@
 
                         <div class="form-group">
                             <label for="validDateFrom">Valid date(From)</label>
-                            <input type="text" class="form-control" v-model="pageForm.validDateFrom" id="validDateFrom" name="validDateFrom" data-date-format="dd-mm-yyyy" readonly></input>
+                            <input type="text" class="form-control" id="validDateFrom" name="validDateFrom" data-date-format="dd-mm-yyyy" readonly></input>
                         </div>
 
                         <div class="form-group">
                             <label for="validDateTo">Valid date(To)</label>
-                            <input type="text" class="form-control" v-model="pageForm.validDateTo" id="validDateTo" name="validDateTo" data-date-format="dd-mm-yyyy" readonly></input>
+                            <input type="text" class="form-control" id="validDateTo" name="validDateTo" data-date-format="dd-mm-yyyy" readonly></input>
                         </div>
 
                         <div class="form-group">

@@ -72,7 +72,7 @@ public class AssignCouponDao {
     public List<AssignCouponVo> queryForList(String userId){
         return jdbcTemplate.query("SELECT a.coupon_code, b.coupon_name, a.quantity, a.state, b.amount " +
                 "FROM assign_coupons a " +
-                "INNER JOIN coupons b ON a.coupon_code = b.code WHERE user_id = ?", new Object[]{userId}, assignCouponVoRowMapper);
+                "INNER JOIN coupons b ON a.coupon_code = b.code WHERE user_id = ? ORDER BY b.amount", new Object[]{userId}, assignCouponVoRowMapper);
     }
 
     static class AssignCouponVoRowMapper implements RowMapper<AssignCouponVo>{

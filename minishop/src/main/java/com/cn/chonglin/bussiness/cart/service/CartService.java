@@ -12,7 +12,7 @@ import com.cn.chonglin.bussiness.cart.vo.CartItemVo;
 import com.cn.chonglin.bussiness.cart.vo.CartVo;
 import com.cn.chonglin.bussiness.item.dao.ItemDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
-import com.cn.chonglin.web.client.cart.form.CartItemForm;
+import com.cn.chonglin.web.cart.form.CartItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -118,6 +118,20 @@ public class CartService {
         cartItemDao.delete(cart.getCartId(), itemId);
 
         return updateCart(cart);
+    }
+
+    /**
+     * 清空购物车
+     *
+     * @param cartId
+     */
+    public void clearCart(String cartId){
+        cartItemDao.deleteAll(cartId);
+
+        Cart cart = cartDao.findByKey(cartId);
+        cart.setTotalPrice(BigDecimal.ZERO);
+
+        cartDao.update(cart);
     }
 
     public CartVo updateCartItems(List<CartItemForm> cartItemForms){

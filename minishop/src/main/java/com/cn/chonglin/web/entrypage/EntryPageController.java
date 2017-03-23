@@ -1,10 +1,12 @@
 package com.cn.chonglin.web.entrypage;
 
+import com.cn.chonglin.StartupRunner;
 import com.cn.chonglin.bussiness.base.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 各个页面入口
@@ -14,6 +16,17 @@ public class EntryPageController {
 
     @Autowired
     private SettingService settingService;
+
+    /**
+     * 主页
+     *
+     * @return
+     */
+    @GetMapping("/")
+    public String home(){
+        return "client/home";
+    }
+
     /**
      * 订单
      *
@@ -53,6 +66,12 @@ public class EntryPageController {
         return "admin/item/item-category";
     }
 
+    /**
+     * 账户列表
+     *
+     * @param modelMap
+     * @return
+     */
     @GetMapping(value = "admin/user-list")
     public String userListpage(ModelMap modelMap){
         modelMap.addAttribute("userActive", true);
@@ -72,6 +91,12 @@ public class EntryPageController {
         return "admin/coupon/coupon-list";
     }
 
+    /**
+     * 购物车
+     *
+     * @param modelMap
+     * @return
+     */
     @GetMapping(value = "client/cart")
     public String cartEntryPage(ModelMap modelMap){
 
@@ -80,11 +105,36 @@ public class EntryPageController {
         return "client/cart";
     }
 
-    @GetMapping(value="client/checkout")
+    /**
+     * 结账
+     *
+     * @param modelMap
+     * @return
+     */
+    @GetMapping(value="client/check-out")
     public String checkoutEntryPage(ModelMap modelMap){
         //支付时携带此token向Braintree服务器发送请求
-//        modelMap.addAttribute("clientToken", Application.gateway.clientToken().generate());
+        modelMap.addAttribute("clientToken", StartupRunner.gateway.clientToken().generate());
 
         return "client/checkout";
+    }
+
+    /**
+     * 选择服务
+     *
+     * @param modelMap
+     * @return
+     */
+    @GetMapping(value = "client/select-service")
+    public String selectServiceEntryPage(ModelMap modelMap){
+        return "client/select-service";
+    }
+
+    @GetMapping(value = "client/item-detail/{itemId}")
+    public String itemDetailEntryPage(@PathVariable String itemId, ModelMap modelMap){
+        modelMap.addAttribute("itemId", itemId);
+        modelMap.addAttribute("currency", settingService.findSetting().getCurrency());
+
+        return "client/item-detail";
     }
 }

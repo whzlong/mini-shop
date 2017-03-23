@@ -1,26 +1,4 @@
-<style type="text/css">
-    /*
- *  Usage:
- *
-      <div class="sk-circle">
-        <div class="sk-circle1 sk-child"></div>
-        <div class="sk-circle2 sk-child"></div>
-        <div class="sk-circle3 sk-child"></div>
-        <div class="sk-circle4 sk-child"></div>
-        <div class="sk-circle5 sk-child"></div>
-        <div class="sk-circle6 sk-child"></div>
-        <div class="sk-circle7 sk-child"></div>
-        <div class="sk-circle8 sk-child"></div>
-        <div class="sk-circle9 sk-child"></div>
-        <div class="sk-circle10 sk-child"></div>
-        <div class="sk-circle11 sk-child"></div>
-        <div class="sk-circle12 sk-child"></div>
-      </div>
- *
- */
 
-
-</style>
 
 <div class="container" style="height: 700px;" id="cartForm">
     <div class="item-list">
@@ -36,7 +14,7 @@
                <template v-if="cartItems.length > 0">
                    <tr v-for="cartItem in cartItems">
                        <td>
-                           {{cartItem.itemName}}---{{cartItem.itemId}}
+                           {{cartItem.itemName}}
                        </td>
                        <td>
                            <span>{{currency}}</span>
@@ -50,7 +28,10 @@
                            </template>
                        </td>
                        <td>
-                           <input class="form-control cart-item-quantity" type="text" name="quantity" v-model.number="cartItem.quantity" maxlength="5"/>
+                           <div class="form-group" v-bind:class="[cartItem.errorClass]">
+                                <input class="form-control cart-item-quantity" type="text" name="quantity" v-model.number="cartItem.quantity" maxlength="5"/>
+                                <label class="control-label" v-if="cartItem.hasError">lack of stock</label>
+                           </div>
                        </td>
                        <td>
                            <span>{{currency}}</span>
@@ -106,11 +87,10 @@
         <div class="total-area">
             <div class="checkout-col">
                 <h2 class="subtotal" >{{currency}} {{totalPrice}}</h2>
-                <a href="/client/checkout" class="btn btn-danger">CHECKOUT</a>
+                <a href="#" @click="checkout" class="btn btn-danger" id="checkout">CHECKOUT</a>
                 <br><br>
 
                 <input type="hidden" id="currency" value="${currency}" />
-                <a href="#" id="checkout" class="btn btn-warning checkout-button-papal">Checkout with <img alt="PayPal" src="/images/paypal-logo.png"></a>
             </div>
         </div>
     </div>

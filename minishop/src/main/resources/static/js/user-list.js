@@ -33,7 +33,7 @@ $(function () {
                    type: "get",
                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                    dataType:"json",
-                   url: "http://localhost:8080/admin/user-list",
+                   url: "/admin/user-list",
                    data: queryParas,
                    success: function (res) {
                        if(res.code == "0"){
@@ -96,7 +96,7 @@ $(function () {
                $.ajax({
                    type: "post",
                    dataType:"json",
-                   url: "http://localhost:8080/admin/users",
+                   url: "/admin/users",
                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                    data: vm.pageForm,
                    success: function (res) {
@@ -115,7 +115,7 @@ $(function () {
                $.ajax({
                    type: "get",
                    dataType:"json",
-                   url: "http://localhost:8080/admin/assign-coupons",
+                   url: "/admin/assign-coupons",
                    data: paras,
                    success: function (res) {
                        if(res.code == "0"){

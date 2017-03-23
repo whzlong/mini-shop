@@ -7,16 +7,19 @@
             <div class="checkout-row-content">
                 <div class="checkout-form">
                     <form role="form">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="address" placeholder="Address">
+                        <div class="form-group" v-bind:class="[validation.address.errorClass]">
+                            <input type="text" class="form-control" v-model.trim="submitForm.shippingAddress" placeholder="Address">
+                            <span style="font-size: small; color: red;" v-if="validation.address.notEmpty">Please input the address</span>
                         </div>
                     </form>
-                    <form role="form" class="form-inline">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="city" placeholder="City">
+                    <form role="form">
+                        <div class="form-group" v-bind:class="[validation.city.errorClass]">
+                            <input type="text" class="form-control" v-model.trim="submitForm.shippingCity" placeholder="City">
+                            <span style="font-size: small; color: red;" v-if="validation.city.notEmpty">Please input the city</span>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="postcode" placeholder="Postcode">
+                        <div class="form-group" v-bind:class="[validation.postcode.errorClass]">
+                            <input type="text" class="form-control" v-model.trim="submitForm.shippingPostcode" placeholder="Postcode">
+                            <span style="font-size: small; color: red;" v-if="validation.postcode.notEmpty">Please input the postcode</span>
                         </div>
                     </form>
                 </div>
@@ -28,7 +31,8 @@
                 <span>Shop address</span>
             </div>
             <div class="checkout-row-content">
-                <span>{{pageVo.shopAddress}}&nbsp;Postcode: {{pageVo.shopPostcode}}</span>
+                <p>{{pageVo.shopAddress}}&nbsp;</p>
+                <p>Postcode: {{pageVo.shopPostcode}}</p>
             </div>
         </div>
         <hr>
@@ -44,12 +48,14 @@
                             <img alt="PayPal" src="/images/paypal-logo.png">
                         </label>
                     </div>
+                    <!--
                     <div class="radio">
                         <label>
                             <input type="radio" name="creditCard" id="creditCard" value="1" v-model="payMethod">
                             Credit card
                         </label>
                     </div>
+                    -->
                 </div>
             </div>
         </div>
@@ -63,6 +69,7 @@
                 <template v-for="item of coupons">
                     <input type="checkbox"  v-bind:value="item.couponCode" v-model="selectedCoupons">
                     <label for="jack">{{pageVo.currency}} {{item.amount}}</label>
+                    &nbsp;&nbsp;&nbsp;
                 </template>
             </div>
             <hr>
@@ -87,7 +94,8 @@
         </div>
         <div class="checkout-row">
             <div class="checkout-button">
-                <a id="checkout" class="btn btn-danger">Submit</a>
+                <a @click="pay" class="btn btn-danger">Submit</a>
+                <input type="button" id="checkout" style="display: none;"/>
             </div>
         </div>
 

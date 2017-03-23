@@ -1,6 +1,8 @@
 package com.cn.chonglin.web.item;
 
+import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.service.ItemService;
+import com.cn.chonglin.bussiness.item.vo.ItemStockVo;
 import com.cn.chonglin.bussiness.item.vo.ItemVo;
 import com.cn.chonglin.common.PaginationResult;
 import com.cn.chonglin.common.ResponseResult;
@@ -8,14 +10,12 @@ import com.cn.chonglin.web.item.form.ItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * 商品
@@ -47,5 +47,22 @@ public class ItemController {
         itemService.save(itemForm);
 
         return ResponseResult.success(null);
+    }
+
+    @GetMapping(value = "client/items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<List<Item>> queryItems(@RequestParam String modelId){
+
+        return ResponseResult.success(itemService.findItemsByModel(modelId));
+    }
+
+    @GetMapping(value = "client/items/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<Item> index(@PathVariable String id){
+
+        return ResponseResult.success(itemService.findByKey(id));
+    }
+
+    @GetMapping(value = "item-stock/cart", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<List<ItemStockVo>> checkCartItemsStock(@RequestParam String cartId){
+        return ResponseResult.success(itemService.checkCartItemsStock(cartId));
     }
 }

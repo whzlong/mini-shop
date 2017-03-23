@@ -20,7 +20,7 @@ $(function () {
 
             $.ajax({
                 type: "GET"
-                , url: "http://localhost:8080/api/brands?blank=1"
+                , url: "/api/brands?blank=1"
                 , success: function (result) {
                     if(result.code == "0"){
 
@@ -33,6 +33,10 @@ $(function () {
 
                     }else{
                         alert(result.message);
+                    }
+
+                    if(vm.models.length == 0){
+                        vm.hasModel = false;
                     }
                 }
 
@@ -51,7 +55,7 @@ $(function () {
                 if(this.operateState == "update"){
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8080/admin/item-categories/update",
+                        url: "/admin/item-categories/update",
                         data: {categoryId: vm.selectedBrandId, categoryName: vm.selectedBrandName},
                         success: function (result) {
                             if(result.code == "0"){
@@ -68,7 +72,7 @@ $(function () {
                 }else{
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8080/admin/item-categories/add",
+                        url: "/admin/item-categories/add",
                         data: {categoryName: vm.selectedBrandName},
                         success: function (res) {
                             if(res.code == "0"){
@@ -87,6 +91,10 @@ $(function () {
 
             },
             editBrand: function () {
+                if(this.selectedBrandId == ""){
+                    alert("Please select the brand.");
+                    return;
+                }
 
                 for(var i = 0; i < this.brands.length; i++){
                     if(this.brands[i].selected == true){
@@ -98,6 +106,8 @@ $(function () {
                 }
 
                 this.operateState = "update";
+
+                $('#brandModal').modal('toggle');
             },
             addBrand: function () {
                 this.selectedBrandId = "";
@@ -121,7 +131,7 @@ $(function () {
 
                     $.ajax({
                         type: "post",
-                        url: "http://localhost:8080/admin/item-categories/delete",
+                        url: "/admin/item-categories/delete",
                         data: {categoryId: this.selectedBrandId},
                         success: function (result) {
                             if(result.code == "0"){
@@ -147,9 +157,17 @@ $(function () {
                 }
             },
             addModel: function () {
+                if(this.selectedBrandId == ""){
+                    alert("Please select the brand.");
+                    return;
+                }
+
                 this.selectedModelId = "";
                 this.selectedModelName = "";
                 this.operateModelState = "add";
+
+                $('#modelModal').modal('toggle');
+
             },
             editModel: function () {
                 if(this.selectedModelId == ""){
@@ -185,7 +203,7 @@ $(function () {
 
                     $.ajax({
                         type: "post",
-                        url: "http://localhost:8080/admin/item-categories/delete",
+                        url: "/admin/item-categories/delete",
                         data: {categoryId: this.selectedModelId},
                         success: function (result) {
                             if(result.code == "0"){
@@ -225,7 +243,7 @@ $(function () {
                 if(this.operateModelState == "update"){
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8080/admin/item-categories/update",
+                        url: "/admin/item-categories/update",
                         data: {categoryId: this.selectedModelId, categoryName: this.selectedModelName},
                         success: function (result) {
                             if(result.code == "0"){
@@ -243,7 +261,7 @@ $(function () {
 
                     $.ajax({
                         type: "POST",
-                        url: "http://localhost:8080/admin/item-categories/add",
+                        url: "/admin/item-categories/add",
                         data: {parentCategoryId: this.selectedBrandId, categoryName: this.selectedModelName},
                         success: function (res) {
                             if(res.code == "0"){
@@ -259,6 +277,7 @@ $(function () {
             selectModel: function (event) {
                 setSelectedModel(event.target.id);
             }
+
         }
 
     });
@@ -319,7 +338,7 @@ $(function () {
     function getModelsByBrandId(brandId) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/models?blank=1&brandId=" + brandId ,
+            url: "/api/models?blank=1&brandId=" + brandId ,
             success: function (result) {
                 if(result.code == "0"){
                     vm.models = result.rs;

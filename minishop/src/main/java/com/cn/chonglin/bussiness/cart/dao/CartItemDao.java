@@ -49,6 +49,15 @@ public class CartItemDao {
                             , itemId);
     }
 
+    /**
+     * 删除指定购物车中的所有商品
+     *
+     * @param cartId
+     */
+    public void deleteAll(String cartId){
+        jdbcTemplate.update("DELETE FROM cart_items WHERE cart_id = ?", cartId);
+    }
+
     public CartItem findByKey(String cartId, String itemId){
         try{
             return jdbcTemplate.queryForObject("SELECT * FROM cart_items WHERE cart_id = ? and item_id = ?"

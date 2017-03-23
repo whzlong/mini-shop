@@ -1,4 +1,4 @@
-package com.cn.chonglin.web.client.cart.form;
+package com.cn.chonglin.web.cart.form;
 
 import com.cn.chonglin.bussiness.cart.domain.CartItem;
 import org.hibernate.validator.constraints.NotEmpty;
