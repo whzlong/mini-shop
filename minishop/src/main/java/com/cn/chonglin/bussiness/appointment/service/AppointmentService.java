@@ -66,18 +66,22 @@ public class AppointmentService {
 
         Appointment appointment = appointmentDao.findByKey(updateItem.getId());
 
+        //对于已经为确认状态的预约信息不生成订单信息
+        if(!DropdownListContants.APPOINTMENT_STATE_CONFIRMED.equals(appointment.getState())){
+            //如果状态为"已确认"，则生成订单信息
+            if(DropdownListContants.APPOINTMENT_STATE_CONFIRMED.equals(updateItem.getState())){
+                orderService.createOrderFromAppointment(appointment);
+            }
+        }
+
+
+        //更新预约信息
         appointment.setBookDate(updateItem.getBookDate());
         appointment.setBookTime(updateItem.getBookTime());
         appointment.setState(updateItem.getState());
         appointment.setComment(updateItem.getComment());
 
         appointmentDao.update(appointment);
-
-        //如果状态为"已确认"，则生成订单信息
-        if(DropdownListContants.APPOINTMENT_STATE_CONFIRMED.equals(updateItem.getState())){
-            orderService.createOrderFromAppointment(appointment);
-        }
-
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

@@ -91,6 +91,14 @@ $(function(){
                         vm.itemForm.stock = vm.items[index].stock;
                         vm.itemForm.state = vm.items[index].state;
                         vm.itemForm.description = vm.items[index].description;
+
+
+                        $('#itemFormModal').modal({
+                            backdrop: 'static',
+                            show: true
+                        });
+
+                        break;
                     }
                 }
 

@@ -85,6 +85,13 @@ $(function () {
                        this.pageForm.address = this.users[index].address;
                        this.pageForm.role = this.users[index].role;
                        this.pageForm.state = this.users[index].state;
+
+                        $('#pageFormModal').modal({
+                            backdrop: 'static',
+                            show: true
+                        });
+
+                       break;
                    }
                }
            },
@@ -120,11 +127,18 @@ $(function () {
                    success: function (res) {
                        if(res.code == "0"){
                            vm.assignedCoupons = res['rs'];
+
+                           $('#couponFormModal').modal({
+                                backdrop: 'static',
+                                show: true
+                           });
                        }else{
                            alert(res.message);
                        }
                    }
                });
+
+
            }
 
        }

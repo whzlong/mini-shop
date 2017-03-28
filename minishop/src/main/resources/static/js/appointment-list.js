@@ -137,6 +137,11 @@ $(function () {
                         this.state = this.appointments[index].state;
                         this.comment = this.appointments[index].comment;
 
+                        $('#editAppointmentModal').modal({
+                            backdrop: 'static',
+                            show: true
+                        });
+
                         break;
                     }
                 }

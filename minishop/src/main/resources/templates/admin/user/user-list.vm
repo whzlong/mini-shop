@@ -50,9 +50,9 @@
                     <td>{{item.role}}</td>
                     <td>{{item.state}}</td>
                     <td>
-                        <a href="#" @click="editItem" data-toggle="modal" data-target="#pageFormModal" > <span :id="item.userId" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
+                        <a href="#" @click="editItem" data-toggle="modal"> <span :id="item.userId" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
                         &nbsp;&nbsp;
-                        <a href="#" @click="showCoupons" data-toggle="modal" data-target="#couponFormModal" > <span :id="item.userId" title="Show assigned coupons" class="glyphicon glyphicon-th-large"></span></a>
+                        <a href="#" @click="showCoupons" data-toggle="modal"> <span :id="item.userId" title="Show assigned coupons" class="glyphicon glyphicon-th-large"></span></a>
                     </td>
                 </tr>
             </tbody>

@@ -61,7 +61,7 @@
                         <td>{{item.phone}}</td>
                         <td>{{item.state}}</td>
                         <td>
-                            <a href="#" @click="editItem" data-toggle="modal" data-target="#editAppointmentModal" > <span :id="item.id" title="Edit appointment" class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#" @click="editItem" data-toggle="modal" > <span :id="item.id" title="Edit appointment" class="glyphicon glyphicon-edit"></span></a>
                             &nbsp;&nbsp;&nbsp;
                             <a href="#" @click="deleteItem"> <span :id="item.id" title="Delete appointment" class="glyphicon glyphicon-trash"></span></a>
                         </td>

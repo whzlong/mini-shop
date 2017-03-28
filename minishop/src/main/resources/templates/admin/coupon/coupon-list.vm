@@ -43,7 +43,7 @@
                         <td>{{item.validDateTo}}</td>
                         <td>{{item.amount}}</td>
                         <td>
-                            <a href="#" @click="editItem" data-toggle="modal" data-target="#pageFormModal" > <span :id="item.code" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
+                            <a href="#" @click="editItem" data-toggle="modal"> <span :id="item.code" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
                         </td>
                     </tr>
                 </tbody>

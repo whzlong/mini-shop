@@ -68,10 +68,18 @@ $(function () {
 
                     if(this.orders[index].orderId == event.target.id){
                         this.orderForm.orderId = this.orders[index].orderId;
-                        this.orderForm.payDate = this.orders[index].payDate;
+                        // this.orderForm.payDate = this.orders[index].payDate;
+
+                        $('#payDate').val(this.orders[index].payDate);
+
                         this.orderForm.shipAddress = this.orders[index].shipAddress;
                         this.orderForm.state = this.orders[index].state;
                         this.orderForm.comment = this.orders[index].comment;
+
+                        $('#editOrderModal').modal({
+                            backdrop: 'static',
+                            show: true
+                        });
 
                         break;
                     }

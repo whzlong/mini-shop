@@ -88,6 +88,13 @@ $(function () {
                        this.pageForm.validDateFrom = this.coupons[index].validDateFrom;
                        this.pageForm.validDateTo = this.coupons[index].validDateTo;
                        this.pageForm.amount = this.coupons[index].amount;
+
+                       $('#pageFormModal').modal({
+                            backdrop: 'static',
+                            show: true
+                       });
+
+                       break;
                    }
                }
            },

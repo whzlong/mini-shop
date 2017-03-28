@@ -55,7 +55,7 @@
                        <td>{{item.stock}}</td>
                        <td>{{item.state}}</td>
                        <td>
-                           <a href="#" @click="editItem" data-toggle="modal" data-target="#itemFormModal" > <span :id="item.itemId" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
+                           <a href="#" @click="editItem" data-toggle="modal" > <span :id="item.itemId" title="Edit item" class="glyphicon glyphicon-edit"></span></a>
                        </td>
                    </tr>
                </tbody>
