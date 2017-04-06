@@ -7,6 +7,8 @@ import com.cn.chonglin.bussiness.checkout.vo.CheckoutPageVo;
 import com.cn.chonglin.bussiness.order.service.OrderService;
 import com.cn.chonglin.common.ResponseResult;
 import com.cn.chonglin.common.Responses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import java.util.Arrays;
  */
 @Controller
 public class CheckoutController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CheckoutController.class);
 
     private Transaction.Status[] TRANSACTION_SUCCESS_STATUSES = new Transaction.Status[] {
             Transaction.Status.AUTHORIZED,
@@ -44,6 +48,8 @@ public class CheckoutController {
     ResponseResult<Object> checkNonce(@RequestParam String amount
                                         , @RequestParam String nonce
                                         , ModelMap modelMap){
+
+        logger.info("");
 
         BigDecimal decimalAmount;
 

@@ -95,17 +95,4 @@ public class ItemClientController {
         return voList;
     }
 
-//    @RequestMapping(value = "/items/{id}", method = RequestMethod.GET)
-//    public String index(ModelMap model, @PathVariable String id){
-//        Item item = itemService.findByKey(id);
-//
-//        model.addAttribute("item", item);
-//        model.addAttribute("setting",settingDao.queryForObject());
-//
-//        return "client/item-detail";
-//    }
-
-
-
-
 }

@@ -52,6 +52,17 @@ public class OrderController {
         return ResponseResult.success(null);
     }
 
+    @PostMapping(value = "admin/orders/emailToCustomer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseResult<Object> emailToCustomer(@Valid OrderForm orderForm, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return ResponseResult.error(bindingResult.getFieldErrors());
+        }
+
+        orderService.emailToCustomer(orderForm.toDomain());
+
+        return ResponseResult.success(null);
+    }
+
     @PostMapping(value = "admin/orders/delete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<Object> delete(@RequestParam String orderId){
 

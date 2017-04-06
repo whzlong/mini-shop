@@ -2,19 +2,23 @@ package com.cn.chonglin.web.appointment;
 
 import com.cn.chonglin.bussiness.appointment.service.AppointmentService;
 import com.cn.chonglin.bussiness.appointment.vo.AppointmentVo;
+import com.cn.chonglin.bussiness.appointment.vo.SimpleAppointmentVo;
 import com.cn.chonglin.common.PaginationResult;
 import com.cn.chonglin.common.ResponseResult;
 import com.cn.chonglin.web.appointment.form.AppointmentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * 预约控制器
@@ -25,7 +29,7 @@ public class AppointmentController{
     private AppointmentService appointmentService;
 
     /**
-     * 预约
+     * 提交预约信息
      *
      * @param appointmentForm
      * @param bindingResult
@@ -42,11 +46,33 @@ public class AppointmentController{
         return ResponseResult.success(null);
     }
 
-    @GetMapping(value = "admin/appointment-list/index")
-    public String index(ModelMap modelMap){
-        modelMap.addAttribute("appointmentActive", true);
+    /**
+     * 客户端获取预约信息
+     *
+     * @param period
+     * @return
+     */
+    @GetMapping(value = "client/appointments", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody ResponseResult<List<SimpleAppointmentVo>> getAppointments(@RequestParam(required = false, defaultValue = "0") String period){
+        return ResponseResult.success(appointmentService.queryAppointments(period));
+    }
 
-        return "admin/appointment/appointment-list";
+    @PostMapping(value = "client/appointments/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody ResponseResult<Object> updateAppointments(@RequestParam(required = true, defaultValue = "") String id
+                                                                , @RequestParam(required = false) String bookDate
+                                                                , @RequestParam(required = false) String bookTime){
+        appointmentService.updateAppointmentDatetime(id, bookDate, bookTime);
+
+        return ResponseResult.success(null);
+    }
+
+    @PostMapping(value = "client/appointments/delete", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    ResponseResult<Object> deleteClientAppointment(@RequestParam String id){
+
+        appointmentService.delete(id);
+
+        return ResponseResult.success(null);
     }
 
     @GetMapping(value = "admin/appointment-list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -298,3 +298,29 @@ ul li{
 .special-items{
     height: 600px;
 }
+
+/* 客户端－预约列表 */
+.fixed-height{
+
+}
+
+.client-appointments{
+    height: 620px;
+    padding-top: 30px;
+    overflow: auto;
+}
+
+.appointments-table{
+    height: 400px;
+    overflow-y: auto;
+}
+
+.list-item-image{
+    float: left;
+    padding: 5px;
+}
+
+.list-item-name{
+    float: left;
+    padding: 5px;
+}

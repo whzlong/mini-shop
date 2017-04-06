@@ -33,7 +33,10 @@ public class UserMailSender extends BaseMailSender {
     private String buildContent() {
         StringBuffer sb = new StringBuffer(300);
 //        String confirmUrl = "http://localhost:8080/client/confirm/" + verification.getVerificationCode();
-        String confirmUrl = "http://120.27.235.136:8080/client/confirm/" + verification.getVerificationCode();
+//        String confirmUrl = "http://xtramobile.co.uk/client/confirm/" + verification.getVerificationCode();
+
+        String confirmUrl = "http://120.27.235.136/client/confirm/" + verification.getVerificationCode();
+
         sb.append("Thank you very much for your registration. <br>");
         sb.append("Please click the link below to validate your account.<br>");
         sb.append("<a href='" + confirmUrl+"'>" + confirmUrl + "</a>");

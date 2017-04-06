@@ -40,6 +40,16 @@ public class ItemDao {
         return jdbcTemplate.queryForObject("SELECT * FROM items WHERE item_id = ?", new Object[]{id}, mapper);
     }
 
+    /**
+     * 锁定数据行
+     *
+     * @param id
+     * @return
+     */
+    public Item findOneForUpdate(String id){
+        return jdbcTemplate.queryForObject("SELECT * FROM items WHERE item_id = ? FOR UPDATE", new Object[]{id}, mapper);
+    }
+
     public List<Item> findNewItems(){
         return jdbcTemplate.query("SELECT * FROM items WHERE state = 'new'", new Object[]{}, mapper);
     }

@@ -1,13 +1,18 @@
 package com.cn.chonglin.bussiness.order.service;
 
 import com.cn.chonglin.bussiness.appointment.domain.Appointment;
+import com.cn.chonglin.bussiness.base.dao.SettingDao;
 import com.cn.chonglin.bussiness.base.dao.UserDao;
+import com.cn.chonglin.bussiness.base.domain.Setting;
 import com.cn.chonglin.bussiness.base.domain.User;
 import com.cn.chonglin.bussiness.cart.service.CartService;
 import com.cn.chonglin.bussiness.cart.vo.CartItemVo;
 import com.cn.chonglin.bussiness.cart.vo.CartVo;
+import com.cn.chonglin.bussiness.item.dao.ItemDao;
 import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.service.ItemService;
+import com.cn.chonglin.bussiness.mail.OrderMonitor;
+import com.cn.chonglin.bussiness.mail.OrderStatusSender;
 import com.cn.chonglin.bussiness.order.dao.OrderDao;
 import com.cn.chonglin.bussiness.order.dao.OrderDetailDao;
 import com.cn.chonglin.bussiness.order.domain.Order;
@@ -15,14 +20,17 @@ import com.cn.chonglin.bussiness.order.domain.OrderDetail;
 import com.cn.chonglin.bussiness.order.vo.OrderDetailVo;
 import com.cn.chonglin.bussiness.order.vo.OrderVo;
 import com.cn.chonglin.common.ListPage;
+import com.cn.chonglin.common.mail.MailService;
 import com.cn.chonglin.constants.DropdownListContants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,10 +42,16 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class OrderService {
     @Autowired
+    private SettingDao settingDao;
+
+    @Autowired
     private UserDao userDao;
 
     @Autowired
     private OrderDao orderDao;
+
+    @Autowired
+    private ItemDao itemDao;
 
     @Autowired
     private OrderDetailDao orderDetailDao;
@@ -47,6 +61,9 @@ public class OrderService {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private MailService mailService;
 
     /**
      * 预约完成确认后生成订单
@@ -108,6 +125,7 @@ public class OrderService {
             orderDetail.setQuantity(cartItemVo.getQuantity());
 
             item = itemService.findByKey(cartItemVo.getItemId());
+
             if(DropdownListContants.ITEM_STATE_DISCOUNT.equals(item.getState())){
                 orderDetail.setOrderPrice(item.getDiscountPrice());
             }else{
@@ -115,13 +133,9 @@ public class OrderService {
             }
 
             orderDetailDao.insert(orderDetail);
-
-            //减库存
-            item.setStock(item.getStock() - cartItemVo.getQuantity());
-            itemService.update(item);
         }
 
-        //增加订单详细
+        //增加订单
         Order order = new Order();
 
         order.setOrderId(orderId);
@@ -131,6 +145,25 @@ public class OrderService {
         order.setState(DropdownListContants.ORDER_STATE_PAID);
 
         orderDao.insert(order);
+
+        //更新库存
+        try {
+
+            for(CartItemVo cartItemVo : cartVo.getCartItemVos()){
+                item = itemDao.findOneForUpdate(cartItemVo.getItemId());
+                //减库存
+                item.setStock(item.getStock() - cartItemVo.getQuantity());
+                itemDao.update(item);
+            }
+
+        }catch (DataAccessException ex){
+            Setting setting = settingDao.queryForObject();
+
+            //通知管理员，系统发生异常
+            List<String> mailList = new ArrayList<>();
+            mailList.add(setting.getEmail());
+            mailService.asynSend(new OrderMonitor(order), mailList);
+        }
 
         //清空购物车中的商品
         cartService.clearCart(cartVo.getCartId());
@@ -209,4 +242,25 @@ public class OrderService {
         }
 
     }
+
+    /**
+     * 将订单状态发送给客户
+     *
+     * @param order
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void emailToCustomer(Order order){
+        //更新订单
+        update(order);
+
+        Order currentOrder = orderDao.findByKey(order.getOrderId());
+
+        User user = userDao.findByKey(currentOrder.getUserId());
+
+        //发送帐户验证邮件
+        List<String> mailList = new ArrayList<>();
+        mailList.add(user.getEmail());
+        mailService.asynSend(new OrderStatusSender(order), mailList);
+    }
+
 }

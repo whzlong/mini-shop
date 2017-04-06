@@ -47,7 +47,7 @@ public class OrderDetailDao {
     }
 
     public List<OrderDetailVo> query(long orderId){
-        return jdbcTemplate.query("SELECT a.order_id, a.item_id, b.item_name, a.quantity, b.unit_price, " +
+        return jdbcTemplate.query("SELECT a.order_id, a.item_id, b.item_name, b.model_name, a.quantity, b.unit_price, " +
                 "b.discount_price, a.order_price, b.state item_state FROM order_details a INNER JOIN items b ON a.item_id = b.item_id WHERE order_id = ?"
                 , new Object[]{orderId}, mapper);
     }
@@ -66,6 +66,7 @@ public class OrderDetailDao {
             orderDetail.setOrderId(rs.getLong("order_id"));
             orderDetail.setItemId(rs.getString("item_id"));
             orderDetail.setItemName(rs.getString("item_name"));
+            orderDetail.setModelName(rs.getString("model_name"));
             orderDetail.setQuantity(rs.getInt("quantity"));
             orderDetail.setUnitPrice(rs.getBigDecimal("unit_price"));
             orderDetail.setDiscountPrice(rs.getBigDecimal("discount_price"));

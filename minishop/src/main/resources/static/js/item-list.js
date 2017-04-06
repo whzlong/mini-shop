@@ -11,8 +11,8 @@ $(function(){
             itemForm: {itemId: "", brand: "", model: "", itemName: "", unitPrice: ""
                         , discountPrice:"", itemDetailImage:"", itemListImage:"", stock:"", state: "", description: ""},
             itemFormBrand: "",
-            itemFormModel: ""
-
+            itemFormModels: [],
+            selectedFormModel: ""
         },
         created: function () {
             this.query(1);
@@ -84,6 +84,7 @@ $(function(){
                         vm.itemFormBrand = vm.items[index].brandId;
                         vm.itemForm.brand = vm.items[index].brandId;
 
+                        vm.selectedFormModel = vm.items[index].modelId;
                         vm.itemForm.model = vm.items[index].modelId;
                         vm.itemForm.itemName = vm.items[index].itemName;
                         vm.itemForm.unitPrice = vm.items[index].unitPrice;
@@ -138,22 +139,25 @@ $(function(){
                         data: {brandId: brandId},
                         success: function (res) {
                             if(res.code == 0){
-                                if(res["rs"].length > 1){
+                                vm.itemFormModels = res["rs"];
+                                vm.selectedFormModel = selectedModel;
 
-                                    $('#model').html("");
-
-                                    for(var index in res["rs"]){
-
-                                        if(selectedModel == res["rs"][index].value ){
-                                            $('#model').append("<option selected='selected' value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
-                                        }else{
-                                            $('#model').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
-                                        }
-
-                                    }
-                                }else{
-                                    $('#model').html("");
-                                }
+                                // if(res["rs"].length > 1){
+                                //
+                                //     $('#model').html("");
+                                //
+                                //     for(var index in res["rs"]){
+                                //
+                                //         if(selectedModel == res["rs"][index].value ){
+                                //             $('#model').append("<option selected='selected' value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
+                                //         }else{
+                                //             $('#model').append("<option value='" + res["rs"][index].value + "'>" + res["rs"][index].text + "</option>");
+                                //         }
+                                //
+                                //     }
+                                // }else{
+                                //     $('#model').html("");
+                                // }
 
 
                             }else{

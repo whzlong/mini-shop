@@ -28,7 +28,20 @@ public class EntryPageController {
     }
 
     /**
-     * 订单
+     * 管理后台－预约列表
+     *
+     * @param modelMap
+     * @return
+     */
+    @GetMapping(value = "admin/appointment-list/index")
+    public String index(ModelMap modelMap){
+        modelMap.addAttribute("appointmentActive", true);
+
+        return "admin/appointment/appointment-list";
+    }
+
+    /**
+     * 管理后台－订单
      *
      * @param modelMap
      * @return
@@ -41,7 +54,7 @@ public class EntryPageController {
     }
 
     /**
-     * 商品
+     * 管理后台－商品
      *
      * @param modelMap
      * @return
@@ -54,7 +67,7 @@ public class EntryPageController {
     }
 
     /**
-     * 商品分类
+     * 管理后台－商品分类
      *
      * @param modelMap
      * @return
@@ -67,7 +80,7 @@ public class EntryPageController {
     }
 
     /**
-     * 账户列表
+     * 管理后台－账户列表
      *
      * @param modelMap
      * @return
@@ -80,7 +93,8 @@ public class EntryPageController {
     }
 
     /**
-     * 优惠券
+     * 管理后台－优惠券
+     *
      * @param modelMap
      * @return
      */
@@ -92,7 +106,7 @@ public class EntryPageController {
     }
 
     /**
-     * 购物车
+     * 客户端－购物车
      *
      * @param modelMap
      * @return
@@ -106,7 +120,7 @@ public class EntryPageController {
     }
 
     /**
-     * 结账
+     * 客户端－结账
      *
      * @param modelMap
      * @return
@@ -120,7 +134,7 @@ public class EntryPageController {
     }
 
     /**
-     * 选择服务
+     * 客户端－选择服务
      *
      * @param modelMap
      * @return
@@ -136,5 +150,15 @@ public class EntryPageController {
         modelMap.addAttribute("currency", settingService.findSetting().getCurrency());
 
         return "client/item-detail";
+    }
+
+    /**
+     * 客户端－客户预约列表
+     *
+     * @return
+     */
+    @GetMapping(value = "client/appointment-list")
+    public String showClientAppointments(){
+        return "client/appointment-customer";
     }
 }

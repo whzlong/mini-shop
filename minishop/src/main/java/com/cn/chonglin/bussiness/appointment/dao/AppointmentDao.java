@@ -3,6 +3,7 @@ package com.cn.chonglin.bussiness.appointment.dao;
 
 import com.cn.chonglin.bussiness.appointment.domain.Appointment;
 import com.cn.chonglin.bussiness.appointment.vo.AppointmentVo;
+import com.cn.chonglin.bussiness.appointment.vo.SimpleAppointmentVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,6 +28,8 @@ public class AppointmentDao {
     private final RowMapper<Appointment> appointmentRowMapper = new AppointmentMapper();
 
     private final RowMapper<AppointmentVo> appointmentVoRowMapper = new AppointmentVoMapper();
+
+    private final RowMapper<SimpleAppointmentVo> simpleAppointmentVoRowMapper = new SimpleAppointmentVoMapper();
 
     @Autowired
     public void setDataSource(DataSource dataSource){
@@ -105,6 +108,23 @@ public class AppointmentDao {
 
     }
 
+    /**
+     * 查询特定客户某个期间的预约
+     *
+     * @param userId
+     * @param dateFrom
+     * @return
+     */
+    public List<SimpleAppointmentVo> queryByPeriod(String userId, LocalDate dateFrom){
+        try{
+            return jdbcTemplate.query("SELECT a.id, a.book_date, a.book_time, b.item_name, b.item_list_image, b.model_name FROM appointments a INNER JOIN items b " +
+                    "ON a.item_id = b.item_id WHERE a.user_id = ? AND a.book_date >= ?"
+                    , new Object[]{userId, dateFrom}, simpleAppointmentVoRowMapper);
+        }catch (EmptyResultDataAccessException ex){
+            return null;
+        }
+    }
+
     public void update(Appointment appointment){
         jdbcTemplate.update("UPDATE appointments SET book_date = ?, book_time = ?, state = ?, comment= ? WHERE id = ?"
                             , appointment.getBookDate()
@@ -148,6 +168,22 @@ public class AppointmentDao {
             appointmentVo.setComment(rs.getString("comment"));
 
             return appointmentVo;
+        }
+    }
+
+    static class SimpleAppointmentVoMapper implements RowMapper<SimpleAppointmentVo>{
+        @Override
+        public SimpleAppointmentVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+            SimpleAppointmentVo vo = new SimpleAppointmentVo();
+
+            vo.setId(rs.getString("id"));
+            vo.setBookDate(rs.getDate("book_date").toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            vo.setBookTime(rs.getTime("book_time").toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+            vo.setItemName(rs.getString("item_name"));
+            vo.setItemListImage(rs.getString("item_list_image"));
+            vo.setModelName(rs.getString("model_name"));
+
+            return vo;
         }
     }
 }

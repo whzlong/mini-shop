@@ -180,11 +180,12 @@ CREATE TABLE `setting` (
   `email` varchar(50) DEFAULT NULL,
   `shop_address` varchar(300) DEFAULT NULL,
   `shop_postcode` varchar(30) DEFAULT NULL,
+  `shop_telephone` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 BEGIN;
-INSERT INTO `setting` VALUES ('0', 'GBP', '£', 'whzlong@gmail.com', '37 Tottenham St, Fitzrovia, London W1T 4RU', 'WET');
+INSERT INTO `setting` VALUES ('0', 'GBP', '£', 'whzlong@gmail.com', '37 Tottenham St, Fitzrovia, London W1T 4RU', 'WET', '02074360545');
 COMMIT;
 
 -- ----------------------------

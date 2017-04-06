@@ -3,6 +3,7 @@ package com.cn.chonglin.bussiness.appointment.service;
 import com.cn.chonglin.bussiness.appointment.dao.AppointmentDao;
 import com.cn.chonglin.bussiness.appointment.domain.Appointment;
 import com.cn.chonglin.bussiness.appointment.vo.AppointmentVo;
+import com.cn.chonglin.bussiness.appointment.vo.SimpleAppointmentVo;
 import com.cn.chonglin.bussiness.base.dao.UserDao;
 import com.cn.chonglin.bussiness.base.domain.User;
 import com.cn.chonglin.bussiness.mail.AppointmentConfimSender;
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,5 +104,52 @@ public class AppointmentService {
         List<String> mailList = new ArrayList<>();
         mailList.add(user.getEmail());
         mailService.asynSend(new AppointmentConfimSender(updateItem), mailList);
+    }
+
+    /**
+     * 通过期间查询预约信息
+     *
+     */
+    public List<SimpleAppointmentVo> queryAppointments(String period){
+        LocalDate localDate = LocalDate.now();
+
+        switch(period){
+            case DropdownListContants.PERIOD_HALF_YEAR_VALUE:
+                localDate = localDate.minus(6, ChronoUnit.MONTHS);
+                break;
+            case DropdownListContants.PERIOD_YEAR_VALUE:
+                localDate = localDate.minus(12, ChronoUnit.MONTHS);
+                break;
+            default:
+                localDate = localDate.minus(1, ChronoUnit.MONTHS);
+        }
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userDao.findByEmail(username);
+
+        List<SimpleAppointmentVo> ff = appointmentDao.queryByPeriod(user.getId(), localDate);
+
+        return ff;
+    }
+
+    /**
+     * 客户端更新预约日期和时间
+     *
+     * @param id
+     *          预约ID
+     * @param bookDate
+     *          预约日期
+     * @param bookTime
+     *          预约时间
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateAppointmentDatetime(String id, String bookDate, String bookTime){
+        Appointment appointment = appointmentDao.findByKey(id);
+
+        appointment.setBookDate(LocalDate.parse(bookDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        appointment.setBookTime(LocalTime.parse(bookTime, DateTimeFormatter.ofPattern("HH:mm")));
+
+        appointmentDao.update(appointment);
     }
 }

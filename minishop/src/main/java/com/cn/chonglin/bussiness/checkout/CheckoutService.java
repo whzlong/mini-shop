@@ -69,6 +69,7 @@ public class CheckoutService {
         Setting setting = settingService.findSetting();
         checkoutPageVo.setShopAddress(setting.getShopAddress());
         checkoutPageVo.setShopPostcode(setting.getShopPostcode());
+        checkoutPageVo.setShopTelephone(setting.getShopTelephone());
         checkoutPageVo.setCurrency(setting.getCurrency());
 
         return checkoutPageVo;

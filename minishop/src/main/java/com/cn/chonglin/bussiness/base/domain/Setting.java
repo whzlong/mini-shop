@@ -27,6 +27,11 @@ public class Setting {
      */
     private String shopPostcode;
 
+    /**
+     * 店铺联系电话
+     */
+    private String shopTelephone;
+
     public String getCurrency() {
         return currency;
     }
@@ -65,5 +70,13 @@ public class Setting {
 
     public void setShopPostcode(String shopPostcode) {
         this.shopPostcode = shopPostcode;
+    }
+
+    public String getShopTelephone() {
+        return shopTelephone;
+    }
+
+    public void setShopTelephone(String shopTelephone) {
+        this.shopTelephone = shopTelephone;
     }
 }

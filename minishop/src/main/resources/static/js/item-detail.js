@@ -51,6 +51,12 @@ $(function () {
                     this.hasErrorTime = false;
                 }
 
+                if(vm.item.stock <= 0 ){
+                    alert("The item is out of stock, please select another item!");
+                    return;
+                }
+
+
                 var appointmentParams = {itemId: $('#itemId').val(), bookDate: $('#bookDate').val(), bookTime: $('input[name=bookTime]').val()};
 
                 $.ajax({
@@ -80,6 +86,12 @@ $(function () {
                 if(hasValidatorErrors()){
                     return;
                 }
+
+                if(vm.item.stock <= 0 ){
+                    alert("The item is out of stock, please select another item!");
+                    return;
+                }
+
 
                 $.ajax({
                     type: "post",

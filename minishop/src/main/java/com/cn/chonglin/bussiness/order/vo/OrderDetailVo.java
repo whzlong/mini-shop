@@ -19,6 +19,11 @@ public class OrderDetailVo {
     private String itemName;
 
     /**
+     * 型号名称
+     */
+    private String modelName;
+
+    /**
      * 购买数量
      */
     private int quantity;
@@ -65,6 +70,14 @@ public class OrderDetailVo {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
     public int getQuantity() {

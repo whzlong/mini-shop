@@ -33,6 +33,7 @@
             <div class="checkout-row-content">
                 <p>{{pageVo.shopAddress}}&nbsp;</p>
                 <p>Postcode: {{pageVo.shopPostcode}}</p>
+                <p>TEL: {{pageVo.shopTelephone}}</p>
             </div>
         </div>
         <hr>

@@ -8,6 +8,7 @@ import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.domain.ItemCategory;
 import com.cn.chonglin.bussiness.item.vo.ItemStockVo;
 import com.cn.chonglin.bussiness.item.vo.ItemVo;
+import com.cn.chonglin.common.AppException;
 import com.cn.chonglin.common.IdGenerator;
 import com.cn.chonglin.common.ListPage;
 import com.cn.chonglin.constants.DropdownListContants;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -180,7 +182,14 @@ public class ItemService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void update(Item item){
-        Item updateItem = itemDao.findByKey(item.getItemId());
+        Item updateItem = null;
+
+        try{
+            updateItem = itemDao.findOneForUpdate(item.getItemId());
+        }catch (DataAccessException ex){
+            throw new AppException("The item is updated by others, please try to save the item later.");
+        }
+
 
         updateItem.setBrandId(item.getBrandId());
         updateItem.setBrandName(itemCategoryDao.getItemCategoryName(item.getBrandId()));

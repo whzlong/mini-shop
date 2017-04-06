@@ -105,12 +105,17 @@
                             <input type="hidden" v-model="itemForm.itemId" name="itemId">
                             <div class="form-group">
                                 <label for="brand">Brand</label>
-                                <select class="form-control" v-model="itemFormBrand" id="brand" name="brand"></select>
+                                <select class="form-control" v-model="itemFormBrand" id="brand" name="brand">
+                                </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="model">Model</label>
-                                <select class="form-control" v-model="itemForm.model" id="model" name="model"></select>
+                                <select class="form-control" v-model="selectedFormModel" id="model" name="model">
+                                    <option v-for="option in itemFormModels" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
                             </div>
 
                             <div class="form-group">

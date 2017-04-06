@@ -38,6 +38,7 @@ public class SettingDao {
             setting.setEmail(rs.getString("email"));
             setting.setShopAddress(rs.getString("shop_address"));
             setting.setShopPostcode(rs.getString("shop_postcode"));
+            setting.setShopTelephone(rs.getString("shop_telephone"));
 
             return setting;
         }

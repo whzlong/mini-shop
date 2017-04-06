@@ -4,6 +4,7 @@ import com.cn.chonglin.bussiness.item.domain.Item;
 import com.cn.chonglin.bussiness.item.service.ItemService;
 import com.cn.chonglin.bussiness.item.vo.ItemStockVo;
 import com.cn.chonglin.bussiness.item.vo.ItemVo;
+import com.cn.chonglin.common.AppException;
 import com.cn.chonglin.common.PaginationResult;
 import com.cn.chonglin.common.ResponseResult;
 import com.cn.chonglin.web.item.form.ItemForm;
@@ -44,7 +45,11 @@ public class ItemController {
             return ResponseResult.error(bindingResult.getFieldErrors());
         }
 
-        itemService.save(itemForm);
+        try {
+            itemService.save(itemForm);
+        }catch (AppException ex){
+            ResponseResult.error(1, ex.getMessage());
+        }
 
         return ResponseResult.success(null);
     }

@@ -10,7 +10,7 @@ public class ItemStockVo {
     private String itemId;
 
     /**
-     * 库存状态(0:没有库存； 1: 有库存)
+     * 库存状态(0:没有库存； 1: 有库存; 2: 库存不足)
      */
     private String stockStatus;
 

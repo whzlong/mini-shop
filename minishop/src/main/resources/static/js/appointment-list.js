@@ -132,8 +132,13 @@ $(function () {
 
                     if(this.appointments[index].id == event.target.id){
                         this.appointmentId = this.appointments[index].id;
+
                         this.bookDate = this.appointments[index].bookDate;
                         this.bookTime = this.appointments[index].bookTime;
+
+                        $('#bookDate').val(this.appointments[index].bookDate);
+                        $('#bookTime').val(this.appointments[index].bookTime);
+
                         this.state = this.appointments[index].state;
                         this.comment = this.appointments[index].comment;
 

@@ -140,6 +140,25 @@ $(function () {
                         }
                     }
                 });
+            },
+            emailToCustomer: function () {
+                this.orderForm.payDate = $('#payDate').val();
+
+                $.ajax({
+                    type: "post",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    dataType: "json",
+                    url: "/admin/orders/emailToCustomer",
+                    data: this.orderForm,
+                    success: function (res) {
+                        if(res.code == 0){
+                            $('#editOrderModal').modal('hide');
+                            vm.query(vm.pagination.currentPage);
+
+                            clearEditContent();
+                        }
+                    }
+                });
             }
         }
     });

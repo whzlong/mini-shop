@@ -12,6 +12,7 @@ import java.util.List;
 public class CheckoutPageVo {
     private String shopAddress;
     private String shopPostcode;
+    private String shopTelephone;
     private String currency;
     private List<AssignCouponVo> coupons;
     private BigDecimal subtotal;
@@ -30,6 +31,14 @@ public class CheckoutPageVo {
 
     public void setShopPostcode(String shopPostcode) {
         this.shopPostcode = shopPostcode;
+    }
+
+    public String getShopTelephone() {
+        return shopTelephone;
+    }
+
+    public void setShopTelephone(String shopTelephone) {
+        this.shopTelephone = shopTelephone;
     }
 
     public String getCurrency() {
