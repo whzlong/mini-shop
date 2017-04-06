@@ -324,3 +324,9 @@ ul li{
     float: left;
     padding: 5px;
 }
+
+/* 关于我们 */
+.about-us{
+    height: 500px;
+    padding-top: 50px;
+}

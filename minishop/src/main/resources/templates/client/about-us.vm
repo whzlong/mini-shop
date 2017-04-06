@@ -1,0 +1,9 @@
+<div class="container" id="about-us-page">
+    <div class="about-us">
+        <p><span>Shop address: &nbsp;&nbsp;</span> <span>{{company.address}}</span></p>
+        <p><span>TEL: &nbsp;&nbsp;</span> <span>{{company.telephone}}</span></p>
+        <p><span>Email: &nbsp;&nbsp;</span> <span>{{company.email}}</span></p>
+    </div>
+</div>
+
+<script src="/js/about-us.js"></script>

@@ -7,8 +7,7 @@
             <div class="footer-right">
 
                 <div style="float:left;width:100%">
-                    <a href="#">About Us</a><br>
-                    <a href="#">Contact Us</a>
+                    <a href="/client/about-us">About Us</a><br>
                 </div>
             </div>
         </div>

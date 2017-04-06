@@ -161,4 +161,14 @@ public class EntryPageController {
     public String showClientAppointments(){
         return "client/appointment-customer";
     }
+
+    /**
+     * 关于我们
+     *
+     * @return
+     */
+    @GetMapping("client/about-us")
+    public String aboutUs(){
+        return "client/about-us";
+    }
 }
