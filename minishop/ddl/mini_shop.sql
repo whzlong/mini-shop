@@ -185,7 +185,7 @@ CREATE TABLE `setting` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 BEGIN;
-INSERT INTO `setting` VALUES ('0', 'GBP', '£', 'whzlong@gmail.com', '37 Tottenham St, Fitzrovia, London W1T 4RU', 'WET', '02074360545');
+INSERT INTO `setting` VALUES ('0', 'GBP', '£', 'whzlong@gmail.com', 'Tim-mobile limited 55 rathbone place London W1T 1JS', 'WET', '02074360545');
 COMMIT;
 
 -- ----------------------------

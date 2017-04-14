@@ -9,7 +9,7 @@ $(function () {
                 type: "get",
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                 dataType:"json",
-                url: "/client/company",
+                url: "/client/about-us/company",
                 success: function (res) {
                     vm.company = res.rs;
                 }

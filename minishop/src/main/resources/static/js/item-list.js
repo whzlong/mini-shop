@@ -73,6 +73,11 @@ $(function(){
             },
             addItem: function () {
                 clearFormElements(this.itemForm);
+
+                $('#itemFormModal').modal({
+                    backdrop: 'static',
+                    show: true
+                });
             },
             editItem: function (event) {
 

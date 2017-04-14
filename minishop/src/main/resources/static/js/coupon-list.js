@@ -79,6 +79,12 @@ $(function () {
            },
            addItem: function () {
                clearFormElements(this.pageForm);
+
+               $('#pageFormModal').modal({
+                   backdrop: 'static',
+                   show: true
+               });
+
            },
            editItem: function (event) {
                for(var index in this.coupons){
@@ -126,6 +132,12 @@ $(function () {
                 this.hasNotUsers = false;
 
                 this.queryUsers();
+
+
+                $('#assignFormModal').modal({
+                   backdrop: 'static',
+                   show: true
+                });
            },
            queryUsers: function () {
                var paras = {email: this.searchConditionsOfEmail, firstName: this.searchConditionsOfUsername, currentPage: 1, size: 10};

@@ -14,9 +14,9 @@
         <div class="row" style="text-align: center;">
             <a href="#" @click="search" class="btn btn-primary">Search</a>
             &nbsp;
-            <a href="#" @click="addItem" class="btn btn-primary" data-toggle="modal" data-target="#pageFormModal">Add</a>
+            <a href="#" @click="addItem" class="btn btn-primary" data-toggle="modal">Add</a>
             &nbsp;&nbsp;&nbsp;
-            <a href="#" @click="openAssignPage" class="btn btn-primary" data-toggle="modal" data-target="#assignFormModal">Assign</a>
+            <a href="#" @click="openAssignPage" class="btn btn-primary" data-toggle="modal">Assign</a>
         </div>
 
         <div class="table-responsive">

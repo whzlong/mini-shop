@@ -17,7 +17,7 @@ public class AboutUsController {
     @Autowired
     private SettingService settingService;
 
-    @GetMapping(value = "client/company", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "client/about-us/company", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseResult<CompanyVo> aboutUs(){
         return ResponseResult.success(settingService.findCompanyInfo());
     }

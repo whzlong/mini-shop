@@ -29,7 +29,7 @@
         <div class="row" style="text-align: center;">
             <a href="#" @click="search" class="btn btn-primary">Search</a>
             &nbsp;
-            <a href="#" @click="addItem" class="btn btn-primary" data-toggle="modal" data-target="#itemFormModal">Add</a>
+            <a href="#" @click="addItem" class="btn btn-primary" data-toggle="modal">Add</a>
         </div>
 
         <div class="table-responsive">

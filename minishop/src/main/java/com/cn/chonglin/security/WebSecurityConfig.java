@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         , "/client/select-service"
                         , "/client/item-detail/**"
                         , "/client/confirm/**"
+                        , "/client/about-us/**"
                         , "/admin/**"
                         , "/anonym/**"
                         , "/item-images/**"

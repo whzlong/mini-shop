@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
  * @author wu
  */
 public class UserMailSender extends BaseMailSender {
+    private static final String HOST_IP= "http://68.169.62.204/";
     private Verification verification;
 
     public UserMailSender(Verification verification){
@@ -35,7 +36,7 @@ public class UserMailSender extends BaseMailSender {
 //        String confirmUrl = "http://localhost:8080/client/confirm/" + verification.getVerificationCode();
 //        String confirmUrl = "http://xtramobile.co.uk/client/confirm/" + verification.getVerificationCode();
 
-        String confirmUrl = "http://120.27.235.136/client/confirm/" + verification.getVerificationCode();
+        String confirmUrl = HOST_IP + "client/confirm/" + verification.getVerificationCode();
 
         sb.append("Thank you very much for your registration. <br>");
         sb.append("Please click the link below to validate your account.<br>");

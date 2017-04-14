@@ -19,7 +19,7 @@ public final class DropdownListContants {
     public static final String ORDER_STATE_APPOINTMENT = "Appointment";
     public static final String ORDER_STATE_PAID= "Paid";
     public static final String ORDER_STATE_REPAIRING= "Repairing";
-    public static final String ORDER_STATE_OVER= "Over";
+    public static final String ORDER_STATE_OVER= "Completed";
 
     public static final String APPOINTMENT_STATE_PENGING = "Pending";
     public static final String APPOINTMENT_STATE_CONFIRMED = "Confirmed";
