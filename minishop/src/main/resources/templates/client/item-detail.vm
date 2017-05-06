@@ -34,12 +34,30 @@
                 <div class="tab-content">
                     <div id="waitTab" class="tab-pane fade in active">
                         <h2>While you wait, West End</h2>
-                        <h4>37 TOTTENHAM STREET, W1T 4RU</h4>
-                        <p>You’ll get to experience the magic of the iPhone 6S screen repair first hand!</p>
-                        <p>Bring your damaged iPhone 6S into our shop in central London and we’ll have it repaired within 30 minutes.
-                            Meanwhile, you can catch up on some email, get to know our friendly staff, or people watch from our window overlooking the street (and you may see some very strange things!).</p>
-                        <p>Use the calendar below to book a time and date that works best for you or just come by. We’re open from 9am to 6pm Monday through Friday, 9am to 5pm on Saturday and 11am to 5pm on Sunday.
-                        </p>
+                        <h4>Main Office WestEnd</h4>
+                        <p>Extra Mobile</p>
+                        <p>55 Rathbone place</p>
+                        <p>London, W1T 1JS</p>
+                        <p>TEL: 02074360545</p>
+                        <br>
+                        <h4>Second Office (city Monday to Friday only) </h4>
+                        <p>Tim-Mobile</p>
+                        <p>1st floor east</p>
+                        <p>35-37 Ludgate Hill</p>
+                        <p>London</p>
+                        <p>EC4M 7JM</p>
+                        <p>TEL: 07787707788</p>
+
+                        <br>
+                        <p>You’ll be enjoy the fast and excellent repair service.</p>
+                        <br>
+                        <p>Bring your damaged mobile phones or tablets into our shop in central London and we’ll have it repaired within 30 minutes. Meanwhile, you can shopping around in central london.Use the calendar below to book the time and date that works best for you or just give us a call, we will arrange the rest.</p>
+                        <br>
+                        <h4>Shop open time:</h4>
+                        <p>Monday to Friday: 9:30am ---6:30pm</p>
+                        <p>Saturday: 9:30am ---6:00pm (only main office)</p>
+                        <p>Sunday: by appointment only</p>
+
 
                         <h3 style="padding-top: 20px">Select the day and time for your appointment</h3>
 
@@ -62,9 +80,9 @@
 
                     <div id="mailTab" class="tab-pane fade">
                         <h1 style="text-align: center">Express mail</h1>
-                        <p>We get it, our Express mail service is simply one of the most convenient ways to have your iPad Pro 9.7" screen repaired when you can’t make it to our location.</p>
-                        <p>We designed it that way! Plus, when you see the postman approaching with that package you know is your good-as-new iPad Pro 9.7", it can feel a bit like Christmas, no matter what the time of year.</p>
-                        <p>The process is simple. You send us your damaged iPad Pro 9.7" in a padded envelope via Royal Mail Special Delivery. Once we receive it, we’ll fix it right up and have it in the post for you same day. With next day delivery, you’ll be cradling your iPad Pro 9.7" again in just a couple of days! Order this service below and we’ll send you the complete mailing instructions straightaway.</p>
+                        <p>We get it, our Express mail service is simply one of the most convenient ways to have your phones or tablets repaired when you can’t make it to our location.
+                        </p>
+                        <p>The process is simple. You send us your damaged phones or tablets in a padded envelope via Royal Mail Special Delivery. Once we receive it, we’ll fix it right up and have it in the post for you same day. With next day delivery, you’ll be having your working phones or tablets in just a couple of days! Order this service below and we’ll send you the complete mailing instructions straightaway.</p>
                         <div class="cart-input-form">
                             <label for="quantity">Quantity</label>
                             <input type="text" name="quantity" id="quantity" maxlength="2" />

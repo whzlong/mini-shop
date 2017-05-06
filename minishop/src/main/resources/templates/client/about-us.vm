@@ -1,8 +1,16 @@
 <div class="container" id="about-us-page">
     <div class="about-us">
-        <p><span>Shop address: &nbsp;&nbsp;</span> <span>{{company.address}}</span></p>
-        <p><span>TEL: &nbsp;&nbsp;</span> <span>{{company.telephone}}</span></p>
-        <p><span>Email: &nbsp;&nbsp;</span> <span>{{company.email}}</span></p>
+        <div>
+            <p style="font-size: x-large;">
+                Extra mobile is based in central London, have more than 10 years experience for mobile phones and tablets reapir. We are looking forward to expanding the business
+                online recently, please try our service and we are sure you will like it.
+            </p>
+        </div>
+        <div style="padding-top: 30px;">
+            <p><b>Shop address: &nbsp;&nbsp;</b> <span>{{company.address}}</span></p>
+            <p><b>TEL: &nbsp;&nbsp;</b> <span>{{company.telephone}}</span></p>
+            <p><b>Email: &nbsp;&nbsp;</b> <span>{{company.email}}</span></p>
+        </div>
     </div>
 </div>
 
