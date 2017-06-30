@@ -3,7 +3,7 @@ $(function () {
        el: "#user-list",
        data: {
            users: [],
-           pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 3},
+           pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 10},
            pageNums: [],
            searchConditions: {email: "", firstName:"", state:""},
            pageForm: {userId: "", firstName: "", lastName: "", email: ""

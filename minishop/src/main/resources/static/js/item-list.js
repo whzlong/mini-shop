@@ -5,7 +5,7 @@ $(function(){
         el: '#item-list',
         data: {
             items: [],
-            pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 3},
+            pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 10},
             pageNums: [],
             searchConditions: {brandId: "", modelId:""},
             itemForm: {itemId: "", brand: "", model: "", itemName: "", unitPrice: ""

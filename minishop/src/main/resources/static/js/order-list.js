@@ -3,7 +3,7 @@ $(function () {
         el: '#order-list',
         data: {
             orders: [],
-            pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, listCount: 0, pageSize: 3, size: 3},
+            pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, listCount: 0, pageSize: 10, size: 10},
             pageNums: [],
             searchConditions: {orderId: "", orderDateFrom:"", orderDateTo: "", state: "Appointment"},
             orderForm: {orderId: "", payDate: "", state: "", shipAddress: "", comment: ""},

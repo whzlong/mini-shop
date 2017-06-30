@@ -9,6 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class PaypalProperties {
     private String account;
     private String accesstoken;
+    private String clientId;
+    private String secret;
 
     public String getAccount() {
         return account;
@@ -24,5 +26,21 @@ public class PaypalProperties {
 
     public void setAccesstoken(String accesstoken) {
         this.accesstoken = accesstoken;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 }

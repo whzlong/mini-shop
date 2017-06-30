@@ -3,7 +3,7 @@ $(function () {
        el: "#coupon-list",
        data: {
            coupons: [],
-           pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 3},
+           pagination: {startPage: 1, endPage: 5, currentPage: 1, totalPage: 0, pageSize: 10, size: 10},
            pageNums: [],
            selectedCoupons: [],
            selectedUsers: [],
