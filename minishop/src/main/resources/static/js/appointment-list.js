@@ -12,7 +12,7 @@ $(function () {
             comment:""
         },
         created: function () {
-            var queryParas = {bookDate: $('#bookDateQuery').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
+            var queryParas = {bookDateFrom: $('#bookDateFrom').val(), bookDateTo: $('#bookDateTo').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
 
             $.ajax({
                 type: "get",
@@ -31,7 +31,7 @@ $(function () {
             query: function (page) {
                 this.pagination.currentPage = page;
 
-                var queryParas = {bookDate: $('#bookDateQuery').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
+                var queryParas = {bookDateFrom: $('#bookDateFrom').val(), bookDateTo: $('#bookDateTo').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
 
                 $.ajax({
                     type: "get",
@@ -59,7 +59,7 @@ $(function () {
             queryCurrentPage: function(event){
                 this.pagination.currentPage = parseInt(event.target.text);
 
-                var queryParas = {bookDate: $('#bookDateQuery').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
+                var queryParas = {bookDateFrom: $('#bookDateFrom').val(), bookDateTo: $('#bookDateTo').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
 
                 $.ajax({
                     type: "get",
@@ -84,7 +84,7 @@ $(function () {
                     setPageNums();
                 }
 
-                var queryParas = {bookDate: $('#bookDateQuery').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
+                var queryParas = {bookDateFrom: $('#bookDateFrom').val(), bookDateTo: $('#bookDateTo').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
 
                 $.ajax({
                     type: "get",
@@ -112,7 +112,7 @@ $(function () {
                     setPageNums();
                 }
 
-                var queryParas = {bookDate: $('#bookDateQuery').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
+                var queryParas = {bookDateFrom: $('#bookDateFrom').val(), bookDateTo: $('#bookDateTo').val(), state: $('#stateQuery').val(), currentPage: this.pagination.currentPage, size: this.pagination.size};
 
                 $.ajax({
                     type: "get",
@@ -255,14 +255,24 @@ $(function () {
         vm.comment = "";
     }
 
+    $( "#bookDateQuery" ).daterangepicker(
+        {
+            locale:{format: 'DD-MM-YYYY'}
+        }
+    );
 
-
-    $( "#bookDateQuery" ).datetimepicker({
-        format: 'dd-mm-yyyy',
-        minView: "month",
-        autoclose: 1,
-        clearBtn:true
+    $('#bookDateQuery').on('apply.daterangepicker', function(ev, picker) {
+        $('#bookDateFrom').val(picker.startDate.format('DD-MM-YYYY'));
+        $('#bookDateTo').val(picker.endDate.format('DD-MM-YYYY'));
     });
+
+    //
+    // $( "#bookDateQuery" ).datetimepicker({
+    //     format: 'dd-mm-yyyy',
+    //     minView: "month",
+    //     autoclose: 1,
+    //     clearBtn:true
+    // });
 
     $( "#bookDate" ).datetimepicker({
         format: 'dd-mm-yyyy',

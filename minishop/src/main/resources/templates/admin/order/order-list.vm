@@ -2,6 +2,9 @@
 
 <div id="order-list">
     <table class="search-condition-table">
+        <input type="hidden" id="orderDateFrom" />
+        <input type="hidden" id="orderDateTo" />
+
         <tr>
             <td>
                 <label for="orderId" >Order No.</label>
@@ -13,13 +16,7 @@
                 <label for="orderDate">Order Date.</label>
             </td>
             <td>
-                <input type="text" class="form-control" name="orderDateFrom" id="orderDateFrom" data-date-format="dd-mm-yyyy" readonly/>
-            </td>
-            <td>
-                <label for="orderDate">&nbsp;~ &nbsp;</label>
-            </td>
-            <td>
-                <input type="text" class="form-control" name="orderDateTo" id="orderDateTo" data-date-format="dd-mm-yyyy" readonly/>
+                <input type="text" class="form-control" name="orderDate" id="orderDate" data-date-format="dd-mm-yyyy" readonly/>
             </td>
         </tr>
         <tr>

@@ -77,14 +77,15 @@ public class AppointmentController{
 
     @GetMapping(value = "admin/appointment-list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    PaginationResult<AppointmentVo> query(@RequestParam(required = false) String bookDate,
+    PaginationResult<AppointmentVo> query(@RequestParam(required = false) String bookDateFrom,
+                                          @RequestParam(required = false) String bookDateTo,
                                           @RequestParam(required = false, defaultValue = "Pending") String state,
                                           @RequestParam(required = false, defaultValue = "0") @Min(0) int currentPage,
                                           @RequestParam(required = false, defaultValue = "15") @Min(0) @Max(200) int size){
 
         currentPage -= 1;
 
-        return PaginationResult.success(appointmentService.query(bookDate, state, size, currentPage));
+        return PaginationResult.success(appointmentService.query(bookDateFrom, bookDateTo, state, size, currentPage));
     }
 
     @PostMapping(value = "admin/appointments", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

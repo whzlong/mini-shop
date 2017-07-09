@@ -56,16 +56,23 @@ public class AppointmentDao {
         return jdbcTemplate.queryForObject("SELECT * FROM appointments WHERE id = ?", new Object[]{id}, appointmentRowMapper);
     }
 
-    public int countAppointments(String bookDate, String state){
+    public int countAppointments(String bookDateFrom, String bookDateTo, String state){
         StringBuilder whereSql = new StringBuilder();
         List<Object> parameters = new java.util.ArrayList<>();
 
         whereSql.append("WHERE state = ? ");
         parameters.add(state);
 
-        if(!StringUtils.isEmpty(bookDate)){
-            whereSql.append("AND book_date = ? ");
-            LocalDate localDate = LocalDate.parse(bookDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        if(!StringUtils.isEmpty(bookDateFrom)){
+            whereSql.append("AND book_date >= ? ");
+            LocalDate localDate = LocalDate.parse(bookDateFrom, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+            parameters.add(localDate);
+        }
+
+        if(!StringUtils.isEmpty(bookDateTo)){
+            whereSql.append("AND book_date <= ? ");
+            LocalDate localDate = LocalDate.parse(bookDateTo, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
             parameters.add(localDate);
         }
@@ -75,16 +82,23 @@ public class AppointmentDao {
                 , Integer.class);
     }
 
-    public List<AppointmentVo> queryForList(String bookDate, String state, int limit, int offset){
+    public List<AppointmentVo> queryForList(String bookDateFrom, String bookDateTo,String state, int limit, int offset){
         StringBuilder whereSql = new StringBuilder();
         List<Object> parameters = new java.util.ArrayList<>();
 
         whereSql.append("WHERE a.state = ? ");
         parameters.add(state);
 
-        if(!StringUtils.isEmpty(bookDate)){
-            whereSql.append("AND a.book_date = ? ");
-            LocalDate localDate = LocalDate.parse(bookDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        if(!StringUtils.isEmpty(bookDateFrom)){
+            whereSql.append("AND a.book_date >= ? ");
+            LocalDate localDate = LocalDate.parse(bookDateFrom, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+            parameters.add(localDate);
+        }
+
+        if(!StringUtils.isEmpty(bookDateTo)){
+            whereSql.append("AND a.book_date <= ? ");
+            LocalDate localDate = LocalDate.parse(bookDateTo, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
             parameters.add(localDate);
         }

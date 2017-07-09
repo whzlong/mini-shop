@@ -2,6 +2,8 @@
 
 <div class="row">
     <div class="col-md-6">
+        <input type="hidden" id="bookDateFrom"/>
+        <input type="hidden" id="bookDateTo"/>
         <div class="form-horizontal"">
             <div class="form-group">
                 <label for="bookDateQuery" class="col-sm-3 control-label">Book date</label>

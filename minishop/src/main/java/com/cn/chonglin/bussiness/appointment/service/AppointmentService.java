@@ -44,11 +44,11 @@ public class AppointmentService {
     @Autowired
     private OrderService orderService;
 
-    public ListPage<AppointmentVo> query(String bookDate, String state, int limit, int page){
+    public ListPage<AppointmentVo> query(String bookDateFrom, String bookDateTo,String state, int limit, int page){
 
-        int count = appointmentDao.countAppointments(bookDate, state);
+        int count = appointmentDao.countAppointments(bookDateFrom, bookDateTo, state);
 
-        List<AppointmentVo> appointmentVos = appointmentDao.queryForList(bookDate, state, limit, page*limit);
+        List<AppointmentVo> appointmentVos = appointmentDao.queryForList(bookDateFrom, bookDateTo, state, limit, page*limit);
 
         return new ListPage<>(count, appointmentVos);
     }

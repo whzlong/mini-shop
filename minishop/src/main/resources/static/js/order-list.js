@@ -23,6 +23,8 @@ $(function () {
                     orderDateTo: this.searchConditions.orderDateTo, state: this.searchConditions.state,
                     currentPage: this.pagination.currentPage, size: this.pagination.size};
 
+
+
                 $.ajax({
                     type: "get",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
@@ -212,18 +214,14 @@ $(function () {
         }
     }
 
-    $( "#orderDateFrom" ).datetimepicker({
-        format: 'dd-mm-yyyy',
-        minView: "month",
-        autoclose: 1,
-        clearBtn:true
-    });
-
-    $( "#orderDateTo" ).datetimepicker({
-        format: 'dd-mm-yyyy',
-        minView: "month",
-        autoclose: 1,
-        clearBtn:true
+    $( "#orderDate" ).daterangepicker(
+        {
+            locale:{format: 'DD-MM-YYYY'}
+        }
+    );
+    $('#orderDate').on('apply.daterangepicker', function(ev, picker) {
+        $('#orderDateFrom').val(picker.startDate.format('DD-MM-YYYY'));
+        $('#orderDateTo').val(picker.endDate.format('DD-MM-YYYY'));
     });
 
     $( "#payDate" ).datetimepicker({
