@@ -1,6 +1,5 @@
 package com.cn.chonglin.bussiness.base.dao;
 
-
 import com.cn.chonglin.bussiness.base.domain.Verification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

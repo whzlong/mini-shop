@@ -204,7 +204,7 @@ public class ItemService {
         if(!StringUtils.isEmpty(item.getItemListImage())){
             updateItem.setItemListImage("/" + item.getItemListImage());
         }
-
+        updateItem.setDescription(item.getDescription());
         updateItem.setUnitPrice(item.getUnitPrice());
         updateItem.setDiscountPrice(item.getDiscountPrice());
         updateItem.setState(item.getState());
