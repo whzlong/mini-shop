@@ -56,6 +56,12 @@ $(function () {
             search: function () {
                 this.query(1);
             },
+            download:function(){
+                $("a[rel$='external']").attr({
+                    target: "_blank",
+                    href: "/admin/appointments/download"
+                });
+            },
             queryCurrentPage: function(event){
                 this.pagination.currentPage = parseInt(event.target.text);
 
