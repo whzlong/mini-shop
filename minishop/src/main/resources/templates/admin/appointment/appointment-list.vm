@@ -35,7 +35,6 @@
 
         <div class="row" style="text-align: center;">
             <a href="#" class="btn btn-primary" @click="search">Search</a>
-            <a href="javascript:void(0)" rel="external"  class="btn btn-primary" @click="download">download</a>
         </div>
 
         <div class="table-responsive">

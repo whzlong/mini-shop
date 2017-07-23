@@ -6,7 +6,6 @@ import com.cn.chonglin.bussiness.appointment.vo.SimpleAppointmentVo;
 import com.cn.chonglin.common.PaginationResult;
 import com.cn.chonglin.common.ResponseResult;
 import com.cn.chonglin.web.appointment.form.AppointmentForm;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,18 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * 预约控制器
@@ -128,51 +119,6 @@ public class AppointmentController{
         appointmentService.delete(id);
 
         return ResponseResult.success(null);
-    }
-
-    @GetMapping(value = "admin/appointments/download")
-    public void download(HttpServletResponse res) throws IOException{
-        res.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-
-        res.setHeader("Content-Disposition", "attachment; filename=test.zip");
-
-        ZipOutputStream zipOutputStream = new ZipOutputStream(res.getOutputStream());
-
-        List<String> filePathLists = Lists.newArrayList();
-        filePathLists.add("http://www.phosion.cn/uploadfiles/image/201703/545.jpg");
-        filePathLists.add("http://www.phosion.cn/uploadfiles/image/201703/544.jpg");
-
-        int i = 0;
-
-        for(String filePath : filePathLists){
-            URL url = new URL(filePath);
-            URLConnection conn = url.openConnection();
-            InputStream inputStream = conn.getInputStream();
-
-            zipOutputStream.putNextEntry(new ZipEntry(String.valueOf(i++) + ".jpg"));
-            byte[] imgBytes = readInputStream(inputStream);
-            zipOutputStream.write(imgBytes);
-            inputStream.close();
-            zipOutputStream.closeEntry();
-        }
-
-        zipOutputStream.flush();
-        zipOutputStream.close();
-
-    }
-
-    public static byte[] readInputStream(InputStream inputStream) throws IOException{
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-
-        int len = 0;
-        while((len = inputStream.read(buffer)) != -1){
-            outputStream.write(buffer, 0, len);
-        }
-
-        inputStream.close();
-
-        return outputStream.toByteArray();
     }
 
 }
